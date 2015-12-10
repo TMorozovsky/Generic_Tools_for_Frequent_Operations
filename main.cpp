@@ -6,6 +6,7 @@
 #include <iterator>
 
 #include "numeric.hpp"
+#include "algorithm.hpp"
 
 using namespace gtfo;
 
@@ -66,10 +67,13 @@ int main()
 
     adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout));
     endl(cout);
-    adjacent_difference(vi, std::ostream_iterator<int>(cout));
+    //adjacent_difference(vi, std::ostream_iterator<int>(cout));
     endl(cout);
     adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout), std::minus<int>());
     endl(cout);
-    adjacent_difference(vi, std::ostream_iterator<int>(cout), std::minus<int>());
+    //adjacent_difference(vi, std::ostream_iterator<int>(cout), std::minus<int>());
+    endl(cout);
+
+    for_each(vi, [](int x){ cout << "lol:" << x; });
     endl(cout);
 }

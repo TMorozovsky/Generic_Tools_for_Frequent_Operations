@@ -1,6 +1,8 @@
 #include "type_traits.hpp"
 #include <vector>
 
+#define s_assert(x) static_assert(x, #x)
+
 using namespace gtfo::tt;
 
 struct test_no_iterators
@@ -56,6 +58,7 @@ static_assert(is_container< test_iterator_both       >::value == true,  "");
 static_assert(is_dereferenceable< int    >::value == false, "");
 static_assert(is_dereferenceable< int *  >::value == true,  "");
 
+static_assert(is_iterator< std::vector<int>::iterator               >::value == true,  "");
 static_assert(is_iterator< std::vector<int>::const_reverse_iterator >::value == true,  "");
 static_assert(is_iterator< int                                      >::value == false, "");
 static_assert(is_iterator< int *                                    >::value == true,  "");
@@ -64,12 +67,12 @@ static_assert(is_iterator< void *                                   >::value == 
 
 static_assert(is_same
               <
-                  typename dereferencing_result<std::vector<int>::iterator>::type,
+                  typename dereferencing_result_value<std::vector<int>::iterator>::type,
                   int
               >::value, "");
 static_assert(is_same
               <
-                  typename dereferencing_result<std::vector<int>::const_iterator>::type,
+                  typename dereferencing_result_value<std::vector<int>::const_iterator>::type,
                   int
               >::value, "");
 static_assert(is_same
@@ -87,8 +90,36 @@ static_assert(can_assign_container_element_to_dereferenced_output_iterator
                   std::vector<float>,
                   std::vector<long double>::iterator
               >::value, "");
+
+static_assert(is_assignable<long &, long>::value, "");
+static_assert(!is_assignable<const long &, long>::value, "");
+static_assert(is_assignable<std::ostream_iterator<int> &, int>::value, "");
+
+static_assert(is_dereferenceable< std::ostream_iterator<int> >::value, "");
+
 static_assert(!can_assign_container_element_to_dereferenced_output_iterator
               <
                   std::vector<float>,
                   std::vector<long double>::const_iterator
+              >::value, "");
+
+static_assert(is_same
+              <
+                  typename value_from_container<std::vector<int>>::type,
+                  int
+              >::value, "");
+static_assert(::std::is_assignable
+              <
+                  decltype( * declval< std::ostream_iterator<int> &>() ),
+                  int
+              >::value, "");
+static_assert(is_assignable
+              <
+                  decltype( * declval< std::ostream_iterator<int> &>() ),
+                  int
+              >::value, "is_assignable");
+static_assert(can_assign_container_element_to_dereferenced_output_iterator
+              <
+                std::vector<int>,
+                std::ostream_iterator<int>
               >::value, "");

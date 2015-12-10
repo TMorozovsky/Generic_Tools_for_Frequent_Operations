@@ -25,12 +25,12 @@ namespace gtfo
     typename tt::enable_if
     <
         tt::is_container<Container>::value,
-        typename tt::element_of_container<Container>::type
+        typename tt::value_from_container<Container>::type
     >::type
     accumulate(const Container & container)
     {
         return ::std::accumulate(begin(container), end(container),
-                                 typename tt::element_of_container<Container>::type());
+                                 typename tt::value_from_container<Container>::type());
     }
 
     template<typename Container, typename Value, typename BinaryOperation>
@@ -50,12 +50,12 @@ namespace gtfo
     typename tt::enable_if
     <
         tt::can_invoke_operation_on_two_container_elements<BinaryOperation, Container>::value,
-        typename tt::element_of_container<Container>::type
+        typename tt::value_from_container<Container>::type
     >::type
     accumulate(const Container & container, BinaryOperation op)
     {
         return ::std::accumulate(begin(container), end(container),
-                                 typename tt::element_of_container<Container>::type(), op);
+                                 typename tt::value_from_container<Container>::type(), op);
     }
 
     using ::std::adjacent_difference;
@@ -67,9 +67,9 @@ namespace gtfo
         tt::can_assign_container_element_to_dereferenced_output_iterator<Container, OutputIterator>::value,
         OutputIterator
     >::type
-    adjacent_difference(const Container & container, OutputIterator output_iterator)
+    adjacent_difference(const Container & container, OutputIterator it)
     {
-        return ::std::adjacent_difference(begin(container), end(container), output_iterator);
+        return ::std::adjacent_difference(begin(container), end(container), it);
     }
 
     template<typename Container, typename OutputIterator, typename BinaryOperation>
@@ -80,9 +80,9 @@ namespace gtfo
         && tt::can_invoke_operation_on_two_container_elements<BinaryOperation, Container>::value,
         OutputIterator
     >::type
-    adjacent_difference(const Container & container, OutputIterator output_iterator, BinaryOperation op)
+    adjacent_difference(const Container & container, OutputIterator it, BinaryOperation op)
     {
-        return ::std::adjacent_difference(begin(container), end(container), output_iterator, op);
+        return ::std::adjacent_difference(begin(container), end(container), it, op);
     }
 }
 
