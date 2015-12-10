@@ -416,6 +416,20 @@ namespace gtfo
             {
                 typedef decltype( * begin(declval<C &>()) ) type;
             };
+
+            template<typename C, bool c_is_container>
+            struct impl_value_from_container
+            {
+            };
+
+            template<typename C>
+            struct impl_value_from_container<C, true>
+            {
+                typedef typename decay
+                        <
+                            decltype( * begin(declval<C &>()) )
+                        >::type type;
+            };
         }
 
         /// declares member type which is the type of expression
@@ -430,12 +444,8 @@ namespace gtfo
         /// values of what type does a container of type T store;
         /// if is_container<T>::value == false, no member type is provided
         template<typename T>
-        struct value_from_container
+        struct value_from_container : helpers::impl_value_from_container<T, is_container<T>::value>
         {
-            typedef typename decay
-                    <
-                        typename result_of_container_iterator_dereferencing<T>::type
-                    >::type type;
         };
 
         /// defines static member constant value of type bool
