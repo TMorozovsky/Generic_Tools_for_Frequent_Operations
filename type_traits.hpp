@@ -29,8 +29,8 @@ namespace gtfo
         using ::std::decay;
         using ::std::declval;
 
-        typedef char yes_type;
-        struct no_type { char _[2]; };
+        typedef char(&yes_type)[1];
+        typedef char(&no_type) [2];
 
         /// defines static member constant value of type bool
         /// which is true if and only if
@@ -214,23 +214,23 @@ namespace gtfo
         namespace helpers
         {
             template<typename T, bool t_is_dereferenceable>
-            struct impl_declared_dereferencing_result
+            struct impl_result_of_dereferencing
             {
             };
 
             template<typename T>
-            struct impl_declared_dereferencing_result<T, true>
+            struct impl_result_of_dereferencing<T, true>
             {
                 typedef decltype( * declval<T &>() ) type;
             };
 
             template<typename T, bool t_is_dereferenceable>
-            struct impl_dereferencing_result_value
+            struct impl_value_of_dereferenced
             {
             };
 
             template<typename T>
-            struct impl_dereferencing_result_value<T, true>
+            struct impl_value_of_dereferenced<T, true>
             {
                 typedef typename decay
                         <
@@ -245,7 +245,7 @@ namespace gtfo
         /// or cv-qualifiers;
         /// if is_dereferenceable<T>::value == false, no member type is provided
         template<typename T>
-        struct declared_dereferencing_result : helpers::impl_declared_dereferencing_result<T, is_dereferenceable<T>::value>
+        struct result_of_dereferencing : helpers::impl_result_of_dereferencing<T, is_dereferenceable<T>::value>
         {
         };
 
@@ -255,14 +255,150 @@ namespace gtfo
         /// (as if it was returned or passed by value);
         /// if is_dereferenceable<T>::value == false, no member type is provided
         template<typename T>
-        struct dereferencing_result_value : helpers::impl_dereferencing_result_value<T, is_dereferenceable<T>::value>
+        struct value_of_dereferenced : helpers::impl_value_of_dereferenced<T, is_dereferenceable<T>::value>
         {
+        };
+
+        namespace helpers
+        {
+            template<typename T, typename U>
+            struct can_invoke_comparison_eq
+            {
+                template<typename V, typename W>
+                static yes_type test(typename remove_reference
+                                     <
+                                         decltype( declval<const V &>() == declval<const W &>() )
+                                     >::type *);
+
+                template<typename V, typename W>
+                static no_type test(...);
+
+                static GTFO_CONSTEXPR bool value = sizeof(test<T, U>(nullptr)) == sizeof(yes_type);
+            };
+
+            template<typename T, typename U>
+            struct can_invoke_comparison_n_eq
+            {
+                template<typename V, typename W>
+                static yes_type test(typename remove_reference
+                                     <
+                                         decltype( declval<const V &>() != declval<const W &>() )
+                                     >::type *);
+
+                template<typename V, typename W>
+                static no_type test(...);
+
+                static GTFO_CONSTEXPR bool value = sizeof(test<T, U>(nullptr)) == sizeof(yes_type);
+            };
+
+            template<typename T, typename U>
+            struct can_invoke_both_equality_comparisons
+            {
+                static GTFO_CONSTEXPR bool value = can_invoke_comparison_eq<T, U>::value &&
+                                                   can_invoke_comparison_n_eq<T, U>::value;
+            };
+
+            template<typename T, typename U, bool can_invoke_comparison_eq_on_t_and_u>
+            struct impl_result_of_eq_comparison
+            {
+            };
+
+            template<typename T, typename U>
+            struct impl_result_of_eq_comparison<T, U, true>
+            {
+                typedef decltype( declval<const T &>() == declval<const U &>() ) type;
+            };
+
+            template<typename T, typename U, bool can_invoke_comparison_n_eq_on_t_and_u>
+            struct impl_result_of_n_eq_comparison
+            {
+            };
+
+            template<typename T, typename U>
+            struct impl_result_of_n_eq_comparison<T, U, true>
+            {
+                typedef decltype( declval<const T &>() != declval<const U &>() ) type;
+            };
+
+            template<typename T, typename U>
+            struct result_of_eq_comparison : impl_result_of_eq_comparison<T, U,
+                                                                          can_invoke_comparison_eq<T, U>::value>
+            {
+            };
+
+            template<typename T, typename U>
+            struct result_of_n_eq_comparison : impl_result_of_n_eq_comparison<T, U,
+                                                                              can_invoke_comparison_n_eq<T, U>::value>
+            {
+            };
+
+            template<typename T>
+            struct can_be_used_in_a_boolean_context
+            {
+                template<typename U>
+                static yes_type test(typename remove_reference
+                                     <
+                                         decltype( static_cast<bool>(declval<T>()) )
+                                     >::type *);
+
+                template<typename U>
+                static no_type test(...);
+
+                static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
+            };
+        }
+
+        /// defines static member constant value of type bool
+        /// which is true if and only if
+        /// types T and U are equality-comparable, i.e. expressions
+        ///     const-lvalue-of-type-T == const-lvalue-of-type-U
+        /// and
+        ///     const-lvalue-of-type-T != const-lvalue-of-type-U
+        /// are both well-formed and return something that can be used
+        /// in a boolean context
+        template<typename T, typename U>
+        struct is_equality_comparable
+        {
+            template<typename V, typename W, bool can_invoke_both_equality_comparisons_on_v_and_w>
+            struct impl
+            {
+                static GTFO_CONSTEXPR bool value = false;
+            };
+
+            template<typename V, typename W>
+            struct impl<V, W, true>
+            {
+                static GTFO_CONSTEXPR bool value = helpers::can_be_used_in_a_boolean_context
+                                                   <
+                                                       typename helpers::result_of_eq_comparison
+                                                       <
+                                                           V,
+                                                           W
+                                                       >::type
+                                                   >::value
+                                                   &&
+                                                   helpers::can_be_used_in_a_boolean_context
+                                                   <
+                                                       typename helpers::result_of_n_eq_comparison
+                                                       <
+                                                           V,
+                                                           W
+                                                       >::type
+                                                   >::value;
+            };
+
+            static GTFO_CONSTEXPR bool value = impl
+                                               <
+                                                   T,
+                                                   U,
+                                                   helpers::can_invoke_both_equality_comparisons<T, U>::value
+                                               >::value;
         };
 
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// type T is incrementable, i.e. expression
-        ///     ++ object-of-type-T
+        ///     ++ lvalue-of-type-T
         /// is well-formed
         template<typename T>
         struct is_incrementable
@@ -282,11 +418,13 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// object of type T is a valid iterator that
-        /// can be (at least) dereferenced and incremented
+        /// can be (at least) dereferenced, incremented,
+        /// equality-compared to another object of this type,
+        /// and its dereferencing result is not void
         template<typename T>
         struct is_iterator
         {
-            template<typename U, bool u_is_incrementable_and_dereferenceable>
+            template<typename U, bool u_is_incrementable_dereferenceable_and_comparable>
             struct impl
             {
                 static GTFO_CONSTEXPR bool value = false;
@@ -297,7 +435,7 @@ namespace gtfo
             {
                 static GTFO_CONSTEXPR bool value = !is_void
                                                    <
-                                                       typename dereferencing_result_value<U>::type
+                                                       typename value_of_dereferenced<U>::type
                                                    >::value;
             };
 
@@ -305,7 +443,8 @@ namespace gtfo
                                                <
                                                    T,
                                                    is_incrementable<T>::value &&
-                                                   is_dereferenceable<T>::value
+                                                   is_dereferenceable<T>::value &&
+                                                   is_equality_comparable<T, T>::value
                                                >::value;
         };
 
@@ -407,14 +546,17 @@ namespace gtfo
         namespace helpers
         {
             template<typename C, bool c_is_container>
-            struct impl_result_of_container_iterator_dereferencing
+            struct impl_iterator_of_container
             {
             };
 
             template<typename C>
-            struct impl_result_of_container_iterator_dereferencing<C, true>
+            struct impl_iterator_of_container<C, true>
             {
-                typedef decltype( * begin(declval<C &>()) ) type;
+                typedef typename decay
+                        <
+                            decltype( begin(declval<C &>()) )
+                        >::type type;
             };
 
             template<typename C, bool c_is_container>
@@ -432,11 +574,11 @@ namespace gtfo
             };
         }
 
-        /// declares member type which is the type of expression
-        ///     * iterator-from-container-of-type-T;
+        /// declares member type which tells
+        /// iterators of what type does a container of type T use;
         /// if is_container<T>::value == false, no member type is provided
         template<typename T>
-        struct result_of_container_iterator_dereferencing : helpers::impl_result_of_container_iterator_dereferencing<T, is_container<T>::value>
+        struct iterator_of_container : helpers::impl_iterator_of_container<T, is_container<T>::value>
         {
         };
 
@@ -450,98 +592,185 @@ namespace gtfo
 
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// Container is a valid type of container that stores
-        /// elements which can be added to an object of type Value
-        /// using a function object of type Adder;
-        /// an Adder should accept two arguments: a Value as its first argument
-        /// and a container element as its second argument;
-        /// if Adder type is not specified, the expression
-        ///     object-of-type-Value + object-of-Container-element-type
-        /// is used by default
-        template<typename Container, typename Value, typename Adder = void>
-        struct can_add_elements_of_container_to_value
+        /// Function is a type of function or function object
+        /// that can be invoked without any arguments
+        template<typename Function>
+        struct is_invokable_0
         {
-            template<typename C, typename V, typename A, bool c_is_container, bool adder_specified>
-            struct impl
-            {
-                static GTFO_CONSTEXPR bool value = false;
-            };
+            template<typename Fun>
+            static yes_type test(typename remove_reference
+                                 <
+                                     decltype( declval<Fun &>()() )
+                                 >::type *);
 
-            template<typename C, typename V, typename A>
-            struct impl<C, V, A, true, false>
-            {
-                template<typename Lhs, typename Rhs>
-                static yes_type test(typename remove_reference
-                                     <
-                                         decltype( declval<const Lhs &>() + declval<const Rhs &>() )
-                                     >::type *);
+            template<typename Fun>
+            static no_type test(...);
 
-                template<typename Lhs, typename Rhs>
-                static no_type test(...);
-
-                static GTFO_CONSTEXPR bool value = sizeof(test<V, typename value_from_container<C>::type>(nullptr)) == sizeof(yes_type);
-            };
-
-            template<typename C, typename V, typename A>
-            struct impl<C, V, A, true, true>
-            {
-                template<typename Lhs, typename Rhs>
-                static yes_type test(typename remove_reference
-                                     <
-                                         decltype( declval<A &>()(declval<const Lhs &>(), declval<const Rhs &>()) )
-                                     >::type *);
-
-                template<typename Lhs, typename Rhs>
-                static no_type test(...);
-
-                static GTFO_CONSTEXPR bool value = sizeof(test<V, typename value_from_container<C>::type>(nullptr)) == sizeof(yes_type);
-            };
-
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   Container,
-                                                   Value,
-                                                   Adder,
-                                                   is_container<Container>::value,
-                                                   !is_same<Adder, void>::value
-                                               >::value;
+            static GTFO_CONSTEXPR bool value = sizeof(test<Function>(nullptr)) == sizeof(yes_type);
         };
 
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// Container is a valid type of container and
-        /// BinaryOperation is a type of binary function or function object
-        /// which can be invoked on two container elements
-        template<typename BinaryOperation, typename Container>
-        struct can_invoke_operation_on_two_container_elements
+        /// a function or function object of type UnaryOperation
+        /// can be invoked with an rvalue of type Argument;
+        /// for testing it against an lvalue, add
+        /// an lvalue reference to the type of Argument
+        template<typename UnaryOperation, typename Argument>
+        struct is_invokable_1
         {
-            template<typename O, typename C, bool c_is_container>
-            struct impl
+            template<typename Fun, typename Arg>
+            static yes_type test(typename remove_reference
+                                 <
+                                     decltype( declval<Fun &>()(declval<Arg>()) )
+                                 >::type *);
+
+            template<typename Fun, typename Arg>
+            static no_type test(...);
+
+            static GTFO_CONSTEXPR bool value = sizeof(test
+                                                      <
+                                                          UnaryOperation,
+                                                          Argument
+                                                      >(nullptr)) == sizeof(yes_type);
+        };
+
+        /// defines static member constant value of type bool
+        /// which is true if and only if
+        /// a function or function object of type BinaryOperation
+        /// can be invoked with two rvalues of type
+        /// LhsArgument and RhsArgument
+        template<typename BinaryOperation, typename LhsArgument, typename RhsArgument>
+        struct is_invokable_2
+        {
+            template<typename Fun, typename Lhs, typename Rhs>
+            static yes_type test(typename remove_reference
+                                 <
+                                     decltype( declval<Fun &>()(declval<Lhs>(), declval<Rhs>()) )
+                                 >::type *);
+
+            template<typename Fun, typename Lhs, typename Rhs>
+            static no_type test(...);
+
+            static GTFO_CONSTEXPR bool value = sizeof(test
+                                                      <
+                                                          BinaryOperation,
+                                                          LhsArgument,
+                                                          RhsArgument
+                                                      >(nullptr)) == sizeof(yes_type);
+        };
+
+        /// defines static member constant value of type bool
+        /// which is true if and only if an expression
+        ///     rvalue-of-type-LhsArgument + rvalue-of-type-RhsArgument
+        /// is well-formed
+        template<typename LhsArgument, typename RhsArgument>
+        struct are_addable
+        {
+            template<typename Lhs, typename Rhs>
+            static yes_type test(typename remove_reference
+                                 <
+                                     decltype( declval<Lhs>() + declval<Rhs>() )
+                                 >::type *);
+
+            template< typename Lhs, typename Rhs>
+            static no_type test(...);
+
+            static GTFO_CONSTEXPR bool value = sizeof(test
+                                                      <
+                                                          LhsArgument,
+                                                          RhsArgument
+                                                      >(nullptr)) == sizeof(yes_type);
+        };
+
+        /// defines static member constant value of type bool
+        /// which is true if and only if an expression
+        ///     rvalue-of-type-LhsArgument - rvalue-of-type-RhsArgument
+        /// is well-formed
+        template<typename LhsArgument, typename RhsArgument>
+        struct are_subtractable
+        {
+            template<typename Lhs, typename Rhs>
+            static yes_type test(typename remove_reference
+                                 <
+                                     decltype( declval<Lhs>() - declval<Rhs>() )
+                                 >::type *);
+
+            template< typename Lhs, typename Rhs>
+            static no_type test(...);
+
+            static GTFO_CONSTEXPR bool value = sizeof(test
+                                                      <
+                                                          LhsArgument,
+                                                          RhsArgument
+                                                      >(nullptr)) == sizeof(yes_type);
+        };
+
+        namespace helpers
+        {
+            template<typename Fun, typename Lhs, typename Rhs, bool fun_is_invokable>
+            struct impl_result_of_2
             {
-                static GTFO_CONSTEXPR bool value = false;
             };
 
-            template<typename O, typename C>
-            struct impl<O, C, true>
+            template<typename Fun, typename Lhs, typename Rhs>
+            struct impl_result_of_2<Fun, Lhs, Rhs, true>
             {
-                template<typename F, typename E>
-                static yes_type test(typename remove_reference
-                                     <
-                                         decltype( declval<F &>()(declval<const E &>(), declval<const E &>()) )
-                                     >::type *);
-
-                template<typename F, typename E>
-                static no_type test(...);
-
-                static GTFO_CONSTEXPR bool value = sizeof(test<O, typename value_from_container<C>::type>(nullptr)) == sizeof(yes_type);
+                typedef decltype( declval<Fun &>()(declval<Lhs>(), declval<Rhs>()) ) type;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   BinaryOperation,
-                                                   Container,
-                                                   is_container<Container>::value
-                                               >::value;
+            template<typename Lhs, typename Rhs, bool lhs_and_rhs_are_addable>
+            struct impl_result_of_addition
+            {
+            };
+
+            template<typename Lhs, typename Rhs>
+            struct impl_result_of_addition<Lhs, Rhs, true>
+            {
+                typedef decltype( declval<Lhs>() + declval<Rhs>() ) type;
+            };
+
+            template<typename Lhs, typename Rhs, bool lhs_and_rhs_are_subtractable>
+            struct impl_result_of_subtraction
+            {
+            };
+
+            template<typename Lhs, typename Rhs>
+            struct impl_result_of_subtraction<Lhs, Rhs, true>
+            {
+                typedef decltype( declval<Lhs>() - declval<Rhs>() ) type;
+            };
+        }
+
+        /// declares member type which is the type returned by
+        /// a call to BinaryOperation function (function object)
+        /// with two arguments of types LhsArgument and RhsArgument;
+        /// if such call is ill-formed, no member type is provided
+        template<typename BinaryOperation, typename LhsArgument, typename RhsArgument>
+        struct result_of_2 : helpers::impl_result_of_2<BinaryOperation, LhsArgument, RhsArgument,
+                                                       is_invokable_2<BinaryOperation, LhsArgument, RhsArgument>::value>
+        {
+        };
+
+        /// declares member type which is the type of expression
+        ///     rvalue-of-type-LhsArgument + rvalue-of-type-RhsArgument;
+        /// for testing it against an lvalues, don't forget to add
+        /// lvalue references to argument types;
+        /// if such expression is ill-formed, no member type is provided
+        template<typename LhsArgument, typename RhsArgument>
+        struct result_of_addition : helpers::impl_result_of_addition<LhsArgument, RhsArgument,
+                                                                     are_addable<LhsArgument, RhsArgument>::value>
+        {
+        };
+
+        /// declares member type which is the type of expression
+        ///     rvalue-of-type-LhsArgument - rvalue-of-type-RhsArgument;
+        /// for testing it against an lvalues, don't forget to add
+        /// lvalue references to argument types;
+        /// if such expression is ill-formed, no member type is provided
+        template<typename LhsArgument, typename RhsArgument>
+        struct result_of_subtraction : helpers::impl_result_of_subtraction<LhsArgument, RhsArgument,
+                                                                           are_subtractable<LhsArgument, RhsArgument>::value>
+        {
         };
 
         /// defines static member constant value of type bool
@@ -568,37 +797,13 @@ namespace gtfo
                     ;
         };
 
-        /// defines static member constant value of type bool
-        /// which is true if and only if
-        /// Container is a valid type of container
-        /// that stores elements which can be assigned to
-        ///     * object-of-type-OutputIterator
-        template<typename Container, typename OutputIterator>
-        struct can_assign_container_element_to_dereferenced_output_iterator
+        /// declares member type which is exactly T;
+        /// can be used to disable argument-dependent lookup
+        /// when used with overloaded function arguments
+        template<typename T>
+        struct type_of
         {
-            template<typename C, typename I, bool c_is_container_and_i_is_iterator>
-            struct impl
-            {
-                static GTFO_CONSTEXPR bool value = false;
-            };
-
-            template<typename C, typename I>
-            struct impl<C, I, true>
-            {
-                static GTFO_CONSTEXPR bool value = is_assignable
-                                                   <
-                                                       typename declared_dereferencing_result<I>::type,
-                                                       typename value_from_container<C>::type
-                                                   >::value;
-            };
-
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   Container,
-                                                   OutputIterator,
-                                                   is_container<Container>::value &&
-                                                   is_iterator<OutputIterator>::value
-                                               >::value;
+            typedef T type;
         };
     }
 }
