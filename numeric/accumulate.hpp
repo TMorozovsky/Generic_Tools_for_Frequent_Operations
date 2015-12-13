@@ -2,71 +2,28 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_ACCUMULATE_HPP
 
 #include <numeric>
-#include "type_traits.hpp"
+#include "_impl/type_traits/is_assignable.hpp"
+#include "_impl/type_traits/result_of_addition.hpp"
+#include "_impl/type_traits/result_of_dereferencing.hpp"
+#include "_impl/type_traits/iterator_of_container.hpp"
+#include "_impl/type_traits/value_from_container.hpp"
+#include "_impl/type_traits/result_of_fun2.hpp"
 
 namespace gtfo
 {
-#define GTFO_DISABLE_ADL(t) typename tt::type_of<t>::type
-
-    template<typename InputIterator, typename Value>
-    inline
-    typename tt::enable_if
-    <
-        tt::is_assignable
-        <
-            Value &,
-            typename tt::result_of_addition
-            <
-                Value &,
-                typename tt::result_of_dereferencing<InputIterator>::type
-            >::type
-        >::value,
-        Value
-    >::type
-    accumulate(GTFO_DISABLE_ADL(InputIterator) it_begin,
-               GTFO_DISABLE_ADL(InputIterator) it_end,
-               GTFO_DISABLE_ADL(Value)         init)
-    {
-        return ::std::accumulate(it_begin, it_end, init);
-    }
-
-    template<typename InputIterator, typename Value, typename BinaryOperation>
-    inline
-    typename tt::enable_if
-    <
-        tt::is_assignable
-        <
-            Value &,
-            typename tt::result_of_2
-            <
-                BinaryOperation &,
-                Value &,
-                typename tt::result_of_dereferencing<InputIterator>::type
-            >::type
-        >::value,
-        Value
-    >::type
-    accumulate(GTFO_DISABLE_ADL(InputIterator)   it_begin,
-               GTFO_DISABLE_ADL(InputIterator)   it_end,
-               GTFO_DISABLE_ADL(Value)           init,
-               GTFO_DISABLE_ADL(BinaryOperation) op)
-    {
-        return ::std::accumulate(it_begin, it_end, init, op);
-    }
-
     template<typename Container, typename Value>
     inline
-    typename tt::enable_if
+    typename _tt::enable_if
     <
-        tt::is_assignable
+        _tt::is_assignable
         <
             Value &,
-            typename tt::result_of_addition
+            typename _tt::result_of_addition
             <
                 Value &,
-                typename tt::result_of_dereferencing
+                typename _tt::result_of_dereferencing
                 <
-                    typename tt::iterator_of_container<Container>::type
+                    typename _tt::iterator_of_container<Container>::type
                 >::type
             >::type
         >::value,
@@ -79,27 +36,27 @@ namespace gtfo
 
     template<typename Container>
     inline
-    typename tt::value_from_container<Container>::type
+    typename _tt::value_from_container<Container>::type
     accumulate(Container && container)
     {
         return ::std::accumulate(begin(container), end(container),
-                                 typename tt::value_from_container<Container>::type());
+                                 typename _tt::value_from_container<Container>::type());
     }
 
     template<typename Container, typename Value, typename BinaryOperation>
     inline
-    typename tt::enable_if
+    typename _tt::enable_if
     <
-        tt::is_assignable
+        _tt::is_assignable
         <
             Value &,
-            typename tt::result_of_2
+            typename _tt::result_of_fun2
             <
                 BinaryOperation &,
                 Value &,
-                typename tt::result_of_dereferencing
+                typename _tt::result_of_dereferencing
                 <
-                    typename tt::iterator_of_container<Container>::type
+                    typename _tt::iterator_of_container<Container>::type
                 >::type
             >::type
         >::value,
@@ -112,23 +69,25 @@ namespace gtfo
 
     template<typename Container, typename BinaryOperation>
     inline
-    typename tt::enable_if
+    typename _tt::enable_if
     <
-        tt::is_invokable_2
+        _tt::is_assignable
         <
-            BinaryOperation,
-            typename tt::value_from_container<Container>::type,
-            typename tt::value_from_container<Container>::type
+            typename _tt::value_from_container<Container>::type &,
+            typename _tt::result_of_fun2
+            <
+                BinaryOperation,
+                typename _tt::value_from_container<Container>::type,
+                typename _tt::value_from_container<Container>::type
+            >::type
         >::value,
-        typename tt::value_from_container<Container>::type
+        typename _tt::value_from_container<Container>::type
     >::type
-    accumulate(const Container & container, BinaryOperation op)
+    accumulate(Container && container, BinaryOperation op)
     {
         return ::std::accumulate(begin(container), end(container),
-                                 typename tt::value_from_container<Container>::type(), op);
+                                 typename _tt::value_from_container<Container>::type(), op);
     }
-
-#undef GTFO_DISABLE_ADL
 }
 
 #endif // GTFO_FILE_INCLUDED_NUMERIC_ACCUMULATE_HPP

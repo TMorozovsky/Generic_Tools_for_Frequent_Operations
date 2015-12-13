@@ -1,19 +1,19 @@
-#include "type_traits.hpp"
+#include "_impl/type_traits.hpp"
 #include <vector>
 
 #define s_assert(x) static_assert(x, #x)
 
-using namespace gtfo::tt;
+using namespace gtfo::_tt;
 
 struct test_no_iterators
 {
     int   begin() { return 0; }
     int   end()   { return 0; }
 };
-namespace std {
-    auto begin(test_no_iterators &arg) -> decltype(arg.begin()) { return arg.begin(); }
-    auto end  (test_no_iterators &arg) -> decltype(arg.end())   { return arg.end  (); }
-}
+
+using helpers::has_iterator_returning_begin;
+using helpers::has_iterator_returning_end;
+
 static_assert(has_begin                   <test_no_iterators>::value == true,  "");
 static_assert(has_end                     <test_no_iterators>::value == true,  "");
 static_assert(has_iterator_returning_begin<test_no_iterators>::value == false, "");
@@ -55,8 +55,8 @@ static_assert(is_container< test_iterator_begin_only >::value == false, "");
 static_assert(is_container< test_iterator_end_only   >::value == false, "");
 static_assert(is_container< test_iterator_both       >::value == true,  "");
 
-static_assert(is_dereferenceable< int    >::value == false, "");
-static_assert(is_dereferenceable< int *  >::value == true,  "");
+static_assert(is_dereferenceable< int   >::value == false, "");
+static_assert(is_dereferenceable< int * >::value == true,  "");
 
 static_assert(is_iterator< std::vector<int>::iterator               >::value == true,  "");
 static_assert(is_iterator< std::vector<int>::const_reverse_iterator >::value == true,  "");
@@ -129,32 +129,39 @@ struct Comparable
     friend bool operator != (const Comparable &, const Comparable &);
 };
 
+template<typename T, typename U>
+struct can_invoke_both_equality_comparisons
+{
+    static const bool value = helpers::can_invoke_comparison_eq<T, U>::value &&
+                              helpers::can_invoke_comparison_n_eq<T, U>::value;
+};
+
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<int, int>::value,
+        can_invoke_both_equality_comparisons<int, int>::value,
         ""
         );
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<int *, const int *volatile>::value,
+        can_invoke_both_equality_comparisons<int *, const int *volatile>::value,
         ""
         );
 static_assert(
-        !helpers::can_invoke_both_equality_comparisons<int *, int>::value,
+        !can_invoke_both_equality_comparisons<int *, int>::value,
         ""
         );
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<NotComparableEq, NotComparableEq>::value,
+        can_invoke_both_equality_comparisons<NotComparableEq, NotComparableEq>::value,
         ""
         );
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<NotComparableNEq, NotComparableNEq>::value,
+        can_invoke_both_equality_comparisons<NotComparableNEq, NotComparableNEq>::value,
         ""
         );
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<NotComparableAtAll, NotComparableAtAll>::value,
+        can_invoke_both_equality_comparisons<NotComparableAtAll, NotComparableAtAll>::value,
         ""
         );
 static_assert(
-        helpers::can_invoke_both_equality_comparisons<Comparable, Comparable>::value,
+        can_invoke_both_equality_comparisons<Comparable, Comparable>::value,
         ""
         );
 
@@ -196,10 +203,14 @@ static_assert(
         !helpers::can_be_used_in_a_boolean_context<TwoConversionBoolean>::value,
         ""
         );
+
+// unfortunately, a bug in MSVC 2012 :( dunno how to make workarounds for it right now
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 static_assert(
         !helpers::can_be_used_in_a_boolean_context<ShyBoolean>::value,
         ""
         );
+#endif
 
 static_assert(
         !is_equality_comparable<NotComparableEq, NotComparableEq>::value,
@@ -227,5 +238,30 @@ static_assert(
         );
 static_assert(
         !is_equality_comparable<std::vector<int>::iterator, std::vector<int>::reverse_iterator>::value,
+        ""
+        );
+
+static_assert(
+        is_same
+        <
+            typename common_type_2<float &, int &>::type,
+            float
+        >::value,
+        ""
+        );
+static_assert(
+        is_same
+        <
+            typename common_type_2<int &, float &>::type,
+            float
+        >::value,
+        ""
+        );
+static_assert(
+        is_same
+        <
+            typename common_type_2<const float &, volatile int &>::type,
+            float
+        >::value,
         ""
         );

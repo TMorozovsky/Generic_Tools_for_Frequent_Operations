@@ -44,6 +44,22 @@ Foo operator + (const Foo & lhs, const Boo & rhs)
     return Foo( lhs.data() + rhs.data() );
 }
 
+
+
+
+
+void print_if_odd(int arg)
+{
+    if (arg % 2)
+        cout << "odd element: " << arg << endl;
+}
+
+
+
+
+
+
+
 int main()
 {
     std::vector<int> vi;
@@ -78,4 +94,23 @@ int main()
     endl(cout);
     for_each(vi, [](int x){ cout << "lol:" << x; });
     endl(cout);
+
+    cout << inner_product(begin(vi), end(vi), begin(c_array),
+                          10000L) <<
+            endl;
+    cout << inner_product(begin(vi), end(vi), begin(c_array),
+                          10000L,
+                          std::plus<int>(), std::multiplies<int>()) <<
+            endl;
+    cout << inner_product(begin(vi), end(vi), begin(c_array)) <<
+            endl;
+    cout << inner_product(begin(vi), end(vi), begin(c_array),
+                          std::plus<int>(), std::multiplies<int>()) <<
+            endl;
+
+
+
+
+
+
 }
