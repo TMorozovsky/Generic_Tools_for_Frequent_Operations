@@ -1,0 +1,7 @@
+#ifndef GTFO_FILE_INCLUDED_ALGORITHM_HPP
+#define GTFO_FILE_INCLUDED_ALGORITHM_HPP
+
+#include "gtfo/algorithm/for_each.hpp"
+
+#endif // GTFO_FILE_INCLUDED_ALGORITHM_HPP
+
