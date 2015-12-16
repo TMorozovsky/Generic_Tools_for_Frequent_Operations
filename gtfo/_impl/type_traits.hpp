@@ -29,5 +29,6 @@
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/common_type_2.hpp"
 #include "gtfo/_impl/type_traits/is_container_castable_to_its_iterator.hpp"
+#include "gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp"
 
 #endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_HPP

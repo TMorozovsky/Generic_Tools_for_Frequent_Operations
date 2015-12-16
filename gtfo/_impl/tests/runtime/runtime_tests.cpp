@@ -68,49 +68,61 @@ int main()
     vi.push_back(3);
     vi.push_back(4);
     vi.push_back(5);
-    cout << accumulate(vi.begin() + 1, vi.end() - 1, 10000) << endl;
-    cout << accumulate(vi.begin() + 1, vi.end() - 1, -10000, std::plus<int>()) << endl;
-    cout << accumulate(vi, -100) << endl;
-    cout << accumulate(vi, 100, std::plus<int>()) << endl;
-    cout << accumulate(vi, std::plus<int>()) << endl;
+    cout << gtfo::accumulate(vi.begin() + 1, vi.end() - 1, 10000) << endl;
+    cout << gtfo::accumulate(vi.begin() + 1, vi.end() - 1, -10000, std::plus<int>()) << endl;
+    cout << gtfo::accumulate(vi, -100) << endl;
+    cout << gtfo::accumulate(vi, 100, std::plus<int>()) << endl;
 
     float c_array[] = { 1.f, 2.f, 3.f, 4.f, 5.f };
-    cout << accumulate(c_array, 5.0, std::multiplies<double>()) << endl;
+    cout << gtfo::accumulate(c_array, 5.0, std::multiplies<double>()) << endl;
 
     Boo boo_arr[] = { Boo(1), Boo(9) };
-    cout << accumulate(boo_arr, Foo(7), PlusFooBoo()).data() << endl;
-    cout << accumulate(boo_arr, Foo(25)).data() << endl;
+    cout << gtfo::accumulate(boo_arr, Foo(7), PlusFooBoo()).data() << endl;
+    cout << gtfo::accumulate(boo_arr, Foo(25)).data() << endl;
 
-    adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout));
+    gtfo::adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout));
     endl(cout);
-    adjacent_difference(vi, std::ostream_iterator<int>(cout));
+    gtfo::adjacent_difference(vi, std::ostream_iterator<int>(cout));
     endl(cout);
-    adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout), std::minus<int>());
+    gtfo::adjacent_difference(vi.begin(), vi.end(), std::ostream_iterator<int>(cout), std::minus<int>());
     endl(cout);
-    adjacent_difference(vi, std::ostream_iterator<int>(cout), std::minus<int>());
-    endl(cout);
-
-    for_each(vi.begin(), vi.end(), [](int x){ cout << "lol:" << x; });
-    endl(cout);
-    for_each(vi, [](int x){ cout << "lol:" << x; });
+    gtfo::adjacent_difference(vi, std::ostream_iterator<int>(cout), std::minus<int>());
     endl(cout);
 
-    cout << inner_product(begin(vi), end(vi), begin(c_array),
-                          10000L) <<
+    gtfo::for_each(vi.begin(), vi.end(), [](int x){ cout << "lol:" << x; });
+    endl(cout);
+    gtfo::for_each(vi, [](int x){ cout << "lol:" << x; });
+    endl(cout);
+
+    cout << gtfo::inner_product(begin(vi), end(vi), begin(c_array),
+                                10000L) <<
             endl;
-    cout << inner_product(begin(vi), end(vi), begin(c_array),
-                          10000L,
-                          std::plus<int>(), std::multiplies<int>()) <<
+    cout << gtfo::inner_product(begin(vi), end(vi), begin(c_array),
+                                10000L,
+                                std::plus<int>(), std::multiplies<int>()) <<
             endl;
-    cout << inner_product(begin(vi), end(vi), begin(c_array)) <<
+    cout << gtfo::inner_product(begin(vi), end(vi), begin(c_array)) <<
             endl;
 
 
-    cout << inner_product(vi, begin(c_array), 42) << endl;
-    cout << inner_product(vi, begin(c_array), 42, std::plus<int>(), std::multiplies<int>()) << endl;
+    cout << gtfo::inner_product(vi, begin(c_array), 42) << endl;
+    cout << gtfo::inner_product(vi, begin(c_array), 42, std::plus<int>(), std::multiplies<int>()) << endl;
 
     cout << gtfo::inner_product(vi.begin(), vi.end(), c_array, 42) << endl;
     cout << gtfo::inner_product(begin(c_array), end(c_array), vi, 42, std::plus<int>(), std::multiplies<int>()) << endl;
 
-    cout << inner_product(c_array, vi, 100) << ' ' << inner_product(vi, c_array, 100) << endl;
+    cout << gtfo::inner_product(c_array, vi, 100) << ' ' <<
+            gtfo::inner_product(vi, c_array, 100) << endl;
+
+    cout << gtfo::inner_product(c_array, vi, 100, std::plus<int>(), std::multiplies<int>()) << ' ' <<
+            gtfo::inner_product(vi, c_array, 100, std::plus<int>(), std::multiplies<int>()) << endl;
+
+    cout << gtfo::inner_product(c_array, vi.begin()) << ' ' <<
+            gtfo::inner_product(vi, begin(c_array)) << endl;
+
+    cout << gtfo::inner_product(begin(c_array), end(c_array), vi) << ' ' <<
+            gtfo::inner_product(vi.begin(), vi.end(), c_array) << endl;
+
+    cout << gtfo::inner_product(c_array, vi) << ' ' <<
+            gtfo::inner_product(vi, c_array) << endl;
 }

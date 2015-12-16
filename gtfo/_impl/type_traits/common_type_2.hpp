@@ -41,6 +41,8 @@ namespace gtfo
 
         /// declares member type which is the type
         /// both T1 and T2 can be implicitly converted to
+        /// (top-level reference and cv-qualifiers are stripped);
+        /// if no common type exists, no member type is provided
         template<typename T1, typename T2>
         struct common_type_2 : helpers::impl_common_type_2<T1, T2,
                                                            helpers::common_type_2_exists<T1, T2>::value>
