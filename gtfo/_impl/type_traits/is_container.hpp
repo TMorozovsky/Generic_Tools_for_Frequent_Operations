@@ -77,8 +77,9 @@ namespace gtfo
 
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// object of type T is a valid container,
-        /// i.e. both calls to
+        /// object of type T is a valid container
+        /// or a reference to such container,
+        /// i.e. if both calls to
         ///     begin(object-of-type-T)
         /// and
         ///     end(object-of-type-T)
