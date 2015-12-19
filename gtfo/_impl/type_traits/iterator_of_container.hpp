@@ -26,7 +26,8 @@ namespace gtfo
         }
 
         /// declares member type which tells
-        /// iterators of what type does a container of type T use;
+        /// iterators of what type does a container of type T use
+        /// (T may also be a type of reference to such container);
         /// if is_container<T>::value == false, no member type is provided
         template<typename T>
         struct iterator_of_container : helpers::impl_iterator_of_container<T, is_container<T>::value>

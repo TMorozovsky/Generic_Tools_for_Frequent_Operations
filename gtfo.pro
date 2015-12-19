@@ -42,4 +42,6 @@ HEADERS += \
     gtfo/_impl/type_traits/is_assignable.hpp \
     gtfo/_impl/type_traits/common_type_2.hpp \
     gtfo/_impl/type_traits/is_container_castable_to_its_iterator.hpp \
-    gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp
+    gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp \
+    gtfo/numeric/partial_sum.hpp \
+    gtfo/numeric/iota.hpp
