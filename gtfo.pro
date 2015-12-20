@@ -1,6 +1,17 @@
 SOURCES += \
     gtfo/_impl/tests/runtime/runtime_tests.cpp \
-    gtfo/_impl/tests/static/static_tests.cpp
+    gtfo/_impl/tests/static/_old_static_tests.cpp \
+    gtfo/_impl/tests/static/static_test_are_addable.cpp \
+    gtfo/_impl/tests/static/static_test_are_multipliable.cpp \
+    gtfo/_impl/tests/static/static_test_are_subtractable.cpp \
+    gtfo/_impl/tests/static/static_test_common_type_2.cpp \
+    gtfo/_impl/tests/static/static_test_has_begin.cpp \
+    gtfo/_impl/tests/static/static_test_has_end.cpp \
+    gtfo/_impl/tests/static/static_test_is_assignable.cpp \
+    gtfo/_impl/tests/static/static_test_is_container.cpp \
+    gtfo/_impl/tests/static/static_test_is_container_castable_to_its_iterator.cpp \
+    gtfo/_impl/tests/static/static_test_is_dereferenceable.cpp \
+    gtfo/_impl/tests/static/static_test_is_equality_comparable.cpp
 
 QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 
