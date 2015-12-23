@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="gtfo">
+      <UniqueIdentifier>{80a99636-3f47-47c2-8204-b9abc782fce3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_tests">
+      <UniqueIdentifier>{9ccd91d1-e44f-4aeb-8ad3-fd3a450e4f48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_tests\runtime">
+      <UniqueIdentifier>{cb73e601-b794-4f88-b4e1-d665c20b9912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_tests\static">
+      <UniqueIdentifier>{e5d11aa8-28ec-431c-a5dc-42d945ddc7e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\numeric">
+      <UniqueIdentifier>{8bd1c207-51f8-4abd-bc4a-5eb8c443468a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl">
+      <UniqueIdentifier>{cd76c1b3-66b6-4edb-869a-16c3da71d618}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\algorithm">
+      <UniqueIdentifier>{9d56b6f1-f3b7-47b5-9b91-d7f2fdb16034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl\type_traits">
+      <UniqueIdentifier>{daffdf74-a6c1-4af3-889e-229fbaae0813}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gtfo\_impl\type_traits\_common_definitions.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_multipliable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_subtractable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\common_type_2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\has_begin.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\has_end.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_assignable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_container.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_container_castable_to_its_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_dereferenceable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_equality_comparable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_incrementable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun0.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun1.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\iterator_of_container.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_addition.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_begin.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_container_iterator_dereferencing.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_dereferencing.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_end.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_fun0.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_fun1.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_fun2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_multiplication.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_subtraction.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\value_from_container.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\value_of_dereferenced.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\for_each.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric\accumulate.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric\adjacent_difference.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric\inner_product.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric\iota.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric\partial_sum.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\numeric.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
+      <Filter>gtfo_tests\runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\_old_static_tests.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_multipliable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_subtractable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_common_type_2.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_has_begin.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_has_end.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_assignable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_container.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_container_castable_to_its_iterator.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_dereferenceable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_equality_comparable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
