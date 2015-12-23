@@ -11,7 +11,8 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// object of type T is a valid container that is
+        /// lvalue of type T is a valid container
+        /// (or a reference to such container) that is
         /// castable to the type of that container's iterator
         template<typename T>
         struct is_container_castable_to_its_iterator
@@ -30,7 +31,7 @@ namespace gtfo
                 template<typename V>
                 static yes_type test(typename remove_reference
                                      <
-                                        decltype( Iterator(declval<V>()) )
+                                        decltype( Iterator(declval<V &>()) )
                                      >::type *);
 
                 template<typename V>

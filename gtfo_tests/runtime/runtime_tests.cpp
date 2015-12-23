@@ -165,4 +165,8 @@ int main()
         gtfo::for_each(vi, [](int x){ cout << "test:" << x; });
         endl(cout);
     }
+
+#ifdef _MSC_VER
+    std::cin.get();
+#endif
 }

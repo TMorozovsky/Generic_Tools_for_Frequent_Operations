@@ -10,7 +10,7 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// Function is a type of function or function object
-        /// that can be invoked without any arguments
+        /// lvalue of which can be invoked without any arguments
         template<typename Function>
         struct is_invokable_fun0
         {

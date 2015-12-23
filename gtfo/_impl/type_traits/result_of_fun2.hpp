@@ -23,8 +23,8 @@ namespace gtfo
         }
 
         /// declares member type which is the type returned by
-        /// a call to BinaryOperation function (function object)
-        /// with two arguments of types Argument1 and Argument2;
+        /// a call to lvalue of type BinaryOperation
+        /// with two rvalue arguments of types Argument1 and Argument2;
         /// if such call is ill-formed, no member type is provided
         template<typename BinaryOperation, typename Argument1, typename Argument2>
         struct result_of_fun2 : helpers::impl_result_of_fun2<BinaryOperation, Argument1, Argument2,

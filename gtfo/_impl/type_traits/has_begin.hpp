@@ -10,7 +10,7 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// a call to
-        ///     begin(object-of-type-T)
+        ///     begin(lvalue-of-type-T)
         /// is well-formed
         template<typename T>
         struct has_begin

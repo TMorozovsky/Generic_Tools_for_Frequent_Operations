@@ -14,30 +14,30 @@ namespace
     struct G { int * begin() { return nullptr; } int * end() { return nullptr; } };
 }
 
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(A), "");
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(A), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(A &), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(A &), "");
 static_assert(!GTFO_IS_CONTAINER(A), "");
 
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(B), "");
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(B), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(B &), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(B &), "");
 static_assert(!GTFO_IS_CONTAINER(B), "");
 
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(C), "");
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(C), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(C &), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(C &), "");
 static_assert(!GTFO_IS_CONTAINER(C), "");
 
-static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(D), "");
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(D), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(D &), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(D &), "");
 static_assert(!GTFO_IS_CONTAINER(D), "");
 
-static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(E), "");
-static_assert(GTFO_HAS_ITERATOR_RETURNING_END(E), "");
+static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(E &), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_END(E &), "");
 static_assert(!GTFO_IS_CONTAINER(E), "");
 
-static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(F), "");
-static_assert(GTFO_HAS_ITERATOR_RETURNING_END(F), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(F &), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_END(F &), "");
 static_assert(!GTFO_IS_CONTAINER(F), "");
 
-static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(G), "");
-static_assert(GTFO_HAS_ITERATOR_RETURNING_END(G), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(G &), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_END(G &), "");
 static_assert(GTFO_IS_CONTAINER(G), "");

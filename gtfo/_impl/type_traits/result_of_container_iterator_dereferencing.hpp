@@ -12,7 +12,7 @@ namespace gtfo
     {
         namespace helpers
         {
-            template<typename T, bool t_is_container>
+            template<typename T, bool t_is_container_or_reference_to_container>
             struct impl_result_of_container_iterator_dereferencing
             {
             };
@@ -22,16 +22,7 @@ namespace gtfo
             {
                 typedef typename result_of_dereferencing
                         <
-                            typename add_lvalue_reference
-                            <
-                                typename iterator_of_container
-                                <
-                                    typename remove_reference
-                                    <
-                                        T
-                                    >::type
-                                >::type
-                            >::type
+                            typename iterator_of_container< T >::type &
                         >::type type;
             };
         }
@@ -40,16 +31,14 @@ namespace gtfo
         /// declares member type which is the type returned by
         /// dereferencing operation applied to an lvalue iterator
         /// from a container of type T
-        /// (where T is T_or_TRef with top-level reference stripped);
-        /// if T is not a container, no member type is provided
-        template<typename T_or_TRef>
+        /// (T can also be type of reference to some container);
+        /// if T is neither container nor reference to container,
+        /// no member type is provided
+        template<typename T>
         struct result_of_container_iterator_dereferencing : helpers::impl_result_of_container_iterator_dereferencing
                                                             <
-                                                                typename remove_reference<T_or_TRef>::type,
-                                                                is_container
-                                                                <
-                                                                    typename remove_reference<T_or_TRef>::type
-                                                                >::value
+                                                                T,
+                                                                is_container<T>::value
                                                             >
         {
         };

@@ -14,12 +14,12 @@ namespace gtfo
 #define GTFO_RESULT_OF_IOTA(ForwardIterator, Value) \
     typename _tt::enable_if                                \
     <                                                            \
-        _tt::is_incrementable< Value & >::value                        \
+        _tt::is_incrementable< Value >::value                          \
         &&                                                                 \
         _tt::is_assignable                                                   \
         <                                                                      \
-            typename _tt::result_of_dereferencing< ForwardIterator & > ::type,  \
-            Value &                                                            \
+            typename _tt::result_of_dereferencing< ForwardIterator > ::type,    \
+            Value                                                              \
         >::value,                                                         \
         void                                                        \
     >::type
@@ -39,12 +39,12 @@ namespace gtfo
     template<typename ForwardIterator>
     inline
     GTFO_RESULT_OF_IOTA(ForwardIterator,
-                        typename _tt::value_of_dereferenced< ForwardIterator & >::type)
+                        typename _tt::value_of_dereferenced< ForwardIterator >::type)
     iota(ForwardIterator it_begin,
          ForwardIterator it_end)
     {
         ::std::iota(it_begin, it_end,
-                    typename _tt::value_of_dereferenced< ForwardIterator & >::type());
+                    typename _tt::value_of_dereferenced< ForwardIterator >::type());
     }
 
     template<typename Container, typename Value>

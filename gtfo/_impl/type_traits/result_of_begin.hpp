@@ -26,7 +26,7 @@ namespace gtfo
         }
 
         /// declares member type which is the type returned from
-        ///     begin(object-of-type-T);
+        ///     begin(lvalue-of-type-T);
         /// top-level reference and cv-qualifiers (if any) are stripped;
         /// if has_begin<T>::value == false, no member type is provided
         template<typename T>

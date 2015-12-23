@@ -17,11 +17,11 @@ namespace gtfo
     <                                                                       \
         _tt::is_assignable                                                   \
         <                                                                     \
-            typename _tt::result_of_dereferencing< OutputIterator & >::type,   \
+            typename _tt::result_of_dereferencing< OutputIterator >::type,     \
             typename _tt::result_of_subtraction                                 \
             <                                                                    \
-                typename _tt::result_of_dereferencing< InputIterator & >::type,  \
-                typename _tt::result_of_dereferencing< InputIterator & >::type   \
+                typename _tt::result_of_dereferencing< InputIterator >::type,    \
+                typename _tt::result_of_dereferencing< InputIterator >::type     \
             >::type                                                              \
         >::value,                                                              \
         OutputIterator                                                       \
@@ -32,12 +32,12 @@ namespace gtfo
     <                                                                      \
         _tt::is_assignable                                                  \
         <                                                                    \
-            typename _tt::result_of_dereferencing< OutputIterator & >::type,  \
+            typename _tt::result_of_dereferencing< OutputIterator >::type,    \
             typename _tt::result_of_fun2                                       \
             <                                                                   \
                 BinaryOperation,                                                 \
-                typename _tt::result_of_dereferencing< InputIterator & >::type,  \
-                typename _tt::result_of_dereferencing< InputIterator & >::type   \
+                typename _tt::result_of_dereferencing< InputIterator >::type,    \
+                typename _tt::result_of_dereferencing< InputIterator >::type     \
             >::type                                                              \
         >::value,                                                              \
         OutputIterator                                                       \

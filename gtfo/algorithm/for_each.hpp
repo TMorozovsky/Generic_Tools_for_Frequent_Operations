@@ -15,7 +15,7 @@ namespace gtfo
         _tt::is_invokable_fun1
         <
             UnaryFunction,
-            typename _tt::result_of_dereferencing< InputIterator & >::type
+            typename _tt::result_of_dereferencing< InputIterator >::type
         >::value,
         UnaryFunction
     >::type

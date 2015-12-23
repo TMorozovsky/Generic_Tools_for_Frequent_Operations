@@ -25,7 +25,7 @@ namespace gtfo
         using ::std::is_same;
         using ::std::is_void;
         using ::std::is_const;
-        using ::std::add_lvalue_reference;
+        using ::std::is_fundamental;
         using ::std::remove_reference;
         using ::std::decay;
         using ::std::declval;

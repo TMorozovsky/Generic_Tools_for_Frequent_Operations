@@ -9,8 +9,8 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// an expression of type From can be assigned
-        /// to an expression of type To
+        /// an rvalue of type From can be assigned
+        /// to an lvalue of type To
         template<typename To, typename From>
         struct is_assignable
         {
@@ -18,7 +18,7 @@ namespace gtfo
             template<typename Lhs, typename Rhs>
             static yes_type test(typename remove_reference
                                  <
-                                     decltype( declval<Lhs>() = declval<Rhs>() )
+                                     decltype( declval<Lhs &>() = declval<Rhs>() )
                                  >::type *);
 
             template<typename Lhs, typename Rhs>

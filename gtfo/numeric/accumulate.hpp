@@ -17,11 +17,11 @@ namespace gtfo
     <                                                            \
         _tt::is_assignable                                           \
         <                                                               \
-            Value &,                                                       \
+            Value,                                                         \
             typename _tt::result_of_addition                                 \
             <                                                                  \
-                Value &,                                                        \
-                typename _tt::result_of_dereferencing< InputIterator & >::type  \
+                Value,                                                          \
+                typename _tt::result_of_dereferencing< InputIterator >::type    \
             >::type                                                             \
         >::value,                                                              \
         Value                                                                \
@@ -32,12 +32,12 @@ namespace gtfo
     <                                                        \
         _tt::is_assignable                                       \
         <                                                            \
-            Value &,                                                    \
+            Value,                                                      \
             typename _tt::result_of_fun2                                   \
             <                                                                \
                 BinaryOperation,                                               \
-                Value &,                                                        \
-                typename _tt::result_of_dereferencing< InputIterator & >::type  \
+                Value,                                                          \
+                typename _tt::result_of_dereferencing< InputIterator >::type    \
             >::type                                                             \
         >::value,                                                              \
         Value                                                                \

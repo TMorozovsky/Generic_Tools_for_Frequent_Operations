@@ -56,7 +56,7 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// type T is dereferenceable, i.e. expression
-        ///     * object-of-type-T
+        ///     * lvalue-of-type-T
         /// is well-formed
         template<typename T>
         struct is_dereferenceable
@@ -79,11 +79,6 @@ namespace gtfo
                                                         decltype(& * declval<U &>()),
                                                         decltype(&   declval<U &>())
                                                     >::value
-                                                    &&
-                                                    !helpers::msvc_specific_workarounds::has_some_nested_iterator_typedefs
-                                                    <
-                                                        U
-                                                    >::value
                                                 >::type *);
 
             template<typename U>
@@ -92,7 +87,15 @@ namespace gtfo
 
             static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type)
     #ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
-                                               && sizeof(test_msvc_workaround<T>(nullptr)) == sizeof(yes_type)
+                                               && !is_fundamental< typename remove_reference<T>::type >::value
+                                               && (
+                                                      sizeof(test_msvc_workaround<T>(nullptr)) == sizeof(yes_type)
+                                                      ||
+                                                      helpers::msvc_specific_workarounds::has_some_nested_iterator_typedefs
+                                                      <
+                                                          typename remove_reference<T>::type
+                                                      >::value
+                                                  )
     #endif
                     ;
         };

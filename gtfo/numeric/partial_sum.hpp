@@ -16,18 +16,18 @@ namespace gtfo
     <                                                                   \
         _tt::is_assignable                                                 \
         <                                                                     \
-            typename _tt::value_of_dereferenced< InputIterator & >::type &,     \
+            typename _tt::value_of_dereferenced< InputIterator >::type,         \
             typename _tt::result_of_addition                                     \
             <                                                                     \
-                typename _tt::value_of_dereferenced< InputIterator & >::type &,   \
-                typename _tt::result_of_dereferencing< InputIterator & >::type    \
+                typename _tt::value_of_dereferenced< InputIterator >::type,       \
+                typename _tt::result_of_dereferencing< InputIterator >::type      \
             >::type                                                               \
         >::value                                                                  \
         &&                                                                        \
         _tt::is_assignable                                                       \
         <                                                                       \
-            typename _tt::result_of_dereferencing< OutputIterator & >::type,   \
-            typename _tt::value_of_dereferenced< InputIterator & >::type &    \
+            typename _tt::result_of_dereferencing< OutputIterator >::type,     \
+            typename _tt::value_of_dereferenced< InputIterator >::type        \
         >::value,                                                           \
         OutputIterator                                                   \
     >::type
@@ -37,19 +37,19 @@ namespace gtfo
     <                                                                   \
         _tt::is_assignable                                                 \
         <                                                                     \
-            typename _tt::value_of_dereferenced< InputIterator & >::type &,     \
+            typename _tt::value_of_dereferenced< InputIterator >::type,         \
             typename _tt::result_of_fun2                                         \
             <                                                                     \
                 BinaryOperation,                                                  \
-                typename _tt::value_of_dereferenced< InputIterator & >::type &,   \
-                typename _tt::result_of_dereferencing< InputIterator & >::type    \
+                typename _tt::value_of_dereferenced< InputIterator >::type,       \
+                typename _tt::result_of_dereferencing< InputIterator >::type      \
             >::type                                                               \
         >::value                                                                  \
         &&                                                                        \
         _tt::is_assignable                                                       \
         <                                                                       \
-            typename _tt::result_of_dereferencing< OutputIterator & >::type,   \
-            typename _tt::value_of_dereferenced< InputIterator & >::type &    \
+            typename _tt::result_of_dereferencing< OutputIterator >::type,     \
+            typename _tt::value_of_dereferenced< InputIterator >::type        \
         >::value,                                                           \
         OutputIterator                                                   \
     >::type

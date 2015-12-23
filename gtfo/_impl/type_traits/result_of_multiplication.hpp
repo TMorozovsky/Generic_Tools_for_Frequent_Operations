@@ -18,12 +18,12 @@ namespace gtfo
             template<typename Lhs, typename Rhs>
             struct impl_result_of_multiplication<Lhs, Rhs, true>
             {
-                typedef decltype( declval<Lhs>() * declval<Rhs>() ) type;
+                typedef decltype( declval<Lhs &>() * declval<Rhs &>() ) type;
             };
         }
 
         /// declares member type which is the type of expression
-        ///     rvalue-of-type-LhsArgument * rvalue-of-type-RhsArgument;
+        ///     lvalue-of-type-LhsArgument * lvalue-of-type-RhsArgument;
         /// if such expression is ill-formed, no member type is provided
         template<typename LhsArgument, typename RhsArgument>
         struct result_of_multiplication : helpers::impl_result_of_multiplication<LhsArgument, RhsArgument,

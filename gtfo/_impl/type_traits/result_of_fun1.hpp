@@ -22,8 +22,8 @@ namespace gtfo
             };
 
             /// declares member type which is the type returned by
-            /// a call to UnaryOperation function (function object)
-            /// with one argument of type Argument;
+            /// a call to lvalue of type UnaryOperation
+            /// with one rvalue argument of type Argument;
             /// if such call is ill-formed, no member type is provided
             template<typename UnaryOperation, typename Argument>
             struct result_of_fun1 : helpers::impl_result_of_fun1<UnaryOperation, Argument,

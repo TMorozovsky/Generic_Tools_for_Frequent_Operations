@@ -9,7 +9,7 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if an expression
-        ///     rvalue-of-type-LhsArgument + rvalue-of-type-RhsArgument
+        ///     lvalue-of-type-LhsArgument + lvalue-of-type-RhsArgument
         /// is well-formed
         template<typename LhsArgument, typename RhsArgument>
         struct are_addable
@@ -17,7 +17,7 @@ namespace gtfo
             template<typename Lhs, typename Rhs>
             static yes_type test(typename remove_reference
                                  <
-                                     decltype( declval<Lhs>() + declval<Rhs>() )
+                                     decltype( declval<Lhs &>() + declval<Rhs &>() )
                                  >::type *);
 
             template< typename Lhs, typename Rhs>

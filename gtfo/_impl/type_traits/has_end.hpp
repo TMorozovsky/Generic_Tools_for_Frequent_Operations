@@ -10,7 +10,7 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// a call to
-        ///     end(object-of-type-T)
+        ///     end(lvalue-of-type-T)
         /// is well-formed
         template<typename T>
         struct has_end

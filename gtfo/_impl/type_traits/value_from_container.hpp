@@ -26,7 +26,8 @@ namespace gtfo
         }
 
         /// declares member type which tells
-        /// values of what type does a container of type T store;
+        /// values of what type does a container of type T store
+        /// (T may also be reference to container);
         /// if is_container<T>::value == false, no member type is provided
         template<typename T>
         struct value_from_container : helpers::impl_value_from_container<T, is_container<T>::value>

@@ -24,7 +24,7 @@ namespace gtfo
                     template<typename X, typename Y>
                     static yes_type test(typename remove_reference
                                          <
-                                             decltype( declval<const X &>() == declval<const Y &>() )
+                                             decltype( declval<X &>() == declval<Y &>() )
                                          >::type *);
 
                     template<typename X, typename Y>
@@ -56,7 +56,7 @@ namespace gtfo
                     template<typename X, typename Y>
                     static yes_type test(typename remove_reference
                                          <
-                                             decltype( declval<const X &>() != declval<const Y &>() )
+                                             decltype( declval<X &>() != declval<Y &>() )
                                          >::type *);
 
                     template<typename X, typename Y>
@@ -81,7 +81,7 @@ namespace gtfo
             template<typename T, typename U>
             struct impl_result_of_eq_comparison<T, U, true>
             {
-                typedef decltype( declval<const T &>() == declval<const U &>() ) type;
+                typedef decltype( declval<T &>() == declval<U &>() ) type;
             };
 
             template<typename T, typename U, bool can_invoke_comparison_n_eq_on_t_and_u>
@@ -92,7 +92,7 @@ namespace gtfo
             template<typename T, typename U>
             struct impl_result_of_n_eq_comparison<T, U, true>
             {
-                typedef decltype( declval<const T &>() != declval<const U &>() ) type;
+                typedef decltype( declval<T &>() != declval<U &>() ) type;
             };
 
             template<typename T, typename U>
@@ -129,9 +129,9 @@ namespace gtfo
         /// defines static member constant value of type bool
         /// which is true if and only if
         /// types T and U are equality-comparable, i.e. expressions
-        ///     const-lvalue-of-type-T == const-lvalue-of-type-U
+        ///     lvalue-of-type-T == lvalue-of-type-U
         /// and
-        ///     const-lvalue-of-type-T != const-lvalue-of-type-U
+        ///     lvalue-of-type-T != lvalue-of-type-U
         /// are both well-formed and return something that can be used
         /// in a boolean context
         template<typename T, typename U>

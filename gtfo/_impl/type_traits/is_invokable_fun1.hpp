@@ -9,10 +9,8 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// a function or function object of type UnaryOperation
-        /// can be invoked with an rvalue of type Argument;
-        /// for testing it against an lvalue, add
-        /// an lvalue reference to the type of Argument
+        /// an lvalue of type UnaryOperation
+        /// can be invoked with an rvalue of type Argument
         template<typename UnaryOperation, typename Argument>
         struct is_invokable_fun1
         {

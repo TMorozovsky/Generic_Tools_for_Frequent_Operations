@@ -14,41 +14,43 @@ struct test_no_iterators
 using helpers::has_iterator_returning_begin;
 using helpers::has_iterator_returning_end;
 
-static_assert(has_begin                   <test_no_iterators>::value == true,  "");
-static_assert(has_end                     <test_no_iterators>::value == true,  "");
-static_assert(has_iterator_returning_begin<test_no_iterators>::value == false, "");
-static_assert(has_iterator_returning_end  <test_no_iterators>::value == false, "");
+static_assert(has_begin                   <test_no_iterators &>::value == true,  "");
+static_assert(has_end                     <test_no_iterators &>::value == true,  "");
+static_assert(has_iterator_returning_begin<test_no_iterators &>::value == false, "");
+static_assert(has_iterator_returning_end  <test_no_iterators &>::value == false, "");
 
 struct test_iterator_begin_only
 {
     int * begin() { return nullptr; }
     int   end()   { return 0;       }
 };
-static_assert(has_begin                   <test_iterator_begin_only>::value == true,  "");
-static_assert(has_end                     <test_iterator_begin_only>::value == true,  "");
-static_assert(has_iterator_returning_begin<test_iterator_begin_only>::value == true,  "");
-static_assert(has_iterator_returning_end  <test_iterator_begin_only>::value == false, "");
+static_assert(has_begin                   <test_iterator_begin_only &>::value == true,  "");
+static_assert(has_end                     <test_iterator_begin_only &>::value == true,  "");
+static_assert(has_iterator_returning_begin<test_iterator_begin_only &>::value == true,  "");
+static_assert(has_iterator_returning_end  <test_iterator_begin_only &>::value == false, "");
 
 struct test_iterator_end_only
 {
     int   begin() { return 0;       }
     int * end()   { return nullptr; }
 };
-static_assert(has_begin                   <test_iterator_end_only>::value == true,  "");
-static_assert(has_end                     <test_iterator_end_only>::value == true,  "");
-static_assert(has_iterator_returning_begin<test_iterator_end_only>::value == false, "");
-static_assert(has_iterator_returning_end  <test_iterator_end_only>::value == true,  "");
+static_assert(has_begin                   <test_iterator_end_only &>::value == true,  "");
+static_assert(has_end                     <test_iterator_end_only &>::value == true,  "");
+static_assert(has_iterator_returning_begin<test_iterator_end_only &>::value == false, "");
+static_assert(has_iterator_returning_end  <test_iterator_end_only &>::value == true,  "");
 
 struct test_iterator_both
 {
     int * begin() { return nullptr; }
     int * end()   { return nullptr; }
 };
-static_assert(has_begin                   <test_iterator_both>::value == true, "");
-static_assert(has_end                     <test_iterator_both>::value == true, "");
-static_assert(has_iterator_returning_begin<test_iterator_both>::value == true, "");
-static_assert(has_iterator_returning_end  <test_iterator_both>::value == true, "");
+static_assert(has_begin                   <test_iterator_both &>::value == true, "");
+static_assert(has_end                     <test_iterator_both &>::value == true, "");
+static_assert(has_iterator_returning_begin<test_iterator_both &>::value == true, "");
+static_assert(has_iterator_returning_end  <test_iterator_both &>::value == true, "");
 
+static_assert(is_container< int[42]                  >::value == true,  "");
+static_assert(is_container< int(&)[42]               >::value == true,  "");
 static_assert(is_container< ::std::vector<int>       >::value == true,  "");
 static_assert(is_container< test_no_iterators        >::value == false, "");
 static_assert(is_container< test_iterator_begin_only >::value == false, "");
@@ -205,7 +207,7 @@ static_assert(
         );
 
 // unfortunately, a bug in MSVC 2012 :( dunno how to make workarounds for it right now
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
 static_assert(
         !helpers::can_be_used_in_a_boolean_context<ShyBoolean>::value,
         ""

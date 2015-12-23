@@ -27,7 +27,7 @@ namespace gtfo
 
         /// declares member type which is the type of expression
         ///     * lvalue-of-type-T
-        /// with top-level reference and cv-qualifiers stripped
+        /// with its top-level reference and cv-qualifiers stripped
         /// (as if it was returned or passed by value);
         /// if is_dereferenceable<T>::value == false, no member type is provided
         template<typename T>

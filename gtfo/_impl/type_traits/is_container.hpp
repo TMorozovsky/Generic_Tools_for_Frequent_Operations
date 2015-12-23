@@ -17,7 +17,7 @@ namespace gtfo
             /// defines static member constant value of type bool
             /// which is true if and only if
             /// a call to
-            ///     begin(object-of-type-T)
+            ///     begin(lvalue-of-type-T)
             /// returns a valid iterator
             template<typename T>
             struct has_iterator_returning_begin
@@ -47,7 +47,7 @@ namespace gtfo
             /// defines static member constant value of type bool
             /// which is true if and only if
             /// a call to
-            ///     end(object-of-type-T)
+            ///     end(lvalue-of-type-T)
             /// returns a valid iterator
             template<typename T>
             struct has_iterator_returning_end
@@ -77,12 +77,12 @@ namespace gtfo
 
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// object of type T is a valid container
-        /// or a reference to such container,
+        /// lvalue of type T is a valid container
+        /// (or a reference to such container),
         /// i.e. if both calls to
-        ///     begin(object-of-type-T)
+        ///     begin(lvalue-of-type-T)
         /// and
-        ///     end(object-of-type-T)
+        ///     end(lvalue-of-type-T)
         /// return valid iterators of the same type
         template<typename T>
         struct is_container

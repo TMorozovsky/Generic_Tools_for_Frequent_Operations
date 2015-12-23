@@ -9,7 +9,7 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// a function or function object of type BinaryOperation
+        /// an lvalue of type BinaryOperation
         /// can be invoked with two rvalues of types
         /// LhsArgument and RhsArgument
         template<typename BinaryOperation, typename LhsArgument, typename RhsArgument>

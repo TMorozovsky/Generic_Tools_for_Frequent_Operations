@@ -20,14 +20,14 @@ namespace gtfo
     <                                                                         \
         _tt::is_assignable                                                     \
         <                                                                       \
-            Value &,                                                             \
+            Value,                                                               \
             typename _tt::result_of_addition                                      \
             <                                                                      \
-                Value &,                                                            \
+                Value,                                                              \
                 typename _tt::result_of_multiplication                               \
                 <                                                                    \
-                    typename _tt::result_of_dereferencing< InputIterator1 & >::type, \
-                    typename _tt::result_of_dereferencing< InputIterator2 & >::type  \
+                    typename _tt::result_of_dereferencing< InputIterator1 >::type,   \
+                    typename _tt::result_of_dereferencing< InputIterator2 >::type    \
                 >::type                                                              \
             >::type                                                                 \
         >::value,                                                                  \
@@ -39,16 +39,16 @@ namespace gtfo
     <                                                                      \
         _tt::is_assignable                                                  \
         <                                                                    \
-            Value &,                                                          \
+            Value,                                                            \
             typename _tt::result_of_fun2                                       \
             <                                                                   \
                 BinaryOperation1,                                                \
-                Value &,                                                          \
+                Value,                                                            \
                 typename _tt::result_of_fun2                                       \
                 <                                                                   \
                     BinaryOperation2,                                                \
-                    typename _tt::result_of_dereferencing< InputIterator1 & >::type, \
-                    typename _tt::result_of_dereferencing< InputIterator2 & >::type  \
+                    typename _tt::result_of_dereferencing< InputIterator1 >::type,   \
+                    typename _tt::result_of_dereferencing< InputIterator2 >::type    \
                 >::type                                                              \
             >::type                                                                 \
         >::value,                                                                  \
@@ -56,10 +56,10 @@ namespace gtfo
     >::type
 
 #define GTFO_ITER_COMMON_VALUE(InputIterator1, InputIterator2) \
-    typename _tt::common_type_2                                     \
-    <                                                                   \
-        typename _tt::result_of_dereferencing< InputIterator1 & >::type,  \
-        typename _tt::result_of_dereferencing< InputIterator2 & >::type   \
+    typename _tt::common_type_2                                    \
+    <                                                                 \
+        typename _tt::result_of_dereferencing< InputIterator1 >::type,  \
+        typename _tt::result_of_dereferencing< InputIterator2 >::type   \
     >::type
 
     template<typename InputIterator1, typename InputIterator2, typename Value>
