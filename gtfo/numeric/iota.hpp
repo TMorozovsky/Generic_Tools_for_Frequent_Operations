@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_IOTA_HPP
 
 #include <numeric>
+#include "gtfo/_impl/move.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/iterator_of_container.hpp"
@@ -32,8 +33,9 @@ namespace gtfo
          ForwardIterator it_end,
          Value           init)
     {
-        ::std::iota(it_begin, it_end,
-                    init);
+        ::std::iota(::gtfo::move(it_begin),
+                    ::gtfo::move(it_end),
+                    ::gtfo::move(init));
     }
 
     template<typename ForwardIterator>
@@ -43,7 +45,8 @@ namespace gtfo
     iota(ForwardIterator it_begin,
          ForwardIterator it_end)
     {
-        ::std::iota(it_begin, it_end,
+        ::std::iota(::gtfo::move(it_begin),
+                    ::gtfo::move(it_end),
                     typename _tt::value_of_dereferenced< ForwardIterator >::type());
     }
 
@@ -54,8 +57,9 @@ namespace gtfo
     iota(Container && container,
          Value        init)
     {
-        ::std::iota(begin(container), end(container),
-                    init);
+        ::std::iota(begin(container),
+                    end(container),
+                    ::gtfo::move(init));
     }
 
     template<typename Container>
@@ -64,7 +68,8 @@ namespace gtfo
                         typename _tt::value_from_container< Container >::type)
     iota(Container && container)
     {
-        ::std::iota(begin(container), end(container),
+        ::std::iota(begin(container),
+                    end(container),
                     typename _tt::value_from_container< Container >::type());
     }
 

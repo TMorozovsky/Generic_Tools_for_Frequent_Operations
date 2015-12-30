@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_INNER_PRODUCT_HPP
 
 #include <numeric>
+#include "gtfo/_impl/move.hpp"
 #include "gtfo/_impl/type_traits/common_type_2.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
@@ -72,8 +73,10 @@ namespace gtfo
                   InputIterator2 it_begin_2,
                   Value          init)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, it_begin_2,
-                                    init);
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::move(it_begin_2),
+                                    ::gtfo::move(init));
     }
 
     template<typename InputIterator1, typename InputIterator2, typename Value,
@@ -91,8 +94,12 @@ namespace gtfo
                   BinaryOperation1 op1,
                   BinaryOperation2 op2)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, it_begin_2,
-                                    init, op1, op2);
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::move(it_begin_2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename InputIterator1, typename InputIterator2>
@@ -105,7 +112,9 @@ namespace gtfo
                   InputIterator1 it_end_1,
                   InputIterator2 it_begin_2)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, it_begin_2,
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::move(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
                                                            InputIterator2)());
     }
@@ -119,8 +128,10 @@ namespace gtfo
                   InputIterator2 it_begin_2,
                   Value          init)
     {
-        return ::std::inner_product(begin(container1), end(container1), it_begin_2,
-                                    init);
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    ::gtfo::move(it_begin_2),
+                                    ::gtfo::move(init));
     }
 
     template<typename Container1, typename InputIterator2, typename Value,
@@ -137,8 +148,12 @@ namespace gtfo
                   BinaryOperation1 op1,
                   BinaryOperation2 op2)
     {
-        return ::std::inner_product(begin(container1), end(container1), it_begin_2,
-                                    init, op1, op2);
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    ::gtfo::move(it_begin_2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename InputIterator1, typename Container2, typename Value>
@@ -155,8 +170,10 @@ namespace gtfo
                   Container2 &&  container2,
                   Value          init)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, begin(container2),
-                                    init);
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    begin(container2),
+                                    ::gtfo::move(init));
     }
 
     template<typename InputIterator1, typename Container2, typename Value,
@@ -178,8 +195,12 @@ namespace gtfo
                   BinaryOperation1 op1,
                   BinaryOperation2 op2)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, begin(container2),
-                                    init, op1, op2);
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    begin(container2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename Container1, typename Container2, typename Value>
@@ -195,8 +216,10 @@ namespace gtfo
                   Container2 && container2,
                   Value         init)
     {
-        return ::std::inner_product(begin(container1), end(container1), begin(container2),
-                                    init);
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    begin(container2),
+                                    ::gtfo::move(init));
     }
 
     template<typename Container1, typename Container2, typename Value,
@@ -217,8 +240,12 @@ namespace gtfo
                   BinaryOperation1 op1,
                   BinaryOperation2 op2)
     {
-        return ::std::inner_product(begin(container1), end(container1), begin(container2),
-                                    init, op1, op2);
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    begin(container2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename Container1, typename InputIterator2>
@@ -230,7 +257,9 @@ namespace gtfo
     inner_product(Container1 &&  container1,
                   InputIterator2 it_begin_2)
     {
-        return ::std::inner_product(begin(container1), end(container1), it_begin_2,
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    ::gtfo::move(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_container< Container1 >::type,
                                                            InputIterator2)());
     }
@@ -249,7 +278,9 @@ namespace gtfo
                   InputIterator1 it_end_1,
                   Container2 &&  container2)
     {
-        return ::std::inner_product(it_begin_1, it_end_1, begin(container2),
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    begin(container2),
                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
                                                            typename _tt::iterator_of_container< Container2 >::type)());
     }
@@ -267,7 +298,9 @@ namespace gtfo
     inner_product(Container1 && container1,
                   Container2 && container2)
     {
-        return ::std::inner_product(begin(container1), end(container1), begin(container2),
+        return ::std::inner_product(begin(container1),
+                                    end(container1),
+                                    begin(container2),
                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_container< Container1 >::type,
                                                            typename _tt::iterator_of_container< Container2 >::type)());
     }

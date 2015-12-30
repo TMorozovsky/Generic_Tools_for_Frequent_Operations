@@ -144,6 +144,21 @@
     <ClInclude Include="gtfo\numeric.hpp">
       <Filter>gtfo</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\_impl\move.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\can_be_used_in_boolean_context.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\all_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\any_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\none_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
@@ -183,6 +198,9 @@
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_is_equality_comparable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_can_be_used_in_boolean_context.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
   </ItemGroup>

@@ -60,6 +60,8 @@ int main()
     const std::vector<int> vi = make_12345();
     const float c_array[] = { 1.f, 2.f, 3.f, 4.f, 5.f };
 
+    cout << std::boolalpha;
+
     {
         cout << gtfo::accumulate(vi.begin() + 1, vi.end() - 1, 10000) << endl;
         cout << gtfo::accumulate(vi.begin() + 1, vi.end() - 1, -10000, std::plus<int>()) << endl;
@@ -166,7 +168,18 @@ int main()
         endl(cout);
     }
 
-#ifdef _MSC_VER
+    {
+        cout << gtfo::all_of(vi.begin(), vi.end(),  [](int x){ return x > 0; }) << endl;
+        cout << gtfo::all_of(vi,                    [](int x){ return x < 0; }) << endl;
+
+        cout << gtfo::any_of(vi.begin(), vi.end(),  [](int x){ return x == 5; }) << endl;
+        cout << gtfo::any_of(vi,                    [](int x){ return x == 7; }) << endl;
+
+        cout << gtfo::none_of(vi.begin(), vi.end(), [](int x){ return x == 7; }) << endl;
+        cout << gtfo::none_of(vi,                   [](int x){ return x == 5; }) << endl;
+    }
+
+#if defined(_MSC_VER) && !defined(GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET)
     std::cin.get();
 #endif
 }

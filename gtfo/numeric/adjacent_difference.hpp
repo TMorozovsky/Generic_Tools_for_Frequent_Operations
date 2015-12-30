@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_ADJACENT_DIFFERENCE_HPP
 
 #include <numeric>
+#include "gtfo/_impl/move.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/result_of_subtraction.hpp"
@@ -51,7 +52,9 @@ namespace gtfo
                         InputIterator  it_end,
                         OutputIterator it_out)
     {
-        return ::std::adjacent_difference(it_begin, it_end, it_out);
+        return ::std::adjacent_difference(::gtfo::move(it_begin),
+                                          ::gtfo::move(it_end),
+                                          ::gtfo::move(it_out));
     }
 
     template<typename InputIterator, typename OutputIterator, typename BinaryOperation>
@@ -74,7 +77,9 @@ namespace gtfo
     adjacent_difference(Container &&   container,
                         OutputIterator it_out)
     {
-        return ::std::adjacent_difference(begin(container), end(container), it_out);
+        return ::std::adjacent_difference(begin(container),
+                                          end(container),
+                                          ::gtfo::move(it_out));
     }
 
     template<typename Container, typename OutputIterator, typename BinaryOperation>
@@ -86,7 +91,10 @@ namespace gtfo
                         OutputIterator  it_out,
                         BinaryOperation op)
     {
-        return ::std::adjacent_difference(begin(container), end(container), it_out, op);
+        return ::std::adjacent_difference(begin(container),
+                                          end(container),
+                                          ::gtfo::move(it_out),
+                                          ::gtfo::move(op));
     }
 
 #undef GTFO_RESULT_OF_ADJACENT_DIFFERENCE_OP

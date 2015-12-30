@@ -145,17 +145,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="gtfo\algorithm.hpp" />
+    <ClInclude Include="gtfo\algorithm\all_of.hpp" />
+    <ClInclude Include="gtfo\algorithm\any_of.hpp" />
     <ClInclude Include="gtfo\algorithm\for_each.hpp" />
+    <ClInclude Include="gtfo\algorithm\none_of.hpp" />
     <ClInclude Include="gtfo\numeric.hpp" />
     <ClInclude Include="gtfo\numeric\accumulate.hpp" />
     <ClInclude Include="gtfo\numeric\adjacent_difference.hpp" />
     <ClInclude Include="gtfo\numeric\inner_product.hpp" />
     <ClInclude Include="gtfo\numeric\iota.hpp" />
     <ClInclude Include="gtfo\numeric\partial_sum.hpp" />
+    <ClInclude Include="gtfo\_impl\move.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_multipliable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_subtractable.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\can_be_used_in_boolean_context.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\common_type_2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\has_begin.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\has_end.hpp" />
@@ -189,6 +194,7 @@
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_multipliable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_subtractable.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_can_be_used_in_boolean_context.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_common_type_2.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_has_begin.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_has_end.cpp" />

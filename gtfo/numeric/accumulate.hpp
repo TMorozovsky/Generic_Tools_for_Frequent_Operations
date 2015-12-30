@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_ACCUMULATE_HPP
 
 #include <numeric>
+#include "gtfo/_impl/move.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_addition.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
@@ -51,7 +52,9 @@ namespace gtfo
                InputIterator it_end,
                Value         init)
     {
-        return ::std::accumulate(it_begin, it_end, init);
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
+                                 ::gtfo::move(init));
     }
 
     template<typename InputIterator, typename Value, typename BinaryOperation>
@@ -64,7 +67,10 @@ namespace gtfo
                Value           init,
                BinaryOperation op)
     {
-        return ::std::accumulate(it_begin, it_end, init, op);
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
+                                 ::gtfo::move(init),
+                                 ::gtfo::move(op));
     }
 
 
@@ -74,7 +80,8 @@ namespace gtfo
                               typename _tt::value_from_container< Container >::type)
     accumulate(Container && container)
     {
-        return ::std::accumulate(begin(container), end(container),
+        return ::std::accumulate(begin(container),
+                                 end(container),
                                  typename _tt::value_from_container<Container>::type());
     }
 
@@ -85,7 +92,9 @@ namespace gtfo
     accumulate(Container && container,
                Value        init)
     {
-        return ::std::accumulate(begin(container), end(container), init);
+        return ::std::accumulate(begin(container),
+                                 end(container),
+                                 ::gtfo::move(init));
     }
 
     template<typename Container, typename Value, typename BinaryOperation>
@@ -97,7 +106,10 @@ namespace gtfo
                Value           init,
                BinaryOperation op)
     {
-        return ::std::accumulate(begin(container), end(container), init, op);
+        return ::std::accumulate(begin(container),
+                                 end(container),
+                                 ::gtfo::move(init),
+                                 ::gtfo::move(op));
     }
 
 #undef GTFO_RESULT_OF_ACCUMULATE_OP

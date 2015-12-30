@@ -11,9 +11,11 @@ SOURCES += \
     gtfo_tests/static/static_test_is_container.cpp \
     gtfo_tests/static/static_test_is_container_castable_to_its_iterator.cpp \
     gtfo_tests/static/static_test_is_dereferenceable.cpp \
-    gtfo_tests/static/static_test_is_equality_comparable.cpp
+    gtfo_tests/static/static_test_is_equality_comparable.cpp \
+    gtfo_tests/static/static_test_can_be_used_in_boolean_context.cpp
 
-QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
+gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
+msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
 
 HEADERS += \
     gtfo/type_traits.hpp \
@@ -55,4 +57,9 @@ HEADERS += \
     gtfo/_impl/type_traits/is_container_castable_to_its_iterator.hpp \
     gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp \
     gtfo/numeric/partial_sum.hpp \
-    gtfo/numeric/iota.hpp
+    gtfo/numeric/iota.hpp \
+    gtfo/algorithm/all_of.hpp \
+    gtfo/_impl/move.hpp \
+    gtfo/algorithm/any_of.hpp \
+    gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp \
+    gtfo/algorithm/none_of.hpp

@@ -8,6 +8,7 @@
 #include "gtfo/_impl/type_traits/is_dereferenceable.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
+#include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 #include "gtfo/_impl/type_traits/is_equality_comparable.hpp"
 #include "gtfo/_impl/type_traits/is_incrementable.hpp"
 #include "gtfo/_impl/type_traits/is_iterator.hpp"

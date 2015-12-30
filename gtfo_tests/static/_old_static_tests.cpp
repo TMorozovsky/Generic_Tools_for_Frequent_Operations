@@ -174,42 +174,42 @@ struct TwoConversionBoolean { operator SortaBoolean(); };
 struct ShyBoolean { private: operator bool(); };
 
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<bool>::value,
+        can_be_used_in_boolean_context<bool>::value,
         ""
         );
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<int>::value,
+        can_be_used_in_boolean_context<int>::value,
         ""
         );
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<int *>::value,
+        can_be_used_in_boolean_context<int *>::value,
         ""
         );
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<std::nullptr_t>::value,
+        can_be_used_in_boolean_context<std::nullptr_t>::value,
         ""
         );
 static_assert(
-        !helpers::can_be_used_in_a_boolean_context<NotBoolean>::value,
+        !can_be_used_in_boolean_context<NotBoolean>::value,
         ""
         );
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<SortaBoolean>::value,
+        can_be_used_in_boolean_context<SortaBoolean>::value,
         ""
         );
 static_assert(
-        helpers::can_be_used_in_a_boolean_context<ALittleBitBoolean>::value,
+        can_be_used_in_boolean_context<ALittleBitBoolean>::value,
         ""
         );
 static_assert(
-        !helpers::can_be_used_in_a_boolean_context<TwoConversionBoolean>::value,
+        !can_be_used_in_boolean_context<TwoConversionBoolean>::value,
         ""
         );
 
 // unfortunately, a bug in MSVC 2012 :( dunno how to make workarounds for it right now
 #ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
 static_assert(
-        !helpers::can_be_used_in_a_boolean_context<ShyBoolean>::value,
+        !can_be_used_in_boolean_context<ShyBoolean>::value,
         ""
         );
 #endif

@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_EQUALITY_COMPARABLE_HPP
 
 #include "gtfo/_impl/type_traits/_common_definitions.hpp"
+#include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 
 namespace gtfo
 {
@@ -106,24 +107,6 @@ namespace gtfo
                                                                               can_invoke_comparison_n_eq<T, U>::value>
             {
             };
-
-            // note:
-            // in MSVC 2012, there is a bug which answers "true"
-            // if T's boolean cast operator is private
-            template<typename T>
-            struct can_be_used_in_a_boolean_context
-            {
-                template<typename U>
-                static yes_type test(typename remove_reference
-                                     <
-                                         decltype( static_cast<bool>(declval<T>()) )
-                                     >::type *);
-
-                template<typename U>
-                static no_type test(...);
-
-                static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
-            };
         }
 
         /// defines static member constant value of type bool
@@ -146,7 +129,7 @@ namespace gtfo
             template<typename V, typename W>
             struct impl<V, W, true>
             {
-                static GTFO_CONSTEXPR bool value = helpers::can_be_used_in_a_boolean_context
+                static GTFO_CONSTEXPR bool value = can_be_used_in_boolean_context
                                                    <
                                                        typename helpers::result_of_eq_comparison
                                                        <
@@ -155,7 +138,7 @@ namespace gtfo
                                                        >::type
                                                    >::value
                                                    &&
-                                                   helpers::can_be_used_in_a_boolean_context
+                                                   can_be_used_in_boolean_context
                                                    <
                                                        typename helpers::result_of_n_eq_comparison
                                                        <

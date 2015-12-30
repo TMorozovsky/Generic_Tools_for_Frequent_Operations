@@ -2,11 +2,12 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_PARTIAL_SUM_HPP
 
 #include <numeric>
-#include <gtfo/_impl/type_traits/is_assignable.hpp>
-#include <gtfo/_impl/type_traits/value_of_dereferenced.hpp>
-#include <gtfo/_impl/type_traits/result_of_addition.hpp>
-#include <gtfo/_impl/type_traits/result_of_dereferencing.hpp>
-#include <gtfo/_impl/type_traits/result_of_fun2.hpp>
+#include "gtfo/_impl/move.hpp"
+#include "gtfo/_impl/type_traits/is_assignable.hpp"
+#include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
+#include "gtfo/_impl/type_traits/result_of_addition.hpp"
+#include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
+#include "gtfo/_impl/type_traits/result_of_fun2.hpp"
 
 namespace gtfo
 {
@@ -62,7 +63,9 @@ namespace gtfo
                 InputIterator  it_end,
                 OutputIterator it_dest)
     {
-        return ::std::partial_sum(it_begin, it_end, it_dest);
+        return ::std::partial_sum(::gtfo::move(it_begin),
+                                  ::gtfo::move(it_end),
+                                  ::gtfo::move(it_dest));
     }
 
     template<typename InputIterator, typename OutputIterator, typename BinaryOperation>
@@ -75,7 +78,10 @@ namespace gtfo
                 OutputIterator  it_dest,
                 BinaryOperation op)
     {
-        return ::std::partial_sum(it_begin, it_end, it_dest, op);
+        return ::std::partial_sum(::gtfo::move(it_begin),
+                                  ::gtfo::move(it_end),
+                                  ::gtfo::move(it_dest),
+                                  ::gtfo::move(op));
     }
 
     template<typename Container, typename OutputIterator>
@@ -85,7 +91,9 @@ namespace gtfo
     partial_sum(Container &&   container,
                 OutputIterator it_dest)
     {
-        return ::std::partial_sum(begin(container), end(container), it_dest);
+        return ::std::partial_sum(begin(container),
+                                  end(container),
+                                  ::gtfo::move(it_dest));
     }
 
     template<typename Container, typename OutputIterator, typename BinaryOperation>
@@ -97,7 +105,10 @@ namespace gtfo
                 OutputIterator  it_dest,
                 BinaryOperation op)
     {
-        return ::std::partial_sum(begin(container), end(container), it_dest, op);
+        return ::std::partial_sum(begin(container),
+                                  end(container),
+                                  ::gtfo::move(it_dest),
+                                  ::gtfo::move(op));
     }
 
 #undef GTFO_RESULT_OF_PARTIAL_SUM_OP

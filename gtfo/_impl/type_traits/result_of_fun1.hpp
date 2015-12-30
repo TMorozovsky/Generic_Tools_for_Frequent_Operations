@@ -20,17 +20,17 @@ namespace gtfo
             {
                 typedef decltype( declval<Fun &>()(declval<Arg>()) ) type;
             };
-
-            /// declares member type which is the type returned by
-            /// a call to lvalue of type UnaryOperation
-            /// with one rvalue argument of type Argument;
-            /// if such call is ill-formed, no member type is provided
-            template<typename UnaryOperation, typename Argument>
-            struct result_of_fun1 : helpers::impl_result_of_fun1<UnaryOperation, Argument,
-                                                                 is_invokable_fun1<UnaryOperation, Argument>::value>
-            {
-            };
         }
+
+        /// declares member type which is the type returned by
+        /// a call to lvalue of type UnaryOperation
+        /// with one rvalue argument of type Argument;
+        /// if such call is ill-formed, no member type is provided
+        template<typename UnaryOperation, typename Argument>
+        struct result_of_fun1 : helpers::impl_result_of_fun1<UnaryOperation, Argument,
+                                                             is_invokable_fun1<UnaryOperation, Argument>::value>
+        {
+        };
     }
 }
 
