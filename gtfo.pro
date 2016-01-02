@@ -53,7 +53,6 @@ HEADERS += \
     gtfo/numeric/partial_sum.hpp \
     gtfo/numeric/iota.hpp \
     gtfo/algorithm/all_of.hpp \
-    gtfo/_impl/move.hpp \
     gtfo/algorithm/any_of.hpp \
     gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp \
     gtfo/algorithm/none_of.hpp \
@@ -66,6 +65,5 @@ HEADERS += \
     gtfo/_impl/type_traits/has_rbegin_mem_fun.hpp \
     gtfo/_impl/type_traits/has_rend_mem_fun.hpp \
     gtfo/_impl/_common_definitions.hpp \
-    gtfo/_impl/rbegin_rend.hpp \
     gtfo/_impl/type_traits/_type_traits_definitions.hpp \
-    gtfo/_impl/addressof.hpp
+    gtfo/_impl/utility.hpp

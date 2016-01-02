@@ -2,7 +2,7 @@
 #define GTFO_FILE_INCLUDED_ALGORITHM_ALL_OF_HPP
 
 #include <algorithm>
-#include "gtfo/_impl/move.hpp"
+#include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun1.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"

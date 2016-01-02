@@ -2,7 +2,7 @@
 #define GTFO_FILE_INCLUDED_NUMERIC_INNER_PRODUCT_HPP
 
 #include <numeric>
-#include "gtfo/_impl/move.hpp"
+#include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/common_type_2.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"

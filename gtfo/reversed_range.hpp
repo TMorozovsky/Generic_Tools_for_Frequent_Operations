@@ -1,24 +1,45 @@
 #ifndef GTFO_FILE_INCLUDED_REVERSED_RANGE_HPP
 #define GTFO_FILE_INCLUDED_REVERSED_RANGE_HPP
 
-#include "gtfo/_impl/rbegin_rend.hpp"
-#include "gtfo/_impl/addressof.hpp"
-#include "gtfo/_impl/move.hpp"
+#include "gtfo/_impl/type_traits/iterator_of_range.hpp"
+#include "gtfo/_impl/utility.hpp"
 
 namespace gtfo
 {
+
+#define GTFO_RANGE_REVERSE_ITERATOR \
+    ::std::reverse_iterator                \
+    <                                             \
+        typename _tt::iterator_of_range< Range >::type \
+    >
+
+    template<typename Range>
+    inline
+    GTFO_RANGE_REVERSE_ITERATOR
+    rbegin(Range && range)
+    {
+        return GTFO_RANGE_REVERSE_ITERATOR( end(::gtfo::forward<Range>(range)) );
+    }
+
+    template<typename Range>
+    inline
+    GTFO_RANGE_REVERSE_ITERATOR
+    rend(Range && range)
+    {
+        return GTFO_RANGE_REVERSE_ITERATOR( begin(::gtfo::forward<Range>(range)) );
+    }
+
+
     namespace detail
     {
         template<typename Range>
         class reversing_raw_pointer_to_range
         {
             typedef typename _tt::remove_reference<Range>::type _range_type;
-            typedef decltype(rbegin(::gtfo::_tt::declval<_range_type &>())) _rbegin_type;
-            typedef decltype(rend  (::gtfo::_tt::declval<_range_type &>())) _rend_type;
         public:
             explicit reversing_raw_pointer_to_range(_range_type & range) : _ptr(::gtfo::addressof(range)) { }
-            _rbegin_type begin() const { return rbegin(*_ptr); }
-            _rend_type   end()   const { return rend(*_ptr);   }
+            GTFO_RANGE_REVERSE_ITERATOR begin() const { return ::gtfo::rbegin(*_ptr); }
+            GTFO_RANGE_REVERSE_ITERATOR end()   const { return ::gtfo::rend(*_ptr);   }
         private:
             _range_type * _ptr;
         };
@@ -27,16 +48,16 @@ namespace gtfo
         class reversing_owner_of_range
         {
             typedef typename _tt::remove_reference<Range>::type _range_type;
-            typedef decltype(::gtfo::rbegin(::gtfo::_tt::declval<_range_type &>())) _rbegin_type;
-            typedef decltype(::gtfo::rend  (::gtfo::_tt::declval<_range_type &>())) _rend_type;
         public:
             explicit reversing_owner_of_range(_range_type && range) : _range(::gtfo::move(range)) { }
-            _rbegin_type begin() { return ::gtfo::rbegin(_range); }
-            _rend_type   end()   { return ::gtfo::rend(_range);   }
+            GTFO_RANGE_REVERSE_ITERATOR begin() { return ::gtfo::rbegin(_range); }
+            GTFO_RANGE_REVERSE_ITERATOR end()   { return ::gtfo::rend(_range);   }
         private:
             _range_type _range;
         };
     }
+
+#undef GTFO_RANGE_REVERSE_ITERATOR
 
     template<typename Range>
     inline

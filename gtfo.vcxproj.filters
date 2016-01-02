@@ -126,9 +126,6 @@
     <ClInclude Include="gtfo\numeric.hpp">
       <Filter>gtfo</Filter>
     </ClInclude>
-    <ClInclude Include="gtfo\_impl\move.hpp">
-      <Filter>gtfo\_impl</Filter>
-    </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\can_be_used_in_boolean_context.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
@@ -168,14 +165,11 @@
     <ClInclude Include="gtfo\_impl\_common_definitions.hpp">
       <Filter>gtfo\_impl</Filter>
     </ClInclude>
-    <ClInclude Include="gtfo\_impl\addressof.hpp">
-      <Filter>gtfo\_impl</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\rbegin_rend.hpp">
+    <ClInclude Include="gtfo\_impl\utility.hpp">
       <Filter>gtfo\_impl</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\reversed_range.hpp">
-      <Filter>gtfo\numeric</Filter>
+      <Filter>gtfo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

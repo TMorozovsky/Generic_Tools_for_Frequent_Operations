@@ -156,9 +156,6 @@
     <ClInclude Include="gtfo\numeric\iota.hpp" />
     <ClInclude Include="gtfo\numeric\partial_sum.hpp" />
     <ClInclude Include="gtfo\reversed_range.hpp" />
-    <ClInclude Include="gtfo\_impl\addressof.hpp" />
-    <ClInclude Include="gtfo\_impl\move.hpp" />
-    <ClInclude Include="gtfo\_impl\rbegin_rend.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_multipliable.hpp" />
@@ -193,6 +190,7 @@
     <ClInclude Include="gtfo\_impl\type_traits\value_from_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\value_of_dereferenced.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\_type_traits_definitions.hpp" />
+    <ClInclude Include="gtfo\_impl\utility.hpp" />
     <ClInclude Include="gtfo\_impl\_common_definitions.hpp" />
   </ItemGroup>
   <ItemGroup>
