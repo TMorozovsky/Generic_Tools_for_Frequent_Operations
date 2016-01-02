@@ -1,7 +1,8 @@
-#include "gtfo/_impl/type_traits/is_container.hpp"
+#include "gtfo/_impl/type_traits/is_range.hpp"
+#include <vector>
 #define GTFO_HAS_ITERATOR_RETURNING_BEGIN(t) ::gtfo::_tt::helpers::has_iterator_returning_begin<t>::value
 #define GTFO_HAS_ITERATOR_RETURNING_END(t) ::gtfo::_tt::helpers::has_iterator_returning_end<t>::value
-#define GTFO_IS_CONTAINER(t) ::gtfo::_tt::is_container<t>::value
+#define GTFO_IS_RANGE(t) ::gtfo::_tt::is_range<t>::value
 
 namespace
 {
@@ -12,32 +13,48 @@ namespace
     struct E { int * end() { return nullptr; } };
     struct F { int * begin() { return nullptr; } float * end() { return nullptr; } };
     struct G { int * begin() { return nullptr; } int * end() { return nullptr; } };
+
+    struct HBeginIterator : std::vector<A>::iterator { };
+    struct HEndIterator : std::vector<B>::const_reverse_iterator { };
+
+    bool operator == (HBeginIterator, HEndIterator) { return true; }
+    bool operator != (HBeginIterator, HEndIterator) { return true; }
+
+    struct H
+    {
+        HBeginIterator begin() { return HBeginIterator(); }
+        HEndIterator   end()   { return HEndIterator(); }
+    };
 }
 
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(A &), "");
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(A &), "");
-static_assert(!GTFO_IS_CONTAINER(A), "");
+static_assert(!GTFO_IS_RANGE(A), "");
 
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(B &), "");
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(B &), "");
-static_assert(!GTFO_IS_CONTAINER(B), "");
+static_assert(!GTFO_IS_RANGE(B), "");
 
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(C &), "");
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(C &), "");
-static_assert(!GTFO_IS_CONTAINER(C), "");
+static_assert(!GTFO_IS_RANGE(C), "");
 
 static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(D &), "");
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_END(D &), "");
-static_assert(!GTFO_IS_CONTAINER(D), "");
+static_assert(!GTFO_IS_RANGE(D), "");
 
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(E &), "");
 static_assert(GTFO_HAS_ITERATOR_RETURNING_END(E &), "");
-static_assert(!GTFO_IS_CONTAINER(E), "");
+static_assert(!GTFO_IS_RANGE(E), "");
 
 static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(F &), "");
 static_assert(GTFO_HAS_ITERATOR_RETURNING_END(F &), "");
-static_assert(!GTFO_IS_CONTAINER(F), "");
+static_assert(!GTFO_IS_RANGE(F), "");
 
 static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(G &), "");
 static_assert(GTFO_HAS_ITERATOR_RETURNING_END(G &), "");
-static_assert(GTFO_IS_CONTAINER(G), "");
+static_assert(GTFO_IS_RANGE(G), "");
+
+static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(H &), "");
+static_assert(GTFO_HAS_ITERATOR_RETURNING_END(H &), "");
+static_assert(GTFO_IS_RANGE(H), "");

@@ -1,7 +1,7 @@
 #ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_ITERATOR_HPP
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_ITERATOR_HPP
 
-#include "gtfo/_impl/type_traits/_common_definitions.hpp"
+#include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_incrementable.hpp"
 #include "gtfo/_impl/type_traits/is_dereferenceable.hpp"
 #include "gtfo/_impl/type_traits/is_equality_comparable.hpp"

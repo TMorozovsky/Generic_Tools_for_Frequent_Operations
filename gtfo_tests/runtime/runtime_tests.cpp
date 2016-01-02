@@ -7,6 +7,7 @@
 
 #include "gtfo/numeric.hpp"
 #include "gtfo/algorithm.hpp"
+#include "gtfo/reversed_range.hpp"
 
 using namespace gtfo;
 
@@ -177,6 +178,52 @@ int main()
 
         cout << gtfo::none_of(vi.begin(), vi.end(), [](int x){ return x == 7; }) << endl;
         cout << gtfo::none_of(vi,                   [](int x){ return x == 5; }) << endl;
+    }
+
+
+
+
+
+    { // testing of reversed ranges
+        {
+            auto rb = gtfo::rbegin(c_array);
+            auto re = gtfo::rend(c_array);
+
+            cout << "reversed C-style array: \t";
+            for (auto rit = rb; rit != re; ++rit)
+                cout << *rit << ' ';
+            cout << endl;
+        }
+        {
+            auto rb = gtfo::rbegin(vi);
+            auto re = gtfo::rend(vi);
+
+            cout << "reversed C++ vector: \t";
+            for (auto rit = rb; rit != re; ++rit)
+                cout << *rit << ' ';
+            cout << endl;
+        }
+        {
+            cout << "reversed C-style array: \t";
+            for_each(rev(c_array), [](int x){ cout << "test:"<<x << ' '; });
+            cout << endl;
+        }
+        {
+            cout << "reversed C++ vector: \t";
+            for_each(rev(vi), [](int x){ cout << "test:"<<x << ' '; });
+            cout << endl;
+        }
+        {
+            cout << "reversed C++ vector (prvalue): \t";
+            for_each(rev(make_12345()), [](int x){ cout << "test:"<<x << ' '; });
+            cout << endl;
+        }
+        {
+            cout << "reversed C++ vector (xvalue): \t";
+            auto tmp = make_12345();
+            for_each(rev(::gtfo::move(tmp)), [](int x){ cout << "test:"<<x << ' '; });
+            cout << endl;
+        }
     }
 
 #if defined(_MSC_VER) && !defined(GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET)

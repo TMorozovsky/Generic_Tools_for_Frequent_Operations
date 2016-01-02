@@ -49,13 +49,13 @@ static_assert(has_end                     <test_iterator_both &>::value == true,
 static_assert(has_iterator_returning_begin<test_iterator_both &>::value == true, "");
 static_assert(has_iterator_returning_end  <test_iterator_both &>::value == true, "");
 
-static_assert(is_container< int[42]                  >::value == true,  "");
-static_assert(is_container< int(&)[42]               >::value == true,  "");
-static_assert(is_container< ::std::vector<int>       >::value == true,  "");
-static_assert(is_container< test_no_iterators        >::value == false, "");
-static_assert(is_container< test_iterator_begin_only >::value == false, "");
-static_assert(is_container< test_iterator_end_only   >::value == false, "");
-static_assert(is_container< test_iterator_both       >::value == true,  "");
+static_assert(is_range< int[42]                  >::value == true,  "");
+static_assert(is_range< int(&)[42]               >::value == true,  "");
+static_assert(is_range< ::std::vector<int>       >::value == true,  "");
+static_assert(is_range< test_no_iterators        >::value == false, "");
+static_assert(is_range< test_iterator_begin_only >::value == false, "");
+static_assert(is_range< test_iterator_end_only   >::value == false, "");
+static_assert(is_range< test_iterator_both       >::value == true,  "");
 
 static_assert(is_dereferenceable< int   >::value == false, "");
 static_assert(is_dereferenceable< int * >::value == true,  "");
@@ -96,7 +96,7 @@ static_assert(is_dereferenceable< std::ostream_iterator<int> >::value, "");
 
 static_assert(is_same
               <
-                  typename value_from_container<std::vector<int>>::type,
+                  typename value_from_range<std::vector<int>>::type,
                   int
               >::value, "");
 static_assert(::std::is_assignable

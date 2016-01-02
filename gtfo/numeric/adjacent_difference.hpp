@@ -6,9 +6,9 @@
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/result_of_subtraction.hpp"
-#include "gtfo/_impl/type_traits/value_from_container.hpp"
+#include "gtfo/_impl/type_traits/value_from_range.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun2.hpp"
-#include "gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp"
+#include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
 
 namespace gtfo
 {
@@ -70,29 +70,29 @@ namespace gtfo
         return ::std::adjacent_difference(it_begin, it_end, it_out, op);
     }
 
-    template<typename Container, typename OutputIterator>
+    template<typename Range, typename OutputIterator>
     inline
-    GTFO_RESULT_OF_ADJACENT_DIFFERENCE(typename _tt::iterator_of_container< Container >::type,
+    GTFO_RESULT_OF_ADJACENT_DIFFERENCE(typename _tt::iterator_of_range< Range >::type,
                                        OutputIterator)
-    adjacent_difference(Container &&   container,
+    adjacent_difference(Range &&       range,
                         OutputIterator it_out)
     {
-        return ::std::adjacent_difference(begin(container),
-                                          end(container),
+        return ::std::adjacent_difference(begin(range),
+                                          end(range),
                                           ::gtfo::move(it_out));
     }
 
-    template<typename Container, typename OutputIterator, typename BinaryOperation>
+    template<typename Range, typename OutputIterator, typename BinaryOperation>
     inline
-    GTFO_RESULT_OF_ADJACENT_DIFFERENCE_OP(typename _tt::iterator_of_container< Container >::type,
+    GTFO_RESULT_OF_ADJACENT_DIFFERENCE_OP(typename _tt::iterator_of_range< Range >::type,
                                           OutputIterator,
                                           BinaryOperation)
-    adjacent_difference(Container &&    container,
+    adjacent_difference(Range &&        range,
                         OutputIterator  it_out,
                         BinaryOperation op)
     {
-        return ::std::adjacent_difference(begin(container),
-                                          end(container),
+        return ::std::adjacent_difference(begin(range),
+                                          end(range),
                                           ::gtfo::move(it_out),
                                           ::gtfo::move(op));
     }

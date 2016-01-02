@@ -1,7 +1,7 @@
 #ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_RESULT_OF_SUBTRACTION_HPP
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_RESULT_OF_SUBTRACTION_HPP
 
-#include "gtfo/_impl/type_traits/_common_definitions.hpp"
+#include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/are_subtractable.hpp"
 
 namespace gtfo

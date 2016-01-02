@@ -5,9 +5,9 @@
 #include "gtfo/_impl/move.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
-#include "gtfo/_impl/type_traits/iterator_of_container.hpp"
+#include "gtfo/_impl/type_traits/iterator_of_range.hpp"
 #include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
-#include "gtfo/_impl/type_traits/value_from_container.hpp"
+#include "gtfo/_impl/type_traits/value_from_range.hpp"
 
 namespace gtfo
 {
@@ -50,27 +50,27 @@ namespace gtfo
                     typename _tt::value_of_dereferenced< ForwardIterator >::type());
     }
 
-    template<typename Container, typename Value>
+    template<typename Range, typename Value>
     inline
-    GTFO_RESULT_OF_IOTA(typename _tt::iterator_of_container< Container >::type,
+    GTFO_RESULT_OF_IOTA(typename _tt::iterator_of_range< Range >::type,
                         Value)
-    iota(Container && container,
-         Value        init)
+    iota(Range && range,
+         Value    init)
     {
-        ::std::iota(begin(container),
-                    end(container),
+        ::std::iota(begin(range),
+                    end(range),
                     ::gtfo::move(init));
     }
 
-    template<typename Container>
+    template<typename Range>
     inline
-    GTFO_RESULT_OF_IOTA(typename _tt::iterator_of_container< Container >::type,
-                        typename _tt::value_from_container< Container >::type)
-    iota(Container && container)
+    GTFO_RESULT_OF_IOTA(typename _tt::iterator_of_range< Range >::type,
+                        typename _tt::value_from_range< Range >::type)
+    iota(Range && range)
     {
-        ::std::iota(begin(container),
-                    end(container),
-                    typename _tt::value_from_container< Container >::type());
+        ::std::iota(begin(range),
+                    end(range),
+                    typename _tt::value_from_range< Range >::type());
     }
 
 #undef GTFO_RESULT_OF_IOTA

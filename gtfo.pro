@@ -8,11 +8,11 @@ SOURCES += \
     gtfo_tests/static/static_test_has_begin.cpp \
     gtfo_tests/static/static_test_has_end.cpp \
     gtfo_tests/static/static_test_is_assignable.cpp \
-    gtfo_tests/static/static_test_is_container.cpp \
-    gtfo_tests/static/static_test_is_container_castable_to_its_iterator.cpp \
     gtfo_tests/static/static_test_is_dereferenceable.cpp \
     gtfo_tests/static/static_test_is_equality_comparable.cpp \
-    gtfo_tests/static/static_test_can_be_used_in_boolean_context.cpp
+    gtfo_tests/static/static_test_can_be_used_in_boolean_context.cpp \
+    gtfo_tests/static/static_test_is_range.cpp \
+    gtfo_tests/static/static_test_is_range_castable_to_its_iterator.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -26,7 +26,6 @@ HEADERS += \
     gtfo/algorithm/for_each.hpp \
     gtfo/numeric/inner_product.hpp \
     gtfo/_impl/type_traits.hpp \
-    gtfo/_impl/type_traits/_common_definitions.hpp \
     gtfo/_impl/type_traits/has_begin.hpp \
     gtfo/_impl/type_traits/has_end.hpp \
     gtfo/_impl/type_traits/result_of_begin.hpp \
@@ -37,9 +36,6 @@ HEADERS += \
     gtfo/_impl/type_traits/is_equality_comparable.hpp \
     gtfo/_impl/type_traits/is_incrementable.hpp \
     gtfo/_impl/type_traits/is_iterator.hpp \
-    gtfo/_impl/type_traits/is_container.hpp \
-    gtfo/_impl/type_traits/iterator_of_container.hpp \
-    gtfo/_impl/type_traits/value_from_container.hpp \
     gtfo/_impl/type_traits/is_invokable_fun0.hpp \
     gtfo/_impl/type_traits/is_invokable_fun1.hpp \
     gtfo/_impl/type_traits/is_invokable_fun2.hpp \
@@ -54,12 +50,22 @@ HEADERS += \
     gtfo/_impl/type_traits/result_of_multiplication.hpp \
     gtfo/_impl/type_traits/is_assignable.hpp \
     gtfo/_impl/type_traits/common_type_2.hpp \
-    gtfo/_impl/type_traits/is_container_castable_to_its_iterator.hpp \
-    gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp \
     gtfo/numeric/partial_sum.hpp \
     gtfo/numeric/iota.hpp \
     gtfo/algorithm/all_of.hpp \
     gtfo/_impl/move.hpp \
     gtfo/algorithm/any_of.hpp \
     gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp \
-    gtfo/algorithm/none_of.hpp
+    gtfo/algorithm/none_of.hpp \
+    gtfo/_impl/type_traits/is_range.hpp \
+    gtfo/_impl/type_traits/is_range_castable_to_its_iterator.hpp \
+    gtfo/_impl/type_traits/iterator_of_range.hpp \
+    gtfo/_impl/type_traits/value_from_range.hpp \
+    gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp \
+    gtfo/reversed_range.hpp \
+    gtfo/_impl/type_traits/has_rbegin_mem_fun.hpp \
+    gtfo/_impl/type_traits/has_rend_mem_fun.hpp \
+    gtfo/_impl/_common_definitions.hpp \
+    gtfo/_impl/rbegin_rend.hpp \
+    gtfo/_impl/type_traits/_type_traits_definitions.hpp \
+    gtfo/_impl/addressof.hpp

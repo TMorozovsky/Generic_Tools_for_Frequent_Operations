@@ -155,7 +155,10 @@
     <ClInclude Include="gtfo\numeric\inner_product.hpp" />
     <ClInclude Include="gtfo\numeric\iota.hpp" />
     <ClInclude Include="gtfo\numeric\partial_sum.hpp" />
+    <ClInclude Include="gtfo\reversed_range.hpp" />
+    <ClInclude Include="gtfo\_impl\addressof.hpp" />
     <ClInclude Include="gtfo\_impl\move.hpp" />
+    <ClInclude Include="gtfo\_impl\rbegin_rend.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_multipliable.hpp" />
@@ -164,9 +167,9 @@
     <ClInclude Include="gtfo\_impl\type_traits\common_type_2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\has_begin.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\has_end.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\has_rbegin_mem_fun.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\has_rend_mem_fun.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_assignable.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\is_container.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\is_container_castable_to_its_iterator.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_dereferenceable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_equality_comparable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_incrementable.hpp" />
@@ -174,20 +177,23 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun1.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_iterator.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\iterator_of_container.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\is_range.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\is_range_castable_to_its_iterator.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\iterator_of_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_addition.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_begin.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\result_of_container_iterator_dereferencing.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_dereferencing.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_end.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_fun0.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_fun1.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_fun2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_multiplication.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_range_iterator_dereferencing.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_subtraction.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\value_from_container.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\value_from_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\value_of_dereferenced.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\_common_definitions.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\_type_traits_definitions.hpp" />
+    <ClInclude Include="gtfo\_impl\_common_definitions.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp" />
@@ -199,10 +205,10 @@
     <ClCompile Include="gtfo_tests\static\static_test_has_begin.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_has_end.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_assignable.cpp" />
-    <ClCompile Include="gtfo_tests\static\static_test_is_container.cpp" />
-    <ClCompile Include="gtfo_tests\static\static_test_is_container_castable_to_its_iterator.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_dereferenceable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_equality_comparable.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_is_range.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_is_range_castable_to_its_iterator.cpp" />
     <ClCompile Include="gtfo_tests\static\_old_static_tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

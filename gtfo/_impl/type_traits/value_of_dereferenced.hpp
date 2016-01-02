@@ -1,7 +1,7 @@
 #ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_VALUE_OF_DEREFERENCED_HPP
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_VALUE_OF_DEREFERENCED_HPP
 
-#include "gtfo/_impl/type_traits/_common_definitions.hpp"
+#include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_dereferenceable.hpp"
 
 namespace gtfo

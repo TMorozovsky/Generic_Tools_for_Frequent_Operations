@@ -6,9 +6,9 @@
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_addition.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
-#include "gtfo/_impl/type_traits/value_from_container.hpp"
+#include "gtfo/_impl/type_traits/value_from_range.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun2.hpp"
-#include "gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp"
+#include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
 
 namespace gtfo
 {
@@ -74,40 +74,40 @@ namespace gtfo
     }
 
 
-    template<typename Container>
+    template<typename Range>
     inline
-    GTFO_RESULT_OF_ACCUMULATE(typename _tt::iterator_of_container< Container >::type,
-                              typename _tt::value_from_container< Container >::type)
-    accumulate(Container && container)
+    GTFO_RESULT_OF_ACCUMULATE(typename _tt::iterator_of_range< Range >::type,
+                              typename _tt::value_from_range< Range >::type)
+    accumulate(Range && range)
     {
-        return ::std::accumulate(begin(container),
-                                 end(container),
-                                 typename _tt::value_from_container<Container>::type());
+        return ::std::accumulate(begin(range),
+                                 end(range),
+                                 typename _tt::value_from_range<Range>::type());
     }
 
-    template<typename Container, typename Value>
+    template<typename Range, typename Value>
     inline
-    GTFO_RESULT_OF_ACCUMULATE(typename _tt::iterator_of_container< Container >::type,
+    GTFO_RESULT_OF_ACCUMULATE(typename _tt::iterator_of_range< Range >::type,
                               Value)
-    accumulate(Container && container,
-               Value        init)
+    accumulate(Range && range,
+               Value    init)
     {
-        return ::std::accumulate(begin(container),
-                                 end(container),
+        return ::std::accumulate(begin(range),
+                                 end(range),
                                  ::gtfo::move(init));
     }
 
-    template<typename Container, typename Value, typename BinaryOperation>
+    template<typename Range, typename Value, typename BinaryOperation>
     inline
-    GTFO_RESULT_OF_ACCUMULATE_OP(typename _tt::iterator_of_container< Container >::type,
+    GTFO_RESULT_OF_ACCUMULATE_OP(typename _tt::iterator_of_range< Range >::type,
                                  Value,
                                  BinaryOperation)
-    accumulate(Container &&    container,
+    accumulate(Range &&        range,
                Value           init,
                BinaryOperation op)
     {
-        return ::std::accumulate(begin(container),
-                                 end(container),
+        return ::std::accumulate(begin(range),
+                                 end(range),
                                  ::gtfo::move(init),
                                  ::gtfo::move(op));
     }

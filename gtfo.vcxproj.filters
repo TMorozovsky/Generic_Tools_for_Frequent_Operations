@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gtfo\_impl\type_traits\_common_definitions.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
@@ -49,12 +46,6 @@
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\is_assignable.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\is_container.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\is_container_castable_to_its_iterator.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\is_dereferenceable.hpp">
@@ -78,16 +69,10 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_iterator.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\iterator_of_container.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\result_of_addition.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\result_of_begin.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\result_of_container_iterator_dereferencing.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\result_of_dereferencing.hpp">
@@ -109,9 +94,6 @@
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\result_of_subtraction.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\value_from_container.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\value_of_dereferenced.hpp">
@@ -159,6 +141,42 @@
     <ClInclude Include="gtfo\algorithm\none_of.hpp">
       <Filter>gtfo\algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\_type_traits_definitions.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\has_rbegin_mem_fun.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\has_rend_mem_fun.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\is_range_castable_to_its_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\iterator_of_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\result_of_range_iterator_dereferencing.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\value_from_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\_common_definitions.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\addressof.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\rbegin_rend.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\reversed_range.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
@@ -188,12 +206,6 @@
     <ClCompile Include="gtfo_tests\static\static_test_is_assignable.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
-    <ClCompile Include="gtfo_tests\static\static_test_is_container.cpp">
-      <Filter>gtfo_tests\static</Filter>
-    </ClCompile>
-    <ClCompile Include="gtfo_tests\static\static_test_is_container_castable_to_its_iterator.cpp">
-      <Filter>gtfo_tests\static</Filter>
-    </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_is_dereferenceable.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
@@ -201,6 +213,12 @@
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_can_be_used_in_boolean_context.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_range.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_range_castable_to_its_iterator.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
   </ItemGroup>

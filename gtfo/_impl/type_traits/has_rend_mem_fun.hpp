@@ -1,5 +1,5 @@
-#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
-#define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
+#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_HAS_REND_MEM_FUN_HPP
+#define GTFO_FILE_INCLUDED_TYPE_TRAITS_HAS_REND_MEM_FUN_HPP
 
 #include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 
@@ -9,16 +9,16 @@ namespace gtfo
     {
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// type T is incrementable, i.e. expression
-        ///     ++ lvalue-of-type-T
+        /// a call to
+        ///     (lvalue-of-type-T).rend()
         /// is well-formed
         template<typename T>
-        struct is_incrementable
+        struct has_rend_mem_fun
         {
             template<typename U>
             static yes_type test(typename remove_reference
                                  <
-                                     decltype( ++ declval<U &>() )
+                                     decltype( declval<U &>().rend() )
                                  >::type *);
 
             template<typename U>
@@ -29,4 +29,4 @@ namespace gtfo
     }
 }
 
-#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
+#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_HAS_REND_MEM_FUN_HPP

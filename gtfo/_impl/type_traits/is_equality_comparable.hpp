@@ -1,7 +1,7 @@
 #ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_EQUALITY_COMPARABLE_HPP
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_EQUALITY_COMPARABLE_HPP
 
-#include "gtfo/_impl/type_traits/_common_definitions.hpp"
+#include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 
 namespace gtfo

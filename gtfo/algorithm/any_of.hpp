@@ -6,7 +6,7 @@
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun1.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
-#include "gtfo/_impl/type_traits/result_of_container_iterator_dereferencing.hpp"
+#include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
 
 namespace gtfo
 {
@@ -33,7 +33,7 @@ namespace gtfo
                              ::gtfo::move(pred));
     }
 
-    template<typename Container, typename UnaryPredicate>
+    template<typename Range, typename UnaryPredicate>
     inline
     typename _tt::enable_if
     <
@@ -42,16 +42,16 @@ namespace gtfo
             typename _tt::result_of_fun1
             <
                 UnaryPredicate,
-                typename _tt::result_of_container_iterator_dereferencing< Container >::type
+                typename _tt::result_of_range_iterator_dereferencing< Range >::type
             >::type
         >::value,
         bool
     >::type
-    any_of(Container &&   container,
+    any_of(Range &&       range,
            UnaryPredicate pred)
     {
-        return ::std::any_of(begin(container),
-                             end(container),
+        return ::std::any_of(begin(range),
+                             end(range),
                              ::gtfo::move(pred));
     }
 }
