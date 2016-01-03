@@ -108,8 +108,7 @@ static_assert(GTFO_CAN_INVOKE_COMPARISON_EQ(GL, GR), "");
 static_assert(GTFO_CAN_INVOKE_COMPARISON_N_EQ(GL, GR), "");
 static_assert(GTFO_RESULT_OF_EQ_COMPARISON_IS(GL, GR, PrivateBool), "");
 static_assert(GTFO_RESULT_OF_N_EQ_COMPARISON_IS(GL, GR, PrivateBool), "");
-// unfortunately, a bug in MSVC 2012 :(
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(PrivateBool), "");
 static_assert(!GTFO_IS_EQUALITY_COMPARABLE(GL, GR), "");
 #endif

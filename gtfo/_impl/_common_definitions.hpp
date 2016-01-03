@@ -11,7 +11,7 @@
 #else
 #define GTFO_CONSTEXPR const
 #define GTFO_CONSTEXPR_FUNCTION inline
-#define GTFO_NOEXCEPT
+#define GTFO_NOEXCEPT throw()
 #endif
 
 #if defined(_MSC_VER) && _MSC_VER < 1900

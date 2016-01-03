@@ -12,7 +12,13 @@ SOURCES += \
     gtfo_tests/static/static_test_is_equality_comparable.cpp \
     gtfo_tests/static/static_test_can_be_used_in_boolean_context.cpp \
     gtfo_tests/static/static_test_is_range.cpp \
-    gtfo_tests/static/static_test_is_range_castable_to_its_iterator.cpp
+    gtfo_tests/static/static_test_is_range_castable_to_its_iterator.cpp \
+    gtfo_tests/static/static_test_is_incrementable.cpp \
+    gtfo_tests/static/static_test_is_invokable_fun0.cpp \
+    gtfo_tests/static/static_test_is_invokable_fun1.cpp \
+    gtfo_tests/static/static_test_is_invokable_fun2.cpp \
+    gtfo_tests/static/static_test_is_iterator.cpp \
+    gtfo_tests/static/static_test_iterator_of_range.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -62,8 +68,6 @@ HEADERS += \
     gtfo/_impl/type_traits/value_from_range.hpp \
     gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp \
     gtfo/reversed_range.hpp \
-    gtfo/_impl/type_traits/has_rbegin_mem_fun.hpp \
-    gtfo/_impl/type_traits/has_rend_mem_fun.hpp \
     gtfo/_impl/_common_definitions.hpp \
     gtfo/_impl/type_traits/_type_traits_definitions.hpp \
     gtfo/_impl/utility.hpp

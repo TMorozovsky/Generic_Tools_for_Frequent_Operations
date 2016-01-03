@@ -141,12 +141,6 @@
     <ClInclude Include="gtfo\_impl\type_traits\_type_traits_definitions.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\has_rbegin_mem_fun.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\has_rend_mem_fun.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\is_range.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
@@ -213,6 +207,24 @@
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_is_range_castable_to_its_iterator.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_incrementable.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun0.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun1.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun2.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_is_iterator.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_iterator_of_range.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
   </ItemGroup>

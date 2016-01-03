@@ -11,6 +11,10 @@ namespace gtfo
         /// which is true if and only if
         /// an rvalue of type From can be assigned
         /// to an lvalue of type To
+        /// note:
+        /// unlike the is_assignable<> type trait from the standard library,
+        /// this implementation always treats its first parameter as if
+        /// it was an lvalue, even if the actual argument was an rvalue
         template<typename To, typename From>
         struct is_assignable
         {
@@ -26,6 +30,7 @@ namespace gtfo
 
             static GTFO_CONSTEXPR bool value = sizeof(test<To, From>(nullptr)) == sizeof(yes_type)
 #ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
+                                               && !is_void<typename remove_reference<To>::type>::value
                                                && !is_const<typename remove_reference<To>::type>::value
 #endif
                     ;

@@ -9,21 +9,15 @@ namespace
     struct NotBool { };
 }
 
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(bool), "");
+static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(void), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(bool), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(const bool &), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(volatile bool &&), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(int), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(unsigned char), "");
 
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(const bool &), "");
-
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(volatile bool &&), "");
-
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(int), "");
-
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(unsigned char), "");
-
-static_assert(GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(Bool), "");
-
-// unfortunately, a bug in MSVC 2012 :(
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(Bool), "");
+#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(PrivateBool), "");
 #endif
-
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(NotBool), "");

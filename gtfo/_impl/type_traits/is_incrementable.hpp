@@ -24,7 +24,12 @@ namespace gtfo
             template<typename U>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
+            static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type)
+#ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
+                                               && !is_void<typename remove_reference<T>::type>::value
+                                               && !is_const<typename remove_reference<T>::type>::value
+#endif
+                    ;
         };
     }
 }

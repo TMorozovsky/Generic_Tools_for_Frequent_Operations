@@ -31,7 +31,5 @@
 #include "gtfo/_impl/type_traits/common_type_2.hpp"
 #include "gtfo/_impl/type_traits/is_range_castable_to_its_iterator.hpp"
 #include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
-#include "gtfo/_impl/type_traits/has_rbegin_mem_fun.hpp"
-#include "gtfo/_impl/type_traits/has_rend_mem_fun.hpp"
 
 #endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_HPP

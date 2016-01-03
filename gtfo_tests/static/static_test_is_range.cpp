@@ -1,5 +1,6 @@
 #include "gtfo/_impl/type_traits/is_range.hpp"
 #include <vector>
+#include "gtfo/reversed_range.hpp"
 #define GTFO_HAS_ITERATOR_RETURNING_BEGIN(t) ::gtfo::_tt::helpers::has_iterator_returning_begin<t>::value
 #define GTFO_HAS_ITERATOR_RETURNING_END(t) ::gtfo::_tt::helpers::has_iterator_returning_end<t>::value
 #define GTFO_IS_RANGE(t) ::gtfo::_tt::is_range<t>::value
@@ -14,17 +15,19 @@ namespace
     struct F { int * begin() { return nullptr; } float * end() { return nullptr; } };
     struct G { int * begin() { return nullptr; } int * end() { return nullptr; } };
 
-    struct HBeginIterator : std::vector<A>::iterator { };
-    struct HEndIterator : std::vector<B>::const_reverse_iterator { };
+    struct HBeginIterator : ::std::vector<A>::iterator { };
+    struct HEndIterator : ::std::vector<B>::const_reverse_iterator { };
 
-    bool operator == (HBeginIterator, HEndIterator) { return true; }
-    bool operator != (HBeginIterator, HEndIterator) { return true; }
+    inline bool operator == (HBeginIterator, HEndIterator) { return true; }
+    inline bool operator != (HBeginIterator, HEndIterator) { return true; }
 
     struct H
     {
         HBeginIterator begin() { return HBeginIterator(); }
         HEndIterator   end()   { return HEndIterator(); }
     };
+
+    typedef ::std::vector<G> V;
 }
 
 static_assert(!GTFO_HAS_ITERATOR_RETURNING_BEGIN(A &), "");
@@ -58,3 +61,13 @@ static_assert(GTFO_IS_RANGE(G), "");
 static_assert(GTFO_HAS_ITERATOR_RETURNING_BEGIN(H &), "");
 static_assert(GTFO_HAS_ITERATOR_RETURNING_END(H &), "");
 static_assert(GTFO_IS_RANGE(H), "");
+
+static_assert(GTFO_IS_RANGE(int(&)[42]), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<int(&)[42]>()))), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<int   [42]>()))), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<int(&&)[42]>()))), "");
+
+static_assert(GTFO_IS_RANGE(V), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<V &>()))), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<V  >()))), "");
+static_assert(GTFO_IS_RANGE(decltype(::gtfo::rev(::gtfo::_tt::declval<V &&>()))), "");

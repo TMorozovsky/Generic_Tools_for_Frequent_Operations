@@ -11,7 +11,7 @@ namespace
 static_assert(!GTFO_IS_DEREFERENCEABLE(int), "");
 static_assert(GTFO_IS_DEREFERENCEABLE(int *), "");
 static_assert(!GTFO_IS_DEREFERENCEABLE(X &), "");
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
+#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_IS_DEREFERENCEABLE(Y &), "");
 #endif
 static_assert(GTFO_IS_DEREFERENCEABLE(Z &), "");
