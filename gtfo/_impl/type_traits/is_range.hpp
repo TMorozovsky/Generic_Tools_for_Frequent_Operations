@@ -49,9 +49,9 @@ namespace gtfo
             /// which is true if and only if
             /// a call to
             ///     end(lvalue-of-type-T)
-            /// returns a valid iterator
+            /// returns some non-void value
             template<typename T>
-            struct has_iterator_returning_end
+            struct has_non_void_returning_end
             {
                 template<typename U, bool u_has_end>
                 struct impl
@@ -62,7 +62,7 @@ namespace gtfo
                 template<typename U>
                 struct impl<U, true>
                 {
-                    static GTFO_CONSTEXPR bool value = is_iterator
+                    static GTFO_CONSTEXPR bool value = !is_void
                                                        <
                                                            typename result_of_end<U>::type
                                                        >::value;
@@ -78,20 +78,21 @@ namespace gtfo
 
         /// defines static member constant value of type bool
         /// which is true if and only if
-        /// lvalue of type T is a valid range
-        /// (or a reference to such range),
-        /// i.e. if both calls to
+        /// T is a valid range type,
+        /// i.e. if call to
         ///     begin(lvalue-of-type-T)
-        /// and
+        /// returns a valid iterator (see is_iterator<> type trait)
+        /// and call to
         ///     end(lvalue-of-type-T)
-        /// return valid iterators and
-        /// a result of begin() on the left-hand side
-        /// can be equality-compared to
-        /// a result of end() on the right-hand side
+        /// returns something that can be equality-compared
+        /// to that iterator in expressions like
+        ///     begin(lvalue-of-type-T) == end(lvalue-of-type-T)
+        /// and
+        ///     begin(lvalue-of-type-T) != end(lvalue-of-type-T)
         template<typename T>
         struct is_range
         {
-            template<typename U, bool u_has_iterator_returning_begin_and_end>
+            template<typename U, bool u_has_iterator_returning_begin_non_void_returning_end>
             struct impl
             {
                 static GTFO_CONSTEXPR bool value = false;
@@ -111,7 +112,7 @@ namespace gtfo
                                                <
                                                    T,
                                                    helpers::has_iterator_returning_begin<T>::value &&
-                                                   helpers::has_iterator_returning_end<T>::value
+                                                   helpers::has_non_void_returning_end<T>::value
                                                >::value;
         };
     }

@@ -15,7 +15,7 @@ namespace
     };
 
     struct HBeginIterator : ::std::vector<signed char>::iterator { };
-    struct HEndIterator : ::std::vector<volatile void *>::const_reverse_iterator { };
+    struct HEndIterator { };
 
     inline bool operator == (HBeginIterator, HEndIterator) { return true; }
     inline bool operator != (HBeginIterator, HEndIterator) { return true; }

@@ -174,6 +174,7 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_iterator.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_range_castable_to_its_iterator.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\is_range_with_same_begin_end.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\iterator_of_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_addition.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\result_of_begin.hpp" />
@@ -210,7 +211,20 @@
     <ClCompile Include="gtfo_tests\static\static_test_is_iterator.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_range.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_range_castable_to_its_iterator.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_is_range_with_same_begin_end.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_iterator_of_range.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_addition.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_begin.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_dereferencing.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_end.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_fun0.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_fun1.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_fun2.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_multiplication.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_range_iterator_dereferencing.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_result_of_subtraction.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_value_from_range.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_value_of_dereferenced.cpp" />
     <ClCompile Include="gtfo_tests\static\_old_static_tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

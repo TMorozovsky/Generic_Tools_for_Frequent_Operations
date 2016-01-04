@@ -26,7 +26,7 @@ namespace gtfo
         /// a function call operator of an lvalue of type Function
         /// without any explicitly provided arguments;
         /// if such call is ill-formed, no member type is provided
-        template<typename Function, typename Argument>
+        template<typename Function>
         struct result_of_fun0 : helpers::impl_result_of_fun0<Function,
                                                              is_invokable_fun0<Function>::value>
         {

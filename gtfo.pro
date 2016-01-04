@@ -18,7 +18,20 @@ SOURCES += \
     gtfo_tests/static/static_test_is_invokable_fun1.cpp \
     gtfo_tests/static/static_test_is_invokable_fun2.cpp \
     gtfo_tests/static/static_test_is_iterator.cpp \
-    gtfo_tests/static/static_test_iterator_of_range.cpp
+    gtfo_tests/static/static_test_iterator_of_range.cpp \
+    gtfo_tests/static/static_test_result_of_addition.cpp \
+    gtfo_tests/static/static_test_result_of_multiplication.cpp \
+    gtfo_tests/static/static_test_result_of_subtraction.cpp \
+    gtfo_tests/static/static_test_result_of_begin.cpp \
+    gtfo_tests/static/static_test_result_of_end.cpp \
+    gtfo_tests/static/static_test_result_of_dereferencing.cpp \
+    gtfo_tests/static/static_test_result_of_fun0.cpp \
+    gtfo_tests/static/static_test_result_of_fun1.cpp \
+    gtfo_tests/static/static_test_result_of_fun2.cpp \
+    gtfo_tests/static/static_test_result_of_range_iterator_dereferencing.cpp \
+    gtfo_tests/static/static_test_value_from_range.cpp \
+    gtfo_tests/static/static_test_value_of_dereferenced.cpp \
+    gtfo_tests/static/static_test_is_range_with_same_begin_end.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -70,4 +83,5 @@ HEADERS += \
     gtfo/reversed_range.hpp \
     gtfo/_impl/_common_definitions.hpp \
     gtfo/_impl/type_traits/_type_traits_definitions.hpp \
-    gtfo/_impl/utility.hpp
+    gtfo/_impl/utility.hpp \
+    gtfo/_impl/type_traits/is_range_with_same_begin_end.hpp

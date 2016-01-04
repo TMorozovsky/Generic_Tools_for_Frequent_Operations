@@ -1,7 +1,6 @@
 #ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_RANGE_CASTABLE_TO_ITS_ITERATOR_HPP
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_RANGE_CASTABLE_TO_ITS_ITERATOR_HPP
 
-#include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_range.hpp"
 #include "gtfo/_impl/type_traits/iterator_of_range.hpp"
 

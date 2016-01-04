@@ -12,12 +12,12 @@ struct test_no_iterators
 };
 
 using helpers::has_iterator_returning_begin;
-using helpers::has_iterator_returning_end;
+using helpers::has_non_void_returning_end;
 
 static_assert(has_begin                   <test_no_iterators &>::value == true,  "");
 static_assert(has_end                     <test_no_iterators &>::value == true,  "");
 static_assert(has_iterator_returning_begin<test_no_iterators &>::value == false, "");
-static_assert(has_iterator_returning_end  <test_no_iterators &>::value == false, "");
+static_assert(has_non_void_returning_end  <test_no_iterators &>::value == true,  "");
 
 struct test_iterator_begin_only
 {
@@ -27,7 +27,7 @@ struct test_iterator_begin_only
 static_assert(has_begin                   <test_iterator_begin_only &>::value == true,  "");
 static_assert(has_end                     <test_iterator_begin_only &>::value == true,  "");
 static_assert(has_iterator_returning_begin<test_iterator_begin_only &>::value == true,  "");
-static_assert(has_iterator_returning_end  <test_iterator_begin_only &>::value == false, "");
+static_assert(has_non_void_returning_end  <test_iterator_begin_only &>::value == true,  "");
 
 struct test_iterator_end_only
 {
@@ -37,7 +37,7 @@ struct test_iterator_end_only
 static_assert(has_begin                   <test_iterator_end_only &>::value == true,  "");
 static_assert(has_end                     <test_iterator_end_only &>::value == true,  "");
 static_assert(has_iterator_returning_begin<test_iterator_end_only &>::value == false, "");
-static_assert(has_iterator_returning_end  <test_iterator_end_only &>::value == true,  "");
+static_assert(has_non_void_returning_end  <test_iterator_end_only &>::value == true,  "");
 
 struct test_iterator_both
 {
@@ -47,7 +47,7 @@ struct test_iterator_both
 static_assert(has_begin                   <test_iterator_both &>::value == true, "");
 static_assert(has_end                     <test_iterator_both &>::value == true, "");
 static_assert(has_iterator_returning_begin<test_iterator_both &>::value == true, "");
-static_assert(has_iterator_returning_end  <test_iterator_both &>::value == true, "");
+static_assert(has_non_void_returning_end  <test_iterator_both &>::value == true, "");
 
 static_assert(is_range< int[42]                  >::value == true,  "");
 static_assert(is_range< int(&)[42]               >::value == true,  "");

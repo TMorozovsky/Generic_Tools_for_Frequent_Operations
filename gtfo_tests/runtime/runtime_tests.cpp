@@ -186,42 +186,42 @@ int main()
 
     { // testing of reversed ranges
         {
-            auto rb = gtfo::rbegin(c_array);
-            auto re = gtfo::rend(c_array);
-
-            cout << "reversed C-style array: \t";
-            for (auto rit = rb; rit != re; ++rit)
-                cout << *rit << ' ';
+            cout << "reversed C-style array - for loop: \t";
+            for (int i : rev(c_array))
+                cout << i << ' ';
             cout << endl;
         }
         {
-            auto rb = gtfo::rbegin(vi);
-            auto re = gtfo::rend(vi);
-
-            cout << "reversed C++ vector: \t";
-            for (auto rit = rb; rit != re; ++rit)
-                cout << *rit << ' ';
+            cout << "reversed C++ vector (lvalue) - for loop: \t";
+            for (int i : rev(vi))
+                cout << i << ' ';
             cout << endl;
         }
         {
-            cout << "reversed C-style array: \t";
-            for_each(rev(c_array), [](int x){ cout << "test:"<<x << ' '; });
+            cout << "reversed C++ vector (prvalue) - for loop: \t";
+            for (int i : rev(make_12345()))
+                cout << i << ' ';
             cout << endl;
         }
         {
-            cout << "reversed C++ vector: \t";
-            for_each(rev(vi), [](int x){ cout << "test:"<<x << ' '; });
+            cout << "reversed C-style array - for_each: \t";
+            for_each(rev(c_array), [](int x){ cout << x << ' '; });
             cout << endl;
         }
         {
-            cout << "reversed C++ vector (prvalue): \t";
-            for_each(rev(make_12345()), [](int x){ cout << "test:"<<x << ' '; });
+            cout << "reversed C++ vector (lvalue) - for_each: \t";
+            for_each(rev(vi), [](int x){ cout << x << ' '; });
             cout << endl;
         }
         {
-            cout << "reversed C++ vector (xvalue): \t";
+            cout << "reversed C++ vector (prvalue) - for_each: \t";
+            for_each(rev(make_12345()), [](int x){ cout << x << ' '; });
+            cout << endl;
+        }
+        {
+            cout << "reversed C++ vector (xvalue) - for_each: \t";
             auto tmp = make_12345();
-            for_each(rev(::gtfo::move(tmp)), [](int x){ cout << "test:"<<x << ' '; });
+            for_each(rev(::gtfo::move(tmp)), [](int x){ cout << x << ' '; });
             cout << endl;
         }
     }

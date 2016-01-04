@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_REVERSED_RANGE_HPP
 
 #include "gtfo/_impl/type_traits/iterator_of_range.hpp"
+#include "gtfo/_impl/type_traits/is_range_with_same_begin_end.hpp"
 #include "gtfo/_impl/utility.hpp"
 
 namespace gtfo
@@ -59,11 +60,17 @@ namespace gtfo
 
 #undef GTFO_RANGE_REVERSE_ITERATOR
 
+    /// function template that returns a view object
+    /// through which a range can be accessed in reverse order;
+    /// this overload works with lvalue ranges only
+    /// and its return value acts like a raw pointer to given range,
+    /// so keep that in mind if you want to save this function's result
+    /// for using it later (which is not recommended in general case)
     template<typename Range>
     inline
     typename _tt::enable_if
     <
-        _tt::is_lvalue_reference<Range>::value,
+        _tt::is_lvalue_reference<Range>::value && _tt::is_range_with_same_begin_end<Range>::value,
         detail::reversing_raw_pointer_to_range<Range>
     >::type
     rev(Range && range)
@@ -71,11 +78,15 @@ namespace gtfo
         return detail::reversing_raw_pointer_to_range<Range>(range);
     }
 
+    /// function template that returns a new range owner object
+    /// through which a range can be accessed in reverse order;
+    /// this overload works with rvalue ranges only
+    /// and its return value stores the entire range in its internal state
     template<typename Range>
     inline
     typename _tt::enable_if
     <
-        !_tt::is_lvalue_reference<Range>::value,
+        !_tt::is_lvalue_reference<Range>::value && _tt::is_range_with_same_begin_end<Range>::value,
         detail::reversing_owner_of_range<Range>
     >::type
     rev(Range && range)

@@ -7,6 +7,7 @@
     >::value
 
 static_assert(GTFO_COMMON_TYPE_2_IS(const volatile int &, int &, int), "");
+static_assert(GTFO_COMMON_TYPE_2_IS(int &, float &, float), "");
 static_assert(GTFO_COMMON_TYPE_2_IS(int, float, float), "");
 static_assert(GTFO_COMMON_TYPE_2_IS(float, int, float), "");
 static_assert(GTFO_COMMON_TYPE_2_IS(int, double, double), "");
