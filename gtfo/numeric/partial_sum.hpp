@@ -4,6 +4,7 @@
 #include <numeric>
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
+#include "gtfo/_impl/type_traits/iterator_of_range.hpp"
 #include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
 #include "gtfo/_impl/type_traits/result_of_addition.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"

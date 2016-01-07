@@ -6,6 +6,7 @@
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/result_of_addition.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
+#include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
 #include "gtfo/_impl/type_traits/value_from_range.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun2.hpp"
 #include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
@@ -73,6 +74,17 @@ namespace gtfo
                                  ::gtfo::move(op));
     }
 
+    template<typename InputIterator>
+    inline
+    GTFO_RESULT_OF_ACCUMULATE(InputIterator,
+                              typename _tt::value_of_dereferenced<InputIterator>::type)
+    accumulate(InputIterator it_begin,
+               InputIterator it_end)
+    {
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
+                                 typename _tt::value_of_dereferenced<InputIterator>::type());
+    }
 
     template<typename Range>
     inline

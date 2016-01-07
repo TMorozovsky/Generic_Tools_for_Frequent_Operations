@@ -30,7 +30,6 @@ namespace gtfo
         return GTFO_RANGE_REVERSE_ITERATOR( begin(::gtfo::forward<Range>(range)) );
     }
 
-
     namespace detail
     {
         template<typename Range>

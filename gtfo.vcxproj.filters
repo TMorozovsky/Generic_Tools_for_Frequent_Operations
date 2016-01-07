@@ -25,6 +25,12 @@
     <Filter Include="gtfo\_impl\type_traits">
       <UniqueIdentifier>{daffdf74-a6c1-4af3-889e-229fbaae0813}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gtfo_tests\runtime\numeric">
+      <UniqueIdentifier>{d33c0d09-a515-41a0-8fe4-4e2c7af1457c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_tests\runtime\algorithm">
+      <UniqueIdentifier>{5e5c191d-ab2e-40f4-89ff-c4e1fb7081a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp">
@@ -168,14 +174,11 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_range_with_same_begin_end.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo_tests\runtime\runtime_tests.hpp">
+      <Filter>gtfo_tests\runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
-      <Filter>gtfo_tests\runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="gtfo_tests\static\_old_static_tests.cpp">
-      <Filter>gtfo_tests\static</Filter>
-    </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
@@ -268,6 +271,27 @@
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_value_of_dereferenced.cpp">
       <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_accumulate.cpp">
+      <Filter>gtfo_tests\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_adjacent_difference.cpp">
+      <Filter>gtfo_tests\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_inner_product.cpp">
+      <Filter>gtfo_tests\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_iota.cpp">
+      <Filter>gtfo_tests\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_partial_sum.cpp">
+      <Filter>gtfo_tests\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_for_each.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
+      <Filter>gtfo_tests\runtime</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,4 @@
 SOURCES += \
-    gtfo_tests/runtime/runtime_tests.cpp \
-    gtfo_tests/static/_old_static_tests.cpp \
     gtfo_tests/static/static_test_are_addable.cpp \
     gtfo_tests/static/static_test_are_multipliable.cpp \
     gtfo_tests/static/static_test_are_subtractable.cpp \
@@ -31,7 +29,14 @@ SOURCES += \
     gtfo_tests/static/static_test_result_of_range_iterator_dereferencing.cpp \
     gtfo_tests/static/static_test_value_from_range.cpp \
     gtfo_tests/static/static_test_value_of_dereferenced.cpp \
-    gtfo_tests/static/static_test_is_range_with_same_begin_end.cpp
+    gtfo_tests/static/static_test_is_range_with_same_begin_end.cpp \
+    gtfo_tests/runtime/numeric/runtime_test_accumulate.cpp \
+    gtfo_tests/runtime/numeric/runtime_test_adjacent_difference.cpp \
+    gtfo_tests/runtime/numeric/runtime_test_inner_product.cpp \
+    gtfo_tests/runtime/numeric/runtime_test_partial_sum.cpp \
+    gtfo_tests/runtime/numeric/runtime_test_iota.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_for_each.cpp \
+    gtfo_tests/runtime/runtime_tests.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -84,4 +89,5 @@ HEADERS += \
     gtfo/_impl/_common_definitions.hpp \
     gtfo/_impl/type_traits/_type_traits_definitions.hpp \
     gtfo/_impl/utility.hpp \
-    gtfo/_impl/type_traits/is_range_with_same_begin_end.hpp
+    gtfo/_impl/type_traits/is_range_with_same_begin_end.hpp \
+    gtfo_tests/runtime/runtime_tests.hpp

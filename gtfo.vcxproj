@@ -191,8 +191,15 @@
     <ClInclude Include="gtfo\_impl\type_traits\_type_traits_definitions.hpp" />
     <ClInclude Include="gtfo\_impl\utility.hpp" />
     <ClInclude Include="gtfo\_impl\_common_definitions.hpp" />
+    <ClInclude Include="gtfo_tests\runtime\runtime_tests.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_for_each.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_accumulate.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_adjacent_difference.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_inner_product.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_iota.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_partial_sum.cpp" />
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_multipliable.cpp" />
@@ -225,7 +232,6 @@
     <ClCompile Include="gtfo_tests\static\static_test_result_of_subtraction.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_value_from_range.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_value_of_dereferenced.cpp" />
-    <ClCompile Include="gtfo_tests\static\_old_static_tests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
