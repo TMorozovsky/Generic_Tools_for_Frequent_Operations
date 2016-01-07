@@ -230,7 +230,21 @@ namespace gtfo
     {
         using gtfo::begin;
         using gtfo::end;
+        using gtfo::rbegin;
+        using gtfo::rend;
         using gtfo::rev;
+
+        template<typename T>
+        inline
+        std::vector<T>
+        make_vec3(const T & e1, const T & e2, const T & e3)
+        {
+            std::vector<T> v;
+            v.push_back(e1);
+            v.push_back(e2);
+            v.push_back(e3);
+            return v;
+        }
 
         template<typename T>
         inline
@@ -246,11 +260,44 @@ namespace gtfo
             return v;
         }
 
+        template<typename T>
+        inline
+        std::vector<T>
+        make_vec10(const T & e1, const T & e2, const T & e3, const T & e4, const T & e5, const T & e6, const T & e7, const T & e8, const T & e9, const T & e10)
+        {
+            std::vector<T> v;
+            v.push_back(e1);
+            v.push_back(e2);
+            v.push_back(e3);
+            v.push_back(e4);
+            v.push_back(e5);
+            v.push_back(e6);
+            v.push_back(e7);
+            v.push_back(e8);
+            v.push_back(e9);
+            v.push_back(e10);
+            return v;
+        }
+
+        inline
+        std::vector<int>
+        make_vec3i(int i1, int i2, int i3)
+        {
+            return make_vec3<int>(i1, i2, i3);
+        }
+
         inline
         std::vector<int>
         make_vec5i(int i1, int i2, int i3, int i4, int i5)
         {
             return make_vec5<int>(i1, i2, i3, i4, i5);
+        }
+
+        inline
+        std::vector<int>
+        make_vec10i(int i1, int i2, int i3, int i4, int i5, int i6, int i7, int i8, int i9, int i10)
+        {
+            return make_vec10<int>(i1, i2, i3, i4, i5, i6, i7, i8, i9, i10);
         }
 
         inline

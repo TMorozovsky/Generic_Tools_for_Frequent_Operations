@@ -147,8 +147,14 @@
     <ClInclude Include="gtfo\algorithm.hpp" />
     <ClInclude Include="gtfo\algorithm\all_of.hpp" />
     <ClInclude Include="gtfo\algorithm\any_of.hpp" />
+    <ClInclude Include="gtfo\algorithm\find.hpp" />
+    <ClInclude Include="gtfo\algorithm\find_end.hpp" />
+    <ClInclude Include="gtfo\algorithm\find_first_of.hpp" />
+    <ClInclude Include="gtfo\algorithm\find_if.hpp" />
+    <ClInclude Include="gtfo\algorithm\find_if_not.hpp" />
     <ClInclude Include="gtfo\algorithm\for_each.hpp" />
     <ClInclude Include="gtfo\algorithm\none_of.hpp" />
+    <ClInclude Include="gtfo\algorithm\search.hpp" />
     <ClInclude Include="gtfo\numeric.hpp" />
     <ClInclude Include="gtfo\numeric\accumulate.hpp" />
     <ClInclude Include="gtfo\numeric\adjacent_difference.hpp" />
@@ -196,8 +202,14 @@
   <ItemGroup>
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_all_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_any_of.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_end.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_first_of.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if_not.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_for_each.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_none_of.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_search.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_accumulate.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_adjacent_difference.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_inner_product.cpp" />

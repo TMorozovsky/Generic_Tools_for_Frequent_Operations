@@ -39,7 +39,13 @@ SOURCES += \
     gtfo_tests/runtime/runtime_tests.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_all_of.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_any_of.cpp \
-    gtfo_tests/runtime/algorithm/runtime_test_none_of.cpp
+    gtfo_tests/runtime/algorithm/runtime_test_none_of.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_find.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_find_if.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_find_if_not.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_find_end.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_find_first_of.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_search.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -93,4 +99,10 @@ HEADERS += \
     gtfo/_impl/type_traits/_type_traits_definitions.hpp \
     gtfo/_impl/utility.hpp \
     gtfo/_impl/type_traits/is_range_with_same_begin_end.hpp \
-    gtfo_tests/runtime/runtime_tests.hpp
+    gtfo_tests/runtime/runtime_tests.hpp \
+    gtfo/algorithm/find.hpp \
+    gtfo/algorithm/find_if.hpp \
+    gtfo/algorithm/find_if_not.hpp \
+    gtfo/algorithm/find_end.hpp \
+    gtfo/algorithm/find_first_of.hpp \
+    gtfo/algorithm/search.hpp

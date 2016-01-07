@@ -177,6 +177,24 @@
     <ClInclude Include="gtfo_tests\runtime\runtime_tests.hpp">
       <Filter>gtfo_tests\runtime</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\algorithm\find.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\find_end.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\find_first_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\find_if.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\find_if_not.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\algorithm\search.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
@@ -300,6 +318,24 @@
       <Filter>gtfo_tests\runtime\algorithm</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_none_of.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_end.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_first_of.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if_not.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_search.cpp">
       <Filter>gtfo_tests\runtime\algorithm</Filter>
     </ClCompile>
   </ItemGroup>
