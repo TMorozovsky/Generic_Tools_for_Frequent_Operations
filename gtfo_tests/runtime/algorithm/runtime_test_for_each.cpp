@@ -1,5 +1,4 @@
 #include "gtfo/algorithm/for_each.hpp"
-#include "gtfo/reversed_range.hpp"
 #include "gtfo_tests/runtime/runtime_tests.hpp"
 #include <vector>
 
@@ -21,10 +20,6 @@ namespace
 }
 
 GTFO_TEST_FUN_BEGIN
-    using gtfo::begin;
-    using gtfo::end;
-    using gtfo::rev;
-
     std::vector<int> dest;
     vi_inserter ins(dest);
 

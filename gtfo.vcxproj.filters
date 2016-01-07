@@ -293,5 +293,14 @@
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp">
       <Filter>gtfo_tests\runtime</Filter>
     </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_all_of.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_any_of.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_none_of.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

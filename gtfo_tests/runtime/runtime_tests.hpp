@@ -1,8 +1,8 @@
-#ifndef GTFO_FILE_INCLUDED_TESTING_DEFINITIONS_HPP
-#define GTFO_FILE_INCLUDED_TESTING_DEFINITIONS_HPP
+#ifndef GTFO_FILE_INCLUDED_RUNTIME_TESTS_HPP
+#define GTFO_FILE_INCLUDED_RUNTIME_TESTS_HPP
 
-#include "gtfo/_impl/_common_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_range.hpp"
+#include "gtfo/reversed_range.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -228,6 +228,10 @@ namespace gtfo
 {
     namespace runtime_test_helpers
     {
+        using gtfo::begin;
+        using gtfo::end;
+        using gtfo::rev;
+
         template<typename T>
         inline
         std::vector<T>
@@ -258,4 +262,4 @@ namespace gtfo
     }
 }
 
-#endif // GTFO_FILE_INCLUDED_TESTING_DEFINITIONS_HPP
+#endif // GTFO_FILE_INCLUDED_RUNTIME_TESTS_HPP

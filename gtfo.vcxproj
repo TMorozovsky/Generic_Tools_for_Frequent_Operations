@@ -194,7 +194,10 @@
     <ClInclude Include="gtfo_tests\runtime\runtime_tests.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_all_of.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_any_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_for_each.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_none_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_accumulate.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_adjacent_difference.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_inner_product.cpp" />

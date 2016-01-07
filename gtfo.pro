@@ -36,7 +36,10 @@ SOURCES += \
     gtfo_tests/runtime/numeric/runtime_test_partial_sum.cpp \
     gtfo_tests/runtime/numeric/runtime_test_iota.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_for_each.cpp \
-    gtfo_tests/runtime/runtime_tests.cpp
+    gtfo_tests/runtime/runtime_tests.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_all_of.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_any_of.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_none_of.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET

@@ -1,5 +1,4 @@
 #include "gtfo/numeric/partial_sum.hpp"
-#include "gtfo/reversed_range.hpp"
 #include "gtfo_tests/runtime/runtime_tests.hpp"
 #include <vector>
 #include <functional>
@@ -7,8 +6,6 @@
 using namespace gtfo::runtime_test_helpers;
 
 GTFO_TEST_FUN_BEGIN
-    using gtfo::rev;
-
     const std::vector<int> vi = make_vec5i(5, 4, 3, 2, 1);
     const int arr[] = { 5, 4, 3, 2, 1 };
     std::vector<int> dest(vi.size());

@@ -1,15 +1,10 @@
 #include "gtfo/numeric/iota.hpp"
-#include "gtfo/reversed_range.hpp"
 #include "gtfo_tests/runtime/runtime_tests.hpp"
 #include <vector>
 
 using namespace gtfo::runtime_test_helpers;
 
 GTFO_TEST_FUN_BEGIN
-    using gtfo::begin;
-    using gtfo::end;
-    using gtfo::rev;
-
     std::vector<int> vi(5);
     int arr[5];
 

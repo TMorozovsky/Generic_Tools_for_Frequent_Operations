@@ -1,5 +1,4 @@
 #include "gtfo/numeric/inner_product.hpp"
-#include "gtfo/reversed_range.hpp"
 #include "gtfo_tests/runtime/runtime_tests.hpp"
 #include <vector>
 #include <functional>
@@ -7,10 +6,6 @@
 using namespace gtfo::runtime_test_helpers;
 
 GTFO_TEST_FUN_BEGIN
-    using gtfo::begin;
-    using gtfo::end;
-    using gtfo::rev;
-
     const int arr1[] = { 2, 4, 6, 8, 10 };
     const int arr2[] = { 10, 20, 40, 80, 160 };
     const std::vector<int> vec2 = make_vec5(arr2[0], arr2[1], arr2[2], arr2[3], arr2[4]);
