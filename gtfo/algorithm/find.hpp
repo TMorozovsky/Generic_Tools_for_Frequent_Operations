@@ -41,8 +41,8 @@ namespace gtfo
     find(Range &&      range,
          const Value & value)
     {
-        return ::std::find(::gtfo::begin(range),
-                           ::gtfo::end(range),
+        return ::std::find(begin(range),
+                           end(range),
                            value);
     }
 }

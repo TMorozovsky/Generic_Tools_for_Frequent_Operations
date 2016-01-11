@@ -48,8 +48,8 @@ namespace gtfo
     find_if(Range &&      range,
             UnaryPredicate pred)
     {
-        return ::std::find_if(::gtfo::begin(range),
-                              ::gtfo::end(range),
+        return ::std::find_if(begin(range),
+                              end(range),
                               ::gtfo::move(pred));
     }
 }

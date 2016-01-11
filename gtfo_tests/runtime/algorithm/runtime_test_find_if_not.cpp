@@ -17,6 +17,30 @@ namespace
             return value != 3;
         }
     };
+
+    namespace adl_testing
+    {
+        struct adl_test_container
+        {
+            int data[42];
+            adl_test_container() { ::std::fill(data, data + 10, 3); }
+        };
+
+        inline const int * begin(const adl_test_container & c)
+        {
+            return ::gtfo::begin(c.data);
+        }
+
+        inline const int * end(const adl_test_container & c)
+        {
+            return ::gtfo::end(c.data);
+        }
+
+        inline bool is_three(int x)
+        {
+            return x == 3;
+        }
+    }
 }
 
 GTFO_TEST_FUN_BEGIN
@@ -56,5 +80,12 @@ GTFO_TEST_FUN_BEGIN
         GTFO_TEST_ASSERT_EQ(*it_result, 3)
         GTFO_TEST_ASSERT_EQ(it_result - rbegin(arr), 1)
         GTFO_TEST_ASSERT_EQ(&*it_result - arr, 3)
+    }
+
+    // extra: test for a container that relies on ADL
+    {
+        adl_testing::adl_test_container adl_test;
+        auto it_result = gtfo::find_if_not(adl_test, adl_testing::is_three);
+        GTFO_TEST_ASSERT_EQ(it_result, begin(adl_test) + 10);
     }
 GTFO_TEST_FUN_END

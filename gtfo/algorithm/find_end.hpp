@@ -81,8 +81,8 @@ namespace gtfo
     {
         return ::std::find_end(::gtfo::move(it_begin_1),
                                ::gtfo::move(it_end_1),
-                               ::gtfo::begin(range2),
-                               ::gtfo::end(range2));
+                               begin(range2),
+                               end(range2));
     }
 
     template<typename ForwardIterator1, typename Range2, typename BinaryPredicate>
@@ -97,8 +97,8 @@ namespace gtfo
     {
         return ::std::find_end(::gtfo::move(it_begin_1),
                                ::gtfo::move(it_end_1),
-                               ::gtfo::begin(range2),
-                               ::gtfo::end(range2),
+                               begin(range2),
+                               end(range2),
                                ::gtfo::move(pred));
     }
 
@@ -110,8 +110,8 @@ namespace gtfo
              ForwardIterator2 it_begin_2,
              ForwardIterator2 it_end_2)
     {
-        return ::std::find_end(::gtfo::begin(range1),
-                               ::gtfo::end(range1),
+        return ::std::find_end(begin(range1),
+                               end(range1),
                                ::gtfo::move(it_begin_2),
                                ::gtfo::move(it_end_2));
     }
@@ -126,8 +126,8 @@ namespace gtfo
              ForwardIterator2 it_end_2,
              BinaryPredicate  pred)
     {
-        return ::std::find_end(::gtfo::begin(range1),
-                               ::gtfo::end(range1),
+        return ::std::find_end(begin(range1),
+                               end(range1),
                                ::gtfo::move(it_begin_2),
                                ::gtfo::move(it_end_2),
                                ::gtfo::move(pred));
@@ -140,10 +140,10 @@ namespace gtfo
     find_end(Range1 && range1,
              Range2 && range2)
     {
-        return ::std::find_end(::gtfo::begin(range1),
-                               ::gtfo::end(range1),
-                               ::gtfo::begin(range2),
-                               ::gtfo::end(range2));
+        return ::std::find_end(begin(range1),
+                               end(range1),
+                               begin(range2),
+                               end(range2));
     }
 
     template<typename Range1, typename Range2, typename BinaryPredicate>
@@ -155,10 +155,10 @@ namespace gtfo
              Range2 &&       range2,
              BinaryPredicate pred)
     {
-        return ::std::find_end(::gtfo::begin(range1),
-                               ::gtfo::end(range1),
-                               ::gtfo::begin(range2),
-                               ::gtfo::end(range2),
+        return ::std::find_end(begin(range1),
+                               end(range1),
+                               begin(range2),
+                               end(range2),
                                ::gtfo::move(pred));
     }
 

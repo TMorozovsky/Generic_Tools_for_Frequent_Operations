@@ -48,8 +48,8 @@ namespace gtfo
     find_if_not(Range &&      range,
                 UnaryPredicate pred)
     {
-        return ::std::find_if_not(::gtfo::begin(range),
-                                  ::gtfo::end(range),
+        return ::std::find_if_not(begin(range),
+                                  end(range),
                                   ::gtfo::move(pred));
     }
 }
