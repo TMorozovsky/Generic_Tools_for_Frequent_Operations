@@ -164,6 +164,10 @@
     <ClInclude Include="gtfo\reversed_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_addable.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_eq.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_less.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_n_eq.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_pred.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_multipliable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\are_subtractable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\can_be_used_in_boolean_context.hpp" />
@@ -172,7 +176,6 @@
     <ClInclude Include="gtfo\_impl\type_traits\has_end.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_assignable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_dereferenceable.hpp" />
-    <ClInclude Include="gtfo\_impl\type_traits\is_equality_comparable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_incrementable.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun0.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun1.hpp" />
@@ -217,6 +220,10 @@
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_partial_sum.cpp" />
     <ClCompile Include="gtfo_tests\runtime\runtime_tests.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_eq.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_less.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_n_eq.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_pred.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_multipliable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_are_subtractable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_can_be_used_in_boolean_context.cpp" />
@@ -225,7 +232,6 @@
     <ClCompile Include="gtfo_tests\static\static_test_has_end.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_assignable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_dereferenceable.cpp" />
-    <ClCompile Include="gtfo_tests\static\static_test_is_equality_comparable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_incrementable.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun0.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun1.cpp" />

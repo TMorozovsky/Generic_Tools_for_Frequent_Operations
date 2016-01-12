@@ -7,7 +7,8 @@
 #include "gtfo/_impl/type_traits/result_of_begin.hpp"
 #include "gtfo/_impl/type_traits/result_of_end.hpp"
 #include "gtfo/_impl/type_traits/is_iterator.hpp"
-#include "gtfo/_impl/type_traits/is_equality_comparable.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_op_eq.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_op_n_eq.hpp"
 
 namespace gtfo
 {
@@ -92,7 +93,7 @@ namespace gtfo
         template<typename T>
         struct is_range
         {
-            template<typename U, bool u_has_iterator_returning_begin_non_void_returning_end>
+            template<typename U, bool u_has_iterator_returning_begin_and_non_void_returning_end>
             struct impl
             {
                 static GTFO_CONSTEXPR bool value = false;
@@ -101,7 +102,13 @@ namespace gtfo
             template<typename U>
             struct impl<U, true>
             {
-                static GTFO_CONSTEXPR bool value = is_equality_comparable
+                static GTFO_CONSTEXPR bool value = are_comparable_op_eq
+                                                   <
+                                                       typename result_of_begin<U>::type,
+                                                       typename result_of_end<U>::type
+                                                   >::value
+                                                   &&
+                                                   are_comparable_op_n_eq
                                                    <
                                                        typename result_of_begin<U>::type,
                                                        typename result_of_end<U>::type

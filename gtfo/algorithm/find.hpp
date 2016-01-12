@@ -11,7 +11,7 @@ namespace gtfo
     inline
     typename _tt::enable_if
     <
-        _tt::is_equality_comparable
+        _tt::are_comparable_op_eq
         <
             typename _tt::result_of_dereferencing< InputIterator >::type,
             Value
@@ -31,7 +31,7 @@ namespace gtfo
     inline
     typename _tt::enable_if
     <
-        _tt::is_equality_comparable
+        _tt::are_comparable_op_eq
         <
             typename _tt::result_of_range_iterator_dereferencing< Range >::type,
             Value

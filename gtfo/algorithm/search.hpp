@@ -3,7 +3,8 @@
 
 #include <algorithm>
 #include "gtfo/_impl/utility.hpp"
-#include "gtfo/_impl/type_traits/is_equality_comparable.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_op_eq.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_pred.hpp"
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun2.hpp"
@@ -15,7 +16,7 @@ namespace gtfo
 #define GTFO_RESULT_OF_SEARCH(ForwardIterator1, ForwardIterator2) \
     typename _tt::enable_if                                           \
     <                                                                    \
-        _tt::is_equality_comparable                                         \
+        _tt::are_comparable_op_eq                                           \
         <                                                                     \
             typename _tt::result_of_dereferencing< ForwardIterator1 >::type,  \
             typename _tt::result_of_dereferencing< ForwardIterator2 >::type   \
@@ -26,16 +27,13 @@ namespace gtfo
 #define GTFO_RESULT_OF_SEARCH_PRED(ForwardIterator1, ForwardIterator2, BinaryPredicate) \
     typename _tt::enable_if                                                             \
     <                                                                                   \
-        _tt::can_be_used_in_boolean_context                                             \
-        <                                                                               \
-            typename _tt::result_of_fun2                                                \
-            <                                                                          \
-                BinaryPredicate,                                                      \
-                typename _tt::result_of_dereferencing< ForwardIterator1 >::type,     \
-                typename _tt::result_of_dereferencing< ForwardIterator2 >::type    \
-            >::type                                                              \
-        >::value,                                                             \
-        ForwardIterator1                                                  \
+        _tt::are_comparable_pred                                                        \
+        <                                                                              \
+            BinaryPredicate,                                                          \
+            typename _tt::result_of_dereferencing< ForwardIterator1 >::type,        \
+            typename _tt::result_of_dereferencing< ForwardIterator2 >::type      \
+        >::value,                                                            \
+        ForwardIterator1                                                \
     >::type
 
     template<typename ForwardIterator1, typename ForwardIterator2>

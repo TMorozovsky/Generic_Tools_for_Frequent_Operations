@@ -4,7 +4,8 @@
 #include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_incrementable.hpp"
 #include "gtfo/_impl/type_traits/is_dereferenceable.hpp"
-#include "gtfo/_impl/type_traits/is_equality_comparable.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_op_eq.hpp"
+#include "gtfo/_impl/type_traits/are_comparable_op_n_eq.hpp"
 #include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
 
 namespace gtfo
@@ -40,7 +41,8 @@ namespace gtfo
                                                    T,
                                                    is_incrementable<T>::value &&
                                                    is_dereferenceable<T>::value &&
-                                                   is_equality_comparable<T, T>::value
+                                                   are_comparable_op_eq<T, T>::value &&
+                                                   are_comparable_op_n_eq<T, T>::value
                                                >::value;
         };
     }

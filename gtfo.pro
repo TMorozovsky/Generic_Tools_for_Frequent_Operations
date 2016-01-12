@@ -7,7 +7,6 @@ SOURCES += \
     gtfo_tests/static/static_test_has_end.cpp \
     gtfo_tests/static/static_test_is_assignable.cpp \
     gtfo_tests/static/static_test_is_dereferenceable.cpp \
-    gtfo_tests/static/static_test_is_equality_comparable.cpp \
     gtfo_tests/static/static_test_can_be_used_in_boolean_context.cpp \
     gtfo_tests/static/static_test_is_range.cpp \
     gtfo_tests/static/static_test_is_range_castable_to_its_iterator.cpp \
@@ -45,7 +44,11 @@ SOURCES += \
     gtfo_tests/runtime/algorithm/runtime_test_find_if_not.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_find_end.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_find_first_of.cpp \
-    gtfo_tests/runtime/algorithm/runtime_test_search.cpp
+    gtfo_tests/runtime/algorithm/runtime_test_search.cpp \
+    gtfo_tests/static/static_test_are_comparable_op_eq.cpp \
+    gtfo_tests/static/static_test_are_comparable_op_less.cpp \
+    gtfo_tests/static/static_test_are_comparable_op_n_eq.cpp \
+    gtfo_tests/static/static_test_are_comparable_pred.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -66,7 +69,6 @@ HEADERS += \
     gtfo/_impl/type_traits/is_dereferenceable.hpp \
     gtfo/_impl/type_traits/result_of_dereferencing.hpp \
     gtfo/_impl/type_traits/value_of_dereferenced.hpp \
-    gtfo/_impl/type_traits/is_equality_comparable.hpp \
     gtfo/_impl/type_traits/is_incrementable.hpp \
     gtfo/_impl/type_traits/is_iterator.hpp \
     gtfo/_impl/type_traits/is_invokable_fun0.hpp \
@@ -105,4 +107,8 @@ HEADERS += \
     gtfo/algorithm/find_if_not.hpp \
     gtfo/algorithm/find_end.hpp \
     gtfo/algorithm/find_first_of.hpp \
-    gtfo/algorithm/search.hpp
+    gtfo/algorithm/search.hpp \
+    gtfo/_impl/type_traits/are_comparable_op_eq.hpp \
+    gtfo/_impl/type_traits/are_comparable_op_less.hpp \
+    gtfo/_impl/type_traits/are_comparable_op_n_eq.hpp \
+    gtfo/_impl/type_traits/are_comparable_pred.hpp

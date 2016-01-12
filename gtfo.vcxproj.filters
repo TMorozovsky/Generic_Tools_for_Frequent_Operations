@@ -57,9 +57,6 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_dereferenceable.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="gtfo\_impl\type_traits\is_equality_comparable.hpp">
-      <Filter>gtfo\_impl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="gtfo\_impl\type_traits\is_incrementable.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
@@ -195,6 +192,18 @@
     <ClInclude Include="gtfo\algorithm\search.hpp">
       <Filter>gtfo\algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_less.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_op_n_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="gtfo\_impl\type_traits\are_comparable_pred.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
@@ -219,9 +228,6 @@
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_is_dereferenceable.cpp">
-      <Filter>gtfo_tests\static</Filter>
-    </ClCompile>
-    <ClCompile Include="gtfo_tests\static\static_test_is_equality_comparable.cpp">
       <Filter>gtfo_tests\static</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_can_be_used_in_boolean_context.cpp">
@@ -337,6 +343,18 @@
     </ClCompile>
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_search.cpp">
       <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_eq.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_less.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_op_n_eq.cpp">
+      <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\static\static_test_are_comparable_pred.cpp">
+      <Filter>gtfo_tests\static</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
