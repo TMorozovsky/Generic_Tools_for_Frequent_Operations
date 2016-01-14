@@ -5,9 +5,7 @@
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/are_comparable_op_eq.hpp"
 #include "gtfo/_impl/type_traits/are_comparable_pred.hpp"
-#include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
-#include "gtfo/_impl/type_traits/result_of_fun2.hpp"
 #include "gtfo/_impl/type_traits/iterator_of_range.hpp"
 
 namespace gtfo

@@ -204,6 +204,9 @@
     <ClInclude Include="gtfo\_impl\type_traits\are_comparable_pred.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\algorithm\adjacent_find.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="gtfo_tests\static\static_test_are_comparable_pred.cpp">
       <Filter>gtfo_tests\static</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_adjacent_find.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
