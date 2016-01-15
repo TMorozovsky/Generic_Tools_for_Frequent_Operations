@@ -49,7 +49,11 @@ SOURCES += \
     gtfo_tests/static/static_test_are_comparable_op_less.cpp \
     gtfo_tests/static/static_test_are_comparable_op_n_eq.cpp \
     gtfo_tests/static/static_test_are_comparable_pred.cpp \
-    gtfo_tests/runtime/algorithm/runtime_test_adjacent_find.cpp
+    gtfo_tests/runtime/algorithm/runtime_test_adjacent_find.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_count.cpp \
+    gtfo_tests/static/static_test_is_predicate1.cpp \
+    gtfo_tests/static/static_test_is_predicate2.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_count_if.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++11 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -113,4 +117,8 @@ HEADERS += \
     gtfo/_impl/type_traits/are_comparable_op_less.hpp \
     gtfo/_impl/type_traits/are_comparable_op_n_eq.hpp \
     gtfo/_impl/type_traits/are_comparable_pred.hpp \
-    gtfo/algorithm/adjacent_find.hpp
+    gtfo/algorithm/adjacent_find.hpp \
+    gtfo/algorithm/count.hpp \
+    gtfo/_impl/type_traits/is_predicate2.hpp \
+    gtfo/_impl/type_traits/is_predicate1.hpp \
+    gtfo/algorithm/count_if.hpp

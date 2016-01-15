@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include "gtfo/_impl/utility.hpp"
-#include "gtfo/_impl/type_traits/result_of_fun1.hpp"
+#include "gtfo/_impl/type_traits/is_predicate1.hpp"
 #include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
 
 namespace gtfo
@@ -12,13 +12,10 @@ namespace gtfo
     inline
     typename _tt::enable_if
     <
-        _tt::can_be_used_in_boolean_context
+        _tt::is_predicate1
         <
-            typename _tt::result_of_fun1
-            <
-                UnaryPredicate,
-                typename _tt::result_of_dereferencing< InputIterator >::type
-            >::type
+            UnaryPredicate,
+            typename _tt::result_of_dereferencing< InputIterator >::type
         >::value,
         InputIterator
     >::type
@@ -35,13 +32,10 @@ namespace gtfo
     inline
     typename _tt::enable_if
     <
-        _tt::can_be_used_in_boolean_context
+        _tt::is_predicate1
         <
-            typename _tt::result_of_fun1
-            <
-                UnaryPredicate,
-                typename _tt::result_of_range_iterator_dereferencing< Range >::type
-            >::type
+            UnaryPredicate,
+            typename _tt::result_of_range_iterator_dereferencing< Range >::type
         >::value,
         typename _tt::iterator_of_range< Range >::type
     >::type

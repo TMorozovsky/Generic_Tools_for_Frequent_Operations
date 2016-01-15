@@ -4,6 +4,8 @@
 #include "gtfo/algorithm/adjacent_find.hpp"
 #include "gtfo/algorithm/all_of.hpp"
 #include "gtfo/algorithm/any_of.hpp"
+#include "gtfo/algorithm/count.hpp"
+#include "gtfo/algorithm/count_if.hpp"
 #include "gtfo/algorithm/find.hpp"
 #include "gtfo/algorithm/find_end.hpp"
 #include "gtfo/algorithm/find_first_of.hpp"
@@ -14,4 +16,3 @@
 #include "gtfo/algorithm/search.hpp"
 
 #endif // GTFO_FILE_INCLUDED_ALGORITHM_HPP
-

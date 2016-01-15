@@ -30,6 +30,8 @@
 #include "gtfo/_impl/type_traits/result_of_addition.hpp"
 #include "gtfo/_impl/type_traits/result_of_subtraction.hpp"
 #include "gtfo/_impl/type_traits/result_of_multiplication.hpp"
+#include "gtfo/_impl/type_traits/is_predicate1.hpp"
+#include "gtfo/_impl/type_traits/is_predicate2.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
 #include "gtfo/_impl/type_traits/common_type_2.hpp"
 #include "gtfo/_impl/type_traits/is_range_castable_to_its_iterator.hpp"

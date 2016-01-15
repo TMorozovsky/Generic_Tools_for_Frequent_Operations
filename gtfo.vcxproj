@@ -148,6 +148,8 @@
     <ClInclude Include="gtfo\algorithm\adjacent_find.hpp" />
     <ClInclude Include="gtfo\algorithm\all_of.hpp" />
     <ClInclude Include="gtfo\algorithm\any_of.hpp" />
+    <ClInclude Include="gtfo\algorithm\count.hpp" />
+    <ClInclude Include="gtfo\algorithm\count_if.hpp" />
     <ClInclude Include="gtfo\algorithm\find.hpp" />
     <ClInclude Include="gtfo\algorithm\find_end.hpp" />
     <ClInclude Include="gtfo\algorithm\find_first_of.hpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun1.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_invokable_fun2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_iterator.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\is_predicate1.hpp" />
+    <ClInclude Include="gtfo\_impl\type_traits\is_predicate2.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_range.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_range_castable_to_its_iterator.hpp" />
     <ClInclude Include="gtfo\_impl\type_traits\is_range_with_same_begin_end.hpp" />
@@ -207,6 +211,8 @@
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_adjacent_find.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_all_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_any_of.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_count.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_count_if.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_end.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_first_of.cpp" />
@@ -239,6 +245,8 @@
     <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun1.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_invokable_fun2.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_iterator.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_is_predicate1.cpp" />
+    <ClCompile Include="gtfo_tests\static\static_test_is_predicate2.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_range.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_range_castable_to_its_iterator.cpp" />
     <ClCompile Include="gtfo_tests\static\static_test_is_range_with_same_begin_end.cpp" />
