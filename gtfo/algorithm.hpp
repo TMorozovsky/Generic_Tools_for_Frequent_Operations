@@ -12,6 +12,7 @@
 #include "gtfo/algorithm/find_if.hpp"
 #include "gtfo/algorithm/find_if_not.hpp"
 #include "gtfo/algorithm/for_each.hpp"
+#include "gtfo/algorithm/mismatch.hpp"
 #include "gtfo/algorithm/none_of.hpp"
 #include "gtfo/algorithm/search.hpp"
 

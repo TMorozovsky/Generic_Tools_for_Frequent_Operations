@@ -156,6 +156,7 @@
     <ClInclude Include="gtfo\algorithm\find_if.hpp" />
     <ClInclude Include="gtfo\algorithm\find_if_not.hpp" />
     <ClInclude Include="gtfo\algorithm\for_each.hpp" />
+    <ClInclude Include="gtfo\algorithm\mismatch.hpp" />
     <ClInclude Include="gtfo\algorithm\none_of.hpp" />
     <ClInclude Include="gtfo\algorithm\search.hpp" />
     <ClInclude Include="gtfo\numeric.hpp" />
@@ -219,6 +220,7 @@
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_if_not.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_for_each.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_mismatch.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_none_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_search.cpp" />
     <ClCompile Include="gtfo_tests\runtime\numeric\runtime_test_accumulate.cpp" />

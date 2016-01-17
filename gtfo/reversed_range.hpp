@@ -19,7 +19,7 @@ namespace gtfo
     GTFO_RANGE_REVERSE_ITERATOR
     rbegin(Range && range)
     {
-        return GTFO_RANGE_REVERSE_ITERATOR( end(::gtfo::forward<Range>(range)) );
+        return GTFO_RANGE_REVERSE_ITERATOR( end(_utils::forward<Range>(range)) );
     }
 
     template<typename Range>
@@ -27,7 +27,7 @@ namespace gtfo
     GTFO_RANGE_REVERSE_ITERATOR
     rend(Range && range)
     {
-        return GTFO_RANGE_REVERSE_ITERATOR( begin(::gtfo::forward<Range>(range)) );
+        return GTFO_RANGE_REVERSE_ITERATOR( begin(_utils::forward<Range>(range)) );
     }
 
     namespace detail
@@ -37,7 +37,7 @@ namespace gtfo
         {
             typedef typename _tt::remove_reference<Range>::type _range_type;
         public:
-            explicit reversing_raw_pointer_to_range(_range_type & range) : _ptr(::gtfo::addressof(range)) { }
+            explicit reversing_raw_pointer_to_range(_range_type & range) : _ptr(_utils::addressof(range)) { }
             GTFO_RANGE_REVERSE_ITERATOR begin() const { return ::gtfo::rbegin(*_ptr); }
             GTFO_RANGE_REVERSE_ITERATOR end()   const { return ::gtfo::rend(*_ptr);   }
         private:
@@ -49,7 +49,7 @@ namespace gtfo
         {
             typedef typename _tt::remove_reference<Range>::type _range_type;
         public:
-            explicit reversing_owner_of_range(_range_type && range) : _range(::gtfo::move(range)) { }
+            explicit reversing_owner_of_range(_range_type && range) : _range(_utils::move(range)) { }
             GTFO_RANGE_REVERSE_ITERATOR begin() { return ::gtfo::rbegin(_range); }
             GTFO_RANGE_REVERSE_ITERATOR end()   { return ::gtfo::rend(_range);   }
         private:
@@ -90,9 +90,8 @@ namespace gtfo
     >::type
     rev(Range && range)
     {
-        return detail::reversing_owner_of_range<Range>(::gtfo::move(range));
+        return detail::reversing_owner_of_range<Range>(_utils::move(range));
     }
 }
 
 #endif // GTFO_FILE_INCLUDED_REVERSED_RANGE_HPP
-

@@ -219,6 +219,9 @@
     <ClInclude Include="gtfo\algorithm\count_if.hpp">
       <Filter>gtfo\algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="gtfo\algorithm\mismatch.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gtfo_tests\static\static_test_are_addable.cpp">
@@ -384,6 +387,9 @@
       <Filter>gtfo_tests\runtime\algorithm</Filter>
     </ClCompile>
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_count_if.cpp">
+      <Filter>gtfo_tests\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_mismatch.cpp">
       <Filter>gtfo_tests\runtime\algorithm</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,16 @@
 #ifndef GTFO_FILE_INCLUDED_NUMERIC_ACCUMULATE_HPP
 #define GTFO_FILE_INCLUDED_NUMERIC_ACCUMULATE_HPP
 
+/*
+ * Defines the following overloads:
+ *     accumulate(InputIterator, InputIterator);
+ *     accumulate(InputIterator, InputIterator, Value);
+ *     accumulate(InputIterator, InputIterator, Value,           BinaryOperation);
+ *     accumulate(Range);
+ *     accumulate(Range,         Value);
+ *     accumulate(Range,         Value,         BinaryOperation);
+ */
+
 #include <numeric>
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
@@ -8,8 +18,8 @@
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
 #include "gtfo/_impl/type_traits/value_of_dereferenced.hpp"
 #include "gtfo/_impl/type_traits/value_from_range.hpp"
+#include "gtfo/_impl/type_traits/iterator_of_range.hpp"
 #include "gtfo/_impl/type_traits/result_of_fun2.hpp"
-#include "gtfo/_impl/type_traits/result_of_range_iterator_dereferencing.hpp"
 
 namespace gtfo
 {
@@ -45,6 +55,18 @@ namespace gtfo
         Value                                                                \
     >::type
 
+    template<typename InputIterator>
+    inline
+    GTFO_RESULT_OF_ACCUMULATE(InputIterator,
+                              typename _tt::value_of_dereferenced< InputIterator >::type)
+    accumulate(InputIterator it_begin,
+               InputIterator it_end)
+    {
+        return ::std::accumulate(_utils::move(it_begin),
+                                 _utils::move(it_end),
+                                 typename _tt::value_of_dereferenced< InputIterator >::type());
+    }
+
     template<typename InputIterator, typename Value>
     inline
     GTFO_RESULT_OF_ACCUMULATE(InputIterator,
@@ -53,48 +75,33 @@ namespace gtfo
                InputIterator it_end,
                Value         init)
     {
-        return ::std::accumulate(::gtfo::move(it_begin),
-                                 ::gtfo::move(it_end),
-                                 ::gtfo::move(init));
+        return ::std::accumulate(_utils::move(it_begin),
+                                 _utils::move(it_end),
+                                 _utils::move(init));
     }
 
     template<typename InputIterator, typename Value, typename BinaryOperation>
     inline
-    GTFO_RESULT_OF_ACCUMULATE_OP(InputIterator,
-                                 Value,
-                                 BinaryOperation)
+    Value
     accumulate(InputIterator   it_begin,
                InputIterator   it_end,
                Value           init,
                BinaryOperation op)
     {
-        return ::std::accumulate(::gtfo::move(it_begin),
-                                 ::gtfo::move(it_end),
-                                 ::gtfo::move(init),
-                                 ::gtfo::move(op));
-    }
-
-    template<typename InputIterator>
-    inline
-    GTFO_RESULT_OF_ACCUMULATE(InputIterator,
-                              typename _tt::value_of_dereferenced<InputIterator>::type)
-    accumulate(InputIterator it_begin,
-               InputIterator it_end)
-    {
-        return ::std::accumulate(::gtfo::move(it_begin),
-                                 ::gtfo::move(it_end),
-                                 typename _tt::value_of_dereferenced<InputIterator>::type());
+        return ::std::accumulate(_utils::move(it_begin),
+                                 _utils::move(it_end),
+                                 _utils::move(init),
+                                 _utils::move(op));
     }
 
     template<typename Range>
     inline
-    GTFO_RESULT_OF_ACCUMULATE(typename _tt::iterator_of_range< Range >::type,
-                              typename _tt::value_from_range< Range >::type)
+    typename _tt::value_from_range< Range >::type
     accumulate(Range && range)
     {
         return ::std::accumulate(begin(range),
                                  end(range),
-                                 typename _tt::value_from_range<Range>::type());
+                                 typename _tt::value_from_range< Range >::type());
     }
 
     template<typename Range, typename Value>
@@ -106,7 +113,7 @@ namespace gtfo
     {
         return ::std::accumulate(begin(range),
                                  end(range),
-                                 ::gtfo::move(init));
+                                 _utils::move(init));
     }
 
     template<typename Range, typename Value, typename BinaryOperation>
@@ -120,8 +127,8 @@ namespace gtfo
     {
         return ::std::accumulate(begin(range),
                                  end(range),
-                                 ::gtfo::move(init),
-                                 ::gtfo::move(op));
+                                 _utils::move(init),
+                                 _utils::move(op));
     }
 
 #undef GTFO_RESULT_OF_ACCUMULATE_OP

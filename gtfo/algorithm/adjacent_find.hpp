@@ -1,6 +1,14 @@
 #ifndef GTFO_FILE_INCLUDED_ALGORITHM_ADJACENT_FIND_HPP
 #define GTFO_FILE_INCLUDED_ALGORITHM_ADJACENT_FIND_HPP
 
+/*
+ * Defines the following overloads:
+ *     adjacent_find(ForwardIterator, ForwardIterator);
+ *     adjacent_find(ForwardIterator, ForwardIterator, BinaryPredicate);
+ *     adjacent_find(Range);
+ *     adjacent_find(Range,           BinaryPredicate);
+ */
+
 #include <algorithm>
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/result_of_dereferencing.hpp"
@@ -40,25 +48,25 @@ namespace gtfo
     adjacent_find(ForwardIterator it_begin,
                   ForwardIterator it_end)
     {
-        return ::std::adjacent_find(::gtfo::move(it_begin),
-                                    ::gtfo::move(it_end));
+        return ::std::adjacent_find(_utils::move(it_begin),
+                                    _utils::move(it_end));
     }
 
     template<typename ForwardIterator, typename BinaryPredicate>
     inline
-    GTFO_RESULT_OF_ADJACENT_FIND_PRED(ForwardIterator, BinaryPredicate)
+    ForwardIterator
     adjacent_find(ForwardIterator it_begin,
                   ForwardIterator it_end,
                   BinaryPredicate pred)
     {
-        return ::std::adjacent_find(::gtfo::move(it_begin),
-                                    ::gtfo::move(it_end),
-                                    ::gtfo::move(pred));
+        return ::std::adjacent_find(_utils::move(it_begin),
+                                    _utils::move(it_end),
+                                    _utils::move(pred));
     }
 
     template<typename Range>
     inline
-    GTFO_RESULT_OF_ADJACENT_FIND(typename _tt::iterator_of_range<Range>::type)
+    typename _tt::iterator_of_range< Range >::type
     adjacent_find(Range && range)
     {
         return ::std::adjacent_find(begin(range),
@@ -67,13 +75,14 @@ namespace gtfo
 
     template<typename Range, typename BinaryPredicate>
     inline
-    GTFO_RESULT_OF_ADJACENT_FIND_PRED(typename _tt::iterator_of_range<Range>::type, BinaryPredicate)
+    GTFO_RESULT_OF_ADJACENT_FIND_PRED(typename _tt::iterator_of_range< Range >::type,
+                                      BinaryPredicate)
     adjacent_find(Range &&        range,
                   BinaryPredicate pred)
     {
         return ::std::adjacent_find(begin(range),
                                     end(range),
-                                    ::gtfo::move(pred));
+                                    _utils::move(pred));
     }
 }
 

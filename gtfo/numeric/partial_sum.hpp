@@ -1,6 +1,14 @@
 #ifndef GTFO_FILE_INCLUDED_NUMERIC_PARTIAL_SUM_HPP
 #define GTFO_FILE_INCLUDED_NUMERIC_PARTIAL_SUM_HPP
 
+/*
+ * Defines the following overloads:
+ *     partial_sum(InputIterator, InputIterator,  OutputIterator);
+ *     partial_sum(InputIterator, InputIterator,  OutputIterator, BinaryOperation);
+ *     partial_sum(Range,         OutputIterator);
+ *     partial_sum(Range,         OutputIterator, BinaryOperation);
+ */
+
 #include <numeric>
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/type_traits/is_assignable.hpp"
@@ -64,37 +72,34 @@ namespace gtfo
                 InputIterator  it_end,
                 OutputIterator it_dest)
     {
-        return ::std::partial_sum(::gtfo::move(it_begin),
-                                  ::gtfo::move(it_end),
-                                  ::gtfo::move(it_dest));
+        return ::std::partial_sum(_utils::move(it_begin),
+                                  _utils::move(it_end),
+                                  _utils::move(it_dest));
     }
 
     template<typename InputIterator, typename OutputIterator, typename BinaryOperation>
     inline
-    GTFO_RESULT_OF_PARTIAL_SUM_OP(InputIterator,
-                                  OutputIterator,
-                                  BinaryOperation)
+    OutputIterator
     partial_sum(InputIterator   it_begin,
                 InputIterator   it_end,
                 OutputIterator  it_dest,
                 BinaryOperation op)
     {
-        return ::std::partial_sum(::gtfo::move(it_begin),
-                                  ::gtfo::move(it_end),
-                                  ::gtfo::move(it_dest),
-                                  ::gtfo::move(op));
+        return ::std::partial_sum(_utils::move(it_begin),
+                                  _utils::move(it_end),
+                                  _utils::move(it_dest),
+                                  _utils::move(op));
     }
 
     template<typename Range, typename OutputIterator>
     inline
-    GTFO_RESULT_OF_PARTIAL_SUM(typename _tt::iterator_of_range< Range >::type,
-                               OutputIterator)
+    OutputIterator
     partial_sum(Range &&       range,
                 OutputIterator it_dest)
     {
         return ::std::partial_sum(begin(range),
                                   end(range),
-                                  ::gtfo::move(it_dest));
+                                  _utils::move(it_dest));
     }
 
     template<typename Range, typename OutputIterator, typename BinaryOperation>
@@ -108,8 +113,8 @@ namespace gtfo
     {
         return ::std::partial_sum(begin(range),
                                   end(range),
-                                  ::gtfo::move(it_dest),
-                                  ::gtfo::move(op));
+                                  _utils::move(it_dest),
+                                  _utils::move(op));
     }
 
 #undef GTFO_RESULT_OF_PARTIAL_SUM_OP
@@ -118,4 +123,3 @@ namespace gtfo
 }
 
 #endif // GTFO_FILE_INCLUDED_NUMERIC_PARTIAL_SUM_HPP
-
