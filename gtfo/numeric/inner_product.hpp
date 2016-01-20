@@ -10,10 +10,10 @@
  *     inner_product(InputIterator1, InputIterator1, InputIterator2, Value,            BinaryOperation1, BinaryOperation2);
  *     inner_product(InputIterator1, InputIterator1, Range2,         Value,            BinaryOperation1, BinaryOperation2);
  *     inner_product(Range1,         InputIterator2);
- *     inner_product(Range1,         InputIterator2, Value);
- *     inner_product(Range1,         InputIterator2, Value,          BinaryOperation1, BinaryOperation2);
  *     inner_product(Range1,         Range2)
+ *     inner_product(Range1,         InputIterator2, Value);
  *     inner_product(Range1,         Range2,         Value);
+ *     inner_product(Range1,         InputIterator2, Value,          BinaryOperation1, BinaryOperation2);
  *     inner_product(Range1,         Range2,         Value,          BinaryOperation1, BinaryOperation2);
  */
 
@@ -80,31 +80,31 @@ namespace gtfo
 
     template<typename InputIterator1, typename InputIterator2>
     inline
-    GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
-                                 InputIterator2,
-                                 GTFO_ITER_COMMON_VALUE(InputIterator1,
-                                                        InputIterator2))
-    inner_product(InputIterator1 it_begin_1,
-                  InputIterator1 it_end_1,
-                  InputIterator2 it_begin_2)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
+                                     InputIterator2,
+                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
+                                                            InputIterator2))
+    >::type
+    inner_product(InputIterator1    it_begin_1,
+                  InputIterator1    it_end_1,
+                  InputIterator2 && it_begin_2)
     {
         return ::std::inner_product(_utils::move(it_begin_1),
                                     _utils::move(it_end_1),
-                                    _utils::move(it_begin_2),
+                                    _utils::forward<InputIterator2>(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
                                                            InputIterator2)());
     }
 
     template<typename InputIterator1, typename Range2>
     inline
-    typename _tt::enable_if
-    <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
-        GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
-                                     typename _tt::iterator_of_range< Range2 >::type,
-                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
-                                                            typename _tt::iterator_of_range< Range2 >::type))
-    >::type
+    GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
+                                 typename _tt::iterator_of_range< Range2 >::type,
+                                 GTFO_ITER_COMMON_VALUE(InputIterator1,
+                                                        typename _tt::iterator_of_range< Range2 >::type))
     inner_product(InputIterator1 it_begin_1,
                   InputIterator1 it_end_1,
                   Range2 &&      range2)
@@ -118,29 +118,29 @@ namespace gtfo
 
     template<typename InputIterator1, typename InputIterator2, typename Value>
     inline
-    GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
-                                 InputIterator2,
-                                 Value)
-    inner_product(InputIterator1 it_begin_1,
-                  InputIterator1 it_end_1,
-                  InputIterator2 it_begin_2,
-                  Value          init)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
+                                     InputIterator2,
+                                     Value)
+    >::type
+    inner_product(InputIterator1    it_begin_1,
+                  InputIterator1    it_end_1,
+                  InputIterator2 && it_begin_2,
+                  Value             init)
     {
         return ::std::inner_product(_utils::move(it_begin_1),
                                     _utils::move(it_end_1),
-                                    _utils::move(it_begin_2),
+                                    _utils::forward<InputIterator2>(it_begin_2),
                                     _utils::move(init));
     }
 
     template<typename InputIterator1, typename Range2, typename Value>
     inline
-    typename _tt::enable_if
-    <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
-        GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
-                                     typename _tt::iterator_of_range< Range2 >::type,
-                                     Value)
-    >::type
+    GTFO_RESULT_OF_INNER_PRODUCT(InputIterator1,
+                                 typename _tt::iterator_of_range< Range2 >::type,
+                                 Value)
     inner_product(InputIterator1 it_begin_1,
                   InputIterator1 it_end_1,
                   Range2 &&      range2,
@@ -155,21 +155,25 @@ namespace gtfo
     template<typename InputIterator1, typename InputIterator2, typename Value,
              typename BinaryOperation1, typename BinaryOperation2>
     inline
-    GTFO_RESULT_OF_INNER_PRODUCT_OPS(InputIterator1,
-                                     InputIterator2,
-                                     Value,
-                                     BinaryOperation1,
-                                     BinaryOperation2)
-    inner_product(InputIterator1   it_begin_1,
-                  InputIterator1   it_end_1,
-                  InputIterator2   it_begin_2,
-                  Value            init,
-                  BinaryOperation1 op1,
-                  BinaryOperation2 op2)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_INNER_PRODUCT_OPS(InputIterator1,
+                                         InputIterator2,
+                                         Value,
+                                         BinaryOperation1,
+                                         BinaryOperation2)
+    >::type
+    inner_product(InputIterator1    it_begin_1,
+                  InputIterator1    it_end_1,
+                  InputIterator2 && it_begin_2,
+                  Value             init,
+                  BinaryOperation1  op1,
+                  BinaryOperation2  op2)
     {
         return ::std::inner_product(_utils::move(it_begin_1),
                                     _utils::move(it_end_1),
-                                    _utils::move(it_begin_2),
+                                    _utils::forward<InputIterator2>(it_begin_2),
                                     _utils::move(init),
                                     _utils::move(op1),
                                     _utils::move(op2));
@@ -178,15 +182,11 @@ namespace gtfo
     template<typename InputIterator1, typename Range2, typename Value,
              typename BinaryOperation1, typename BinaryOperation2>
     inline
-    typename _tt::enable_if
-    <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
-        GTFO_RESULT_OF_INNER_PRODUCT_OPS(InputIterator1,
-                                         typename _tt::iterator_of_range< Range2 >::type,
-                                         Value,
-                                         BinaryOperation1,
-                                         BinaryOperation2)
-    >::type
+    GTFO_RESULT_OF_INNER_PRODUCT_OPS(InputIterator1,
+                                     typename _tt::iterator_of_range< Range2 >::type,
+                                     Value,
+                                     BinaryOperation1,
+                                     BinaryOperation2)
     inner_product(InputIterator1   it_begin_1,
                   InputIterator1   it_end_1,
                   Range2 &&        range2,
@@ -204,67 +204,30 @@ namespace gtfo
 
     template<typename Range1, typename InputIterator2>
     inline
-    GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
-                                 InputIterator2,
-                                 GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
-                                                        InputIterator2))
-    inner_product(Range1 &&      range1,
-                  InputIterator2 it_begin_2)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
+                                     InputIterator2,
+                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
+                                                            InputIterator2))
+    >::type
+    inner_product(Range1 &&         range1,
+                  InputIterator2 && it_begin_2)
     {
         return ::std::inner_product(begin(range1),
                                     end(range1),
-                                    _utils::move(it_begin_2),
+                                    _utils::forward<InputIterator2>(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
                                                            InputIterator2)());
     }
 
-    template<typename Range1, typename InputIterator2, typename Value>
-    inline
-    GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
-                                 InputIterator2,
-                                 Value)
-    inner_product(Range1 &&      range1,
-                  InputIterator2 it_begin_2,
-                  Value          init)
-    {
-        return ::std::inner_product(begin(range1),
-                                    end(range1),
-                                    _utils::move(it_begin_2),
-                                    _utils::move(init));
-    }
-
-    template<typename Range1, typename InputIterator2, typename Value,
-             typename BinaryOperation1, typename BinaryOperation2>
-    inline
-    GTFO_RESULT_OF_INNER_PRODUCT_OPS(typename _tt::iterator_of_range< Range1 >::type,
-                                     InputIterator2,
-                                     Value,
-                                     BinaryOperation1,
-                                     BinaryOperation2)
-    inner_product(Range1 &&        range1,
-                  InputIterator2   it_begin_2,
-                  Value            init,
-                  BinaryOperation1 op1,
-                  BinaryOperation2 op2)
-    {
-        return ::std::inner_product(begin(range1),
-                                    end(range1),
-                                    _utils::move(it_begin_2),
-                                    _utils::move(init),
-                                    _utils::move(op1),
-                                    _utils::move(op2));
-    }
-
     template<typename Range1, typename Range2>
     inline
-    typename _tt::enable_if
-    <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
-        GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
-                                     typename _tt::iterator_of_range< Range2 >::type,
-                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
-                                                            typename _tt::iterator_of_range< Range2 >::type))
-    >::type
+    GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
+                                 typename _tt::iterator_of_range< Range2 >::type,
+                                 GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
+                                                        typename _tt::iterator_of_range< Range2 >::type))
     inner_product(Range1 && range1,
                   Range2 && range2)
     {
@@ -275,15 +238,30 @@ namespace gtfo
                                                            typename _tt::iterator_of_range< Range2 >::type)());
     }
 
-    template<typename Range1, typename Range2, typename Value>
+    template<typename Range1, typename InputIterator2, typename Value>
     inline
     typename _tt::enable_if
     <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
         GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
-                                     typename _tt::iterator_of_range< Range2 >::type,
+                                     InputIterator2,
                                      Value)
     >::type
+    inner_product(Range1 &&         range1,
+                  InputIterator2 && it_begin_2,
+                  Value             init)
+    {
+        return ::std::inner_product(begin(range1),
+                                    end(range1),
+                                    _utils::forward<InputIterator2>(it_begin_2),
+                                    _utils::move(init));
+    }
+
+    template<typename Range1, typename Range2, typename Value>
+    inline
+    GTFO_RESULT_OF_INNER_PRODUCT(typename _tt::iterator_of_range< Range1 >::type,
+                                 typename _tt::iterator_of_range< Range2 >::type,
+                                 Value)
     inner_product(Range1 && range1,
                   Range2 && range2,
                   Value     init)
@@ -294,18 +272,40 @@ namespace gtfo
                                     _utils::move(init));
     }
 
-    template<typename Range1, typename Range2, typename Value,
+    template<typename Range1, typename InputIterator2, typename Value,
              typename BinaryOperation1, typename BinaryOperation2>
     inline
     typename _tt::enable_if
     <
-        !_tt::is_range_castable_to_its_iterator< Range2 >::value,
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
         GTFO_RESULT_OF_INNER_PRODUCT_OPS(typename _tt::iterator_of_range< Range1 >::type,
-                                         typename _tt::iterator_of_range< Range2 >::type,
+                                         InputIterator2,
                                          Value,
                                          BinaryOperation1,
                                          BinaryOperation2)
     >::type
+    inner_product(Range1 &&         range1,
+                  InputIterator2 && it_begin_2,
+                  Value             init,
+                  BinaryOperation1  op1,
+                  BinaryOperation2  op2)
+    {
+        return ::std::inner_product(begin(range1),
+                                    end(range1),
+                                    _utils::forward<InputIterator2>(it_begin_2),
+                                    _utils::move(init),
+                                    _utils::move(op1),
+                                    _utils::move(op2));
+    }
+
+    template<typename Range1, typename Range2, typename Value,
+             typename BinaryOperation1, typename BinaryOperation2>
+    inline
+    GTFO_RESULT_OF_INNER_PRODUCT_OPS(typename _tt::iterator_of_range< Range1 >::type,
+                                     typename _tt::iterator_of_range< Range2 >::type,
+                                     Value,
+                                     BinaryOperation1,
+                                     BinaryOperation2)
     inner_product(Range1 &&        range1,
                   Range2 &&        range2,
                   Value            init,

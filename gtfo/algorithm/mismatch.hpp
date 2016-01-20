@@ -170,7 +170,103 @@ namespace gtfo
                                _utils::move(pred));
     }
 
-    // TODO
+    template<typename Range1, typename InputIterator2>
+    inline
+    GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE(typename _tt::iterator_of_range< Range1 >::type,
+                                                        InputIterator2)
+    mismatch(Range1 &&         range_1,
+             InputIterator2 && it_begin_2)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               _utils::forward<InputIterator2>(it_begin_2)
+                               );
+    }
+
+    template<typename Range1, typename InputIterator2, typename BinaryPredicate>
+    inline
+    GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE(typename _tt::iterator_of_range< Range1 >::type,
+                                                             InputIterator2,
+                                                             BinaryPredicate)
+    mismatch(Range1 &&         range_1,
+             InputIterator2 && it_begin_2,
+             BinaryPredicate   pred)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               _utils::forward<InputIterator2>(it_begin_2),
+                               _utils::move(pred)
+                               );
+    }
+
+#ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
+    template<typename Range1, typename InputIterator2>
+    inline
+    GTFO_RESULT_OF_MISMATCH(typename _tt::iterator_of_range< Range1 >::type,
+                            InputIterator2)
+    mismatch(Range1 &&      range_1,
+             InputIterator2 it_begin_2,
+             InputIterator2 it_end_2)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               _utils::move(it_begin_2),
+                               _utils::move(it_end_2)
+                               );
+    }
+
+    template<typename Range1, typename InputIterator2, typename BinaryPredicate>
+    inline
+    GTFO_RESULT_OF_MISMATCH_PRED(typename _tt::iterator_of_range< Range1 >::type,
+                                 InputIterator2,
+                                 BinaryPredicate)
+    mismatch(Range1 &&       range_1,
+             InputIterator2  it_begin_2,
+             InputIterator2  it_end_2,
+             BinaryPredicate pred)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               _utils::move(it_begin_2),
+                               _utils::move(it_end_2),
+                               _utils::move(pred)
+                               );
+    }
+#endif // GTFO_USE_CPP14_MISMATCH_ALGORITHM
+
+    template<typename Range1, typename Range2>
+    inline
+    GTFO_RESULT_OF_MISMATCH(typename _tt::iterator_of_range< Range1 >::type,
+                            typename _tt::iterator_of_range< Range2 >::type)
+    mismatch(Range1 && range_1,
+             Range2 && range_2)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               begin(range_2)
+#ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
+                               , end(range_2)
+#endif
+                               );
+    }
+
+    template<typename Range1, typename Range2, typename BinaryPredicate>
+    inline
+    GTFO_RESULT_OF_MISMATCH_PRED(typename _tt::iterator_of_range< Range1 >::type,
+                                 typename _tt::iterator_of_range< Range2 >::type,
+                                 BinaryPredicate)
+    mismatch(Range1 &&       range_1,
+             Range2 &&       range_2,
+             BinaryPredicate pred)
+    {
+        return ::std::mismatch(begin(range_1),
+                               end(range_1),
+                               begin(range_2),
+#ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
+                               end(range_2),
+#endif
+                               _utils::move(pred));
+    }
 
 #undef GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE
 #undef GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE

@@ -70,4 +70,54 @@ GTFO_TEST_FUN_BEGIN
         GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
     }
 
+    // range + iterator
+    {
+        auto result_pair = gtfo::mismatch(data, begin(sub_1));
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+
+    // range + iterator + binary predicate
+    {
+        auto result_pair = gtfo::mismatch(data, begin(sub_1), is_equal);
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+
+#ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
+    // range + two iterators
+    {
+        auto result_pair = gtfo::mismatch(data, begin(sub_1), end(sub_1));
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+
+    // range + two iterators + binary predicate
+    {
+        auto result_pair = gtfo::mismatch(data, begin(sub_1), end(sub_1), is_equal);
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+#endif
+
+    // range + range
+    {
+        auto result_pair = gtfo::mismatch(data, sub_1);
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+
+    // range + range + binary predicate
+    {
+        auto result_pair = gtfo::mismatch(data, sub_1, is_equal);
+        GTFO_TEST_ASSERT(result_pair.first != data.end());
+        GTFO_TEST_ASSERT_EQ(*result_pair.first, 10)
+        GTFO_TEST_ASSERT_EQ(*result_pair.second, 5)
+    }
+
 GTFO_TEST_FUN_END
