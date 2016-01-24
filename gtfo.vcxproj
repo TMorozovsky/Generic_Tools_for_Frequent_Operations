@@ -150,6 +150,7 @@
     <ClInclude Include="gtfo\algorithm\any_of.hpp" />
     <ClInclude Include="gtfo\algorithm\count.hpp" />
     <ClInclude Include="gtfo\algorithm\count_if.hpp" />
+    <ClInclude Include="gtfo\algorithm\equal.hpp" />
     <ClInclude Include="gtfo\algorithm\find.hpp" />
     <ClInclude Include="gtfo\algorithm\find_end.hpp" />
     <ClInclude Include="gtfo\algorithm\find_first_of.hpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_any_of.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_count.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_count_if.cpp" />
+    <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_equal.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_end.cpp" />
     <ClCompile Include="gtfo_tests\runtime\algorithm\runtime_test_find_first_of.cpp" />

@@ -6,6 +6,7 @@
 #include "gtfo/algorithm/any_of.hpp"
 #include "gtfo/algorithm/count.hpp"
 #include "gtfo/algorithm/count_if.hpp"
+#include "gtfo/algorithm/equal.hpp"
 #include "gtfo/algorithm/find.hpp"
 #include "gtfo/algorithm/find_end.hpp"
 #include "gtfo/algorithm/find_first_of.hpp"

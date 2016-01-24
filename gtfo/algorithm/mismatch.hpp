@@ -55,27 +55,14 @@ namespace gtfo
         ::std::pair< InputIterator1, InputIterator2 >                     \
     >::type
 
-#define GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE(InputIterator1, InputIterator2) \
-    typename _tt::enable_if                                                               \
-    <                                                                                  \
-        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,         \
-        GTFO_RESULT_OF_MISMATCH(InputIterator1,                              \
-                                InputIterator2)                        \
-    >::type
-
-#define GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE(InputIterator1, InputIterator2, BinaryPredicate) \
-    typename _tt::enable_if                                                                                    \
-    <                                                                                                   \
-        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,                     \
-        GTFO_RESULT_OF_MISMATCH_PRED(InputIterator1,                                \
-                                     InputIterator2,                   \
-                                     BinaryPredicate)     \
-    >::type
-
     template<typename InputIterator1, typename InputIterator2>
     inline
-    GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE(InputIterator1,
-                                                        InputIterator2)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_MISMATCH(InputIterator1,
+                                InputIterator2)
+    >::type
     mismatch(InputIterator1    it_begin_1,
              InputIterator1    it_end_1,
              InputIterator2 && it_begin_2)
@@ -87,9 +74,13 @@ namespace gtfo
 
     template<typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
     inline
-    GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE(InputIterator1,
-                                                             InputIterator2,
-                                                             BinaryPredicate)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_MISMATCH_PRED(InputIterator1,
+                                     InputIterator2,
+                                     BinaryPredicate)
+    >::type
     mismatch(InputIterator1    it_begin_1,
              InputIterator1    it_end_1,
              InputIterator2 && it_begin_2,
@@ -172,8 +163,12 @@ namespace gtfo
 
     template<typename Range1, typename InputIterator2>
     inline
-    GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE(typename _tt::iterator_of_range< Range1 >::type,
-                                                        InputIterator2)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_MISMATCH(typename _tt::iterator_of_range< Range1 >::type,
+                                InputIterator2)
+    >::type
     mismatch(Range1 &&         range_1,
              InputIterator2 && it_begin_2)
     {
@@ -185,9 +180,13 @@ namespace gtfo
 
     template<typename Range1, typename InputIterator2, typename BinaryPredicate>
     inline
-    GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE(typename _tt::iterator_of_range< Range1 >::type,
-                                                             InputIterator2,
-                                                             BinaryPredicate)
+    typename _tt::enable_if
+    <
+        !_tt::is_range_castable_to_its_iterator< InputIterator2 >::value,
+        GTFO_RESULT_OF_MISMATCH_PRED(typename _tt::iterator_of_range< Range1 >::type,
+                                     InputIterator2,
+                                     BinaryPredicate)
+    >::type
     mismatch(Range1 &&         range_1,
              InputIterator2 && it_begin_2,
              BinaryPredicate   pred)
@@ -268,8 +267,6 @@ namespace gtfo
                                _utils::move(pred));
     }
 
-#undef GTFO_RESULT_OF_MISMATCH_PRED_ITERATOR2_NOT_DECAYED_RANGE
-#undef GTFO_RESULT_OF_MISMATCH_ITERATOR2_NOT_DECAYED_RANGE
 #undef GTFO_RESULT_OF_MISMATCH_PRED
 #undef GTFO_RESULT_OF_MISMATCH
 

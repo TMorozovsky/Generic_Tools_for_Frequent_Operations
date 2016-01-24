@@ -54,7 +54,8 @@ SOURCES += \
     gtfo_tests/static/static_test_is_predicate1.cpp \
     gtfo_tests/static/static_test_is_predicate2.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_count_if.cpp \
-    gtfo_tests/runtime/algorithm/runtime_test_mismatch.cpp
+    gtfo_tests/runtime/algorithm/runtime_test_mismatch.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_equal.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++14 -Wall -pedantic
 msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
@@ -122,4 +123,5 @@ HEADERS += \
     gtfo/_impl/type_traits/is_predicate2.hpp \
     gtfo/_impl/type_traits/is_predicate1.hpp \
     gtfo/algorithm/count_if.hpp \
-    gtfo/algorithm/mismatch.hpp
+    gtfo/algorithm/mismatch.hpp \
+    gtfo/algorithm/equal.hpp
