@@ -29,6 +29,16 @@ GTFO_TEST_FUN_BEGIN
     GTFO_TEST_ASSERT(!gtfo::equal(data.begin(), data.end(), begin(arr_bad), is_equal))
     GTFO_TEST_ASSERT(gtfo::equal(data.begin(), data.end(), begin(arr_good), is_equal))
 
+#ifdef GTFO_USE_CPP14_EQUAL_ALGORITHM
+    // two iterators + two iterators
+    GTFO_TEST_ASSERT(!gtfo::equal(data.begin(), data.end(), begin(arr_bad), end(arr_bad)))
+    GTFO_TEST_ASSERT(gtfo::equal(data.begin(), data.end(), begin(arr_good), end(arr_good)))
+
+    // two iterators + two iterators + binary predicate
+    GTFO_TEST_ASSERT(!gtfo::equal(data.begin(), data.end(), begin(arr_bad), end(arr_bad), is_equal))
+    GTFO_TEST_ASSERT(gtfo::equal(data.begin(), data.end(), begin(arr_good), end(arr_good), is_equal))
+#endif
+
     // two iterators + range
     GTFO_TEST_ASSERT(!gtfo::equal(data.begin(), data.end(), arr_bad))
     GTFO_TEST_ASSERT(gtfo::equal(data.begin(), data.end(), arr_good))
@@ -44,6 +54,16 @@ GTFO_TEST_FUN_BEGIN
     // range + iterator + binary predicate
     GTFO_TEST_ASSERT(!gtfo::equal(data, begin(arr_bad), is_equal))
     GTFO_TEST_ASSERT(gtfo::equal(data, begin(arr_good), is_equal))
+
+#ifdef GTFO_USE_CPP14_EQUAL_ALGORITHM
+    // range + two iterators
+    GTFO_TEST_ASSERT(!gtfo::equal(data, begin(arr_bad), end(arr_bad)))
+    GTFO_TEST_ASSERT(gtfo::equal(data, begin(arr_good), end(arr_good)))
+
+    // range + two iterators + binary predicate
+    GTFO_TEST_ASSERT(!gtfo::equal(data, begin(arr_bad), end(arr_bad), is_equal))
+    GTFO_TEST_ASSERT(gtfo::equal(data, begin(arr_good), end(arr_good), is_equal))
+#endif
 
     // range + range
     GTFO_TEST_ASSERT(!gtfo::equal(data, arr_bad))
