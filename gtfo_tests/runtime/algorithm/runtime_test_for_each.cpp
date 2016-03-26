@@ -1,6 +1,5 @@
 #include "gtfo/algorithm/for_each.hpp"
 #include "gtfo_tests/runtime/runtime_tests.hpp"
-#include <vector>
 
 using namespace gtfo::runtime_test_helpers;
 

@@ -15,24 +15,24 @@ namespace gtfo
     template<typename InputIterator, typename UnaryPredicate>
     inline
     bool
-    all_of(InputIterator  it_begin,
-           InputIterator  it_end,
-           UnaryPredicate pred)
+    all_of(InputIterator  _it_begin,
+           InputIterator  _it_end,
+           UnaryPredicate _pred)
     {
-        return ::std::all_of(_utils::move(it_begin),
-                             _utils::move(it_end),
-                             _utils::move(pred));
+        return ::std::all_of(_utils::move(_it_begin),
+                             _utils::move(_it_end),
+                             _utils::move(_pred));
     }
 
     template<typename Range, typename UnaryPredicate>
     inline
     bool
-    all_of(Range &&       range,
-           UnaryPredicate pred)
+    all_of(Range &&       _range,
+           UnaryPredicate _pred)
     {
-        return ::std::all_of(begin(range),
-                             end(range),
-                             _utils::move(pred));
+        return ::std::all_of(begin(_range),
+                             end(_range),
+                             _utils::move(_pred));
     }
 }
 

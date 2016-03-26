@@ -15,24 +15,24 @@ namespace gtfo
     template<typename InputIterator, typename UnaryFunction>
     inline
     UnaryFunction
-    for_each(InputIterator it_begin,
-             InputIterator it_end,
-             UnaryFunction fun)
+    for_each(InputIterator _it_begin,
+             InputIterator _it_end,
+             UnaryFunction _fun)
     {
-        return ::std::for_each(_utils::move(it_begin),
-                               _utils::move(it_end),
-                               _utils::move(fun));
+        return ::std::for_each(_utils::move(_it_begin),
+                               _utils::move(_it_end),
+                               _utils::move(_fun));
     }
 
     template<typename Range, typename UnaryFunction>
     inline
     UnaryFunction
-    for_each(Range &&      range,
-             UnaryFunction fun)
+    for_each(Range &&      _range,
+             UnaryFunction _fun)
     {
-        return ::std::for_each(begin(range),
-                               end(range),
-                               _utils::move(fun));
+        return ::std::for_each(begin(_range),
+                               end(_range),
+                               _utils::move(_fun));
     }
 }
 

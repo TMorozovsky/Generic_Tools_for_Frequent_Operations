@@ -55,10 +55,11 @@ SOURCES += \
     gtfo_tests/static/static_test_is_predicate2.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_count_if.cpp \
     gtfo_tests/runtime/algorithm/runtime_test_mismatch.cpp \
-    gtfo_tests/runtime/algorithm/runtime_test_equal.cpp
+    gtfo_tests/runtime/algorithm/runtime_test_equal.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_is_permutation.cpp \
+    gtfo_tests/runtime/algorithm/runtime_test_search_n.cpp
 
 gcc: QMAKE_CXXFLAGS += -std=c++14 -Wall -pedantic
-msvc: DEFINES += GTFO_MSVC_RUNTIME_TESTS_NO_CIN_GET
 
 HEADERS += \
     gtfo/numeric.hpp \
@@ -124,4 +125,6 @@ HEADERS += \
     gtfo/_impl/type_traits/is_predicate1.hpp \
     gtfo/algorithm/count_if.hpp \
     gtfo/algorithm/mismatch.hpp \
-    gtfo/algorithm/equal.hpp
+    gtfo/algorithm/equal.hpp \
+    gtfo/algorithm/is_permutation.hpp \
+    gtfo/algorithm/search_n.hpp

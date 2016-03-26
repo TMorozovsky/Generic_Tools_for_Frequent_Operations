@@ -17,28 +17,28 @@ namespace gtfo
     template<typename InputIterator, typename Value>
     inline
     auto
-    count(InputIterator it_begin,
-          InputIterator it_end,
-          const Value & value) -> decltype(::std::count(_tt::declval< InputIterator >(),
-                                                        _tt::declval< InputIterator >(),
-                                                        _tt::declval< const Value & >()))
+    count(InputIterator _it_begin,
+          InputIterator _it_end,
+          const Value & _value) -> decltype(::std::count(_tt::declval< InputIterator >(),
+                                                         _tt::declval< InputIterator >(),
+                                                         _tt::declval< const Value & >()))
     {
-        return ::std::count(_utils::move(it_begin),
-                            _utils::move(it_end),
-                            value);
+        return ::std::count(_utils::move(_it_begin),
+                            _utils::move(_it_end),
+                            _value);
     }
 
     template<typename Range, typename Value>
     inline
     auto
-    count(Range &&      range,
-          const Value & value) -> decltype(::std::count(_tt::declval< typename _tt::result_of_begin< Range >::type >(),
-                                                        _tt::declval< typename _tt::result_of_end< Range >::type >(),
-                                                        _tt::declval< const Value & >()))
+    count(Range &&      _range,
+          const Value & _value) -> decltype(::std::count(_tt::declval< typename _tt::result_of_begin< Range >::type >(),
+                                                         _tt::declval< typename _tt::result_of_end< Range >::type >(),
+                                                         _tt::declval< const Value & >()))
     {
-        return ::std::count(begin(range),
-                            end(range),
-                            value);
+        return ::std::count(begin(_range),
+                            end(_range),
+                            _value);
     }
 }
 

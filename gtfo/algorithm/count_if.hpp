@@ -17,28 +17,28 @@ namespace gtfo
     template<typename InputIterator, typename UnaryPredicate>
     inline
     auto
-    count_if(InputIterator  it_begin,
-             InputIterator  it_end,
-             UnaryPredicate pred) -> decltype(::std::count_if(_tt::declval< InputIterator >(),
-                                                              _tt::declval< InputIterator >(),
-                                                              _tt::declval< UnaryPredicate >()))
+    count_if(InputIterator  _it_begin,
+             InputIterator  _it_end,
+             UnaryPredicate _pred) -> decltype(::std::count_if(_tt::declval< InputIterator >(),
+                                                               _tt::declval< InputIterator >(),
+                                                               _tt::declval< UnaryPredicate >()))
     {
-        return ::std::count_if(_utils::move(it_begin),
-                               _utils::move(it_end),
-                               _utils::move(pred));
+        return ::std::count_if(_utils::move(_it_begin),
+                               _utils::move(_it_end),
+                               _utils::move(_pred));
     }
 
     template<typename Range, typename UnaryPredicate>
     inline
     auto
-    count_if(Range &&       range,
-             UnaryPredicate pred) -> decltype(::std::count_if(_tt::declval< typename _tt::result_of_begin< Range >::type >(),
-                                                              _tt::declval< typename _tt::result_of_end< Range >::type >(),
-                                                              _tt::declval< UnaryPredicate >()))
+    count_if(Range &&       _range,
+             UnaryPredicate _pred) -> decltype(::std::count_if(_tt::declval< typename _tt::result_of_begin< Range >::type >(),
+                                                               _tt::declval< typename _tt::result_of_end< Range >::type >(),
+                                                               _tt::declval< UnaryPredicate >()))
     {
-        return ::std::count_if(begin(range),
-                               end(range),
-                               _utils::move(pred));
+        return ::std::count_if(begin(_range),
+                               end(_range),
+                               _utils::move(_pred));
     }
 }
 

@@ -13,8 +13,10 @@
 #include "gtfo/algorithm/find_if.hpp"
 #include "gtfo/algorithm/find_if_not.hpp"
 #include "gtfo/algorithm/for_each.hpp"
+#include "gtfo/algorithm/is_permutation.hpp"
 #include "gtfo/algorithm/mismatch.hpp"
 #include "gtfo/algorithm/none_of.hpp"
 #include "gtfo/algorithm/search.hpp"
+#include "gtfo/algorithm/search_n.hpp"
 
 #endif // GTFO_FILE_INCLUDED_ALGORITHM_HPP

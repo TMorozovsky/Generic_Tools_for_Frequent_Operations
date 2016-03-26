@@ -20,69 +20,69 @@ namespace gtfo
 {
 
 #define GTFO_RESULT_OF_ADJACENT_FIND(ForwardIterator) \
-    typename _tt::enable_if                                  \
-    <                                                              \
-        _tt::are_comparable_op_eq                                         \
-        <                                                                    \
-            typename _tt::result_of_dereferencing< ForwardIterator >::type,   \
-            typename _tt::result_of_dereferencing< ForwardIterator >::type    \
-        >::value,                                                           \
-        ForwardIterator                                                 \
-    >::type                                                      \
+    typename _tt::enable_if \
+    < \
+        _tt::are_comparable_op_eq \
+        < \
+            typename _tt::result_of_dereferencing< ForwardIterator >::type, \
+            typename _tt::result_of_dereferencing< ForwardIterator >::type \
+        >::value, \
+        ForwardIterator \
+    >::type
 
 #define GTFO_RESULT_OF_ADJACENT_FIND_PRED(ForwardIterator, BinaryPredicate) \
-    typename _tt::enable_if                                                 \
-    <                                                                       \
-        _tt::are_comparable_pred                                            \
-        <                                                                   \
-            BinaryPredicate,                                                \
+    typename _tt::enable_if \
+    < \
+        _tt::are_comparable_pred \
+        < \
+            BinaryPredicate, \
             typename _tt::result_of_dereferencing< ForwardIterator >::type, \
-            typename _tt::result_of_dereferencing< ForwardIterator >::type  \
-        >::value,                                                          \
-        ForwardIterator                                                  \
-    >::type                                                           \
+            typename _tt::result_of_dereferencing< ForwardIterator >::type \
+        >::value, \
+        ForwardIterator \
+    >::type
 
     template<typename ForwardIterator>
     inline
     GTFO_RESULT_OF_ADJACENT_FIND(ForwardIterator)
-    adjacent_find(ForwardIterator it_begin,
-                  ForwardIterator it_end)
+    adjacent_find(ForwardIterator _it_begin,
+                  ForwardIterator _it_end)
     {
-        return ::std::adjacent_find(_utils::move(it_begin),
-                                    _utils::move(it_end));
+        return ::std::adjacent_find(_utils::move(_it_begin),
+                                    _utils::move(_it_end));
     }
 
     template<typename ForwardIterator, typename BinaryPredicate>
     inline
     ForwardIterator
-    adjacent_find(ForwardIterator it_begin,
-                  ForwardIterator it_end,
-                  BinaryPredicate pred)
+    adjacent_find(ForwardIterator _it_begin,
+                  ForwardIterator _it_end,
+                  BinaryPredicate _pred)
     {
-        return ::std::adjacent_find(_utils::move(it_begin),
-                                    _utils::move(it_end),
-                                    _utils::move(pred));
+        return ::std::adjacent_find(_utils::move(_it_begin),
+                                    _utils::move(_it_end),
+                                    _utils::move(_pred));
     }
 
     template<typename Range>
     inline
     typename _tt::iterator_of_range< Range >::type
-    adjacent_find(Range && range)
+    adjacent_find(Range && _range)
     {
-        return ::std::adjacent_find(begin(range),
-                                    end(range));
+        return ::std::adjacent_find(begin(_range),
+                                    end(_range));
     }
 
     template<typename Range, typename BinaryPredicate>
     inline
     GTFO_RESULT_OF_ADJACENT_FIND_PRED(typename _tt::iterator_of_range< Range >::type,
                                       BinaryPredicate)
-    adjacent_find(Range &&        range,
-                  BinaryPredicate pred)
+    adjacent_find(Range &&        _range,
+                  BinaryPredicate _pred)
     {
-        return ::std::adjacent_find(begin(range),
-                                    end(range),
-                                    _utils::move(pred));
+        return ::std::adjacent_find(begin(_range),
+                                    end(_range),
+                                    _utils::move(_pred));
     }
 }
 
