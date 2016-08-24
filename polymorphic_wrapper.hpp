@@ -9,6 +9,12 @@
 #include <cstring> // std::size_t, std::memcpy/memcpy_s, std::memset
 #include <cassert> // assert
 
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( push )
+//  Disable MSVC Compiler Warning C4324 ("'struct_name': structure was padded due to alignment specifier")
+#   pragma warning( disable : 4324 )
+#endif
+
 // Macro used by polymorphic_wrapper<...> to check invariants.
 #define POLYMORPHIC_WRAPPER_ASSERT(x) \
     { \
@@ -143,7 +149,7 @@ protected:
         POLYMORPHIC_WRAPPER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_WRAPPER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
         (void)dest_buffer_size; \
-        ::new (dest_buffer_begin) c(static_cast<c &&>(polymorphic_wrapper_lib::move(*this))); \
+        ::new (dest_buffer_begin) c(polymorphic_wrapper_lib::move(*this)); \
     }
 
 // Macro that can be used inside the definition of a derived class
@@ -162,7 +168,7 @@ protected:
         POLYMORPHIC_WRAPPER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_WRAPPER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
         (void)dest_buffer_size; \
-        ::new (dest_buffer_begin) c(static_cast<const c &>(*this)); \
+        ::new (dest_buffer_begin) c(*this); \
     }
 
 namespace polymorphic_wrapper_lib
@@ -509,9 +515,9 @@ private:
     template<class DesiredType, typename... CtorArgs>
     inline void impl_construct(CtorArgs&&... args)
     {
-        static_assert(polymorphic_wrapper_lib::type_traits::is_base_of<base_type, DesiredType>::value, "");
-        static_assert(sizeof(DesiredType) <= derived_object_max_size, "");
-        static_assert(alignof(DesiredType) <= derived_object_alignment, "");
+        static_assert(polymorphic_wrapper_lib::type_traits::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
+        static_assert(sizeof(DesiredType) <= derived_object_max_size, "constructed object does not fit into available memory");
+        static_assert(alignof(DesiredType) <= derived_object_alignment, "constructed object's alignment requirements are not met by this wrapper");
 
         const DesiredType *const test_ptr_d = reinterpret_cast<const DesiredType *>(uintptr_t(-1) / 2);
         const base_type *const test_ptr_b = static_cast<const base_type *>(test_ptr_d);
@@ -608,5 +614,9 @@ public:
         }
     }
 };
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( pop )
+#endif
 
 #endif // POLYMORPHIC_WRAPPER_HPP_INCLUDED
