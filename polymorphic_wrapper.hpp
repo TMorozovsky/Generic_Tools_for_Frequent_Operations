@@ -509,7 +509,7 @@ public:
     inline const base_type * operator -> () const noexcept { POLYMORPHIC_WRAPPER_ASSERT(this->is_constructed()); return this->object_ptr_unsafe(); }
 
     inline explicit operator bool() const { return  this->is_constructed(); }
-    inline bool     operator !    () const { return !this->is_constructed(); }
+    inline bool     operator !   () const { return !this->is_constructed(); }
 
 private:
     template<class DesiredType, typename... CtorArgs>
