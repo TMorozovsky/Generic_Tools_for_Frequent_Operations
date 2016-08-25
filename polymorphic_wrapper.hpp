@@ -505,11 +505,14 @@ public:
     inline       base_type & object_ref()       noexcept { POLYMORPHIC_WRAPPER_ASSERT(this->is_constructed()); return *(this->object_ptr_unsafe()); }
     inline const base_type & object_ref() const noexcept { POLYMORPHIC_WRAPPER_ASSERT(this->is_constructed()); return *(this->object_ptr_unsafe()); }
 
+    inline       base_type & operator * ()       noexcept { return this->object_ref(); }
+    inline const base_type & operator * () const noexcept { return this->object_ref(); }
+
     inline       base_type * operator -> ()       noexcept { POLYMORPHIC_WRAPPER_ASSERT(this->is_constructed()); return this->object_ptr_unsafe(); }
     inline const base_type * operator -> () const noexcept { POLYMORPHIC_WRAPPER_ASSERT(this->is_constructed()); return this->object_ptr_unsafe(); }
 
-    inline explicit operator bool() const { return  this->is_constructed(); }
-    inline bool     operator !   () const { return !this->is_constructed(); }
+    inline explicit operator bool() const noexcept { return  this->is_constructed(); }
+    inline bool     operator !   () const noexcept { return !this->is_constructed(); }
 
 private:
     template<class DesiredType, typename... CtorArgs>
