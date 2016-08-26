@@ -106,11 +106,11 @@ namespace polymorphic_wrapper_lib
     }
 }
 
-// In order to use move constructors of derived objects owned by polymorphic_wrapper<...> instances
+// In order to use move constructors of derived objects (which will be owned by polymorphic_wrapper<...> instances)
 // from polymorphic_wrapper's own move operations, do the following actions:
 //     - inherit the base class of the polymorphic hierarchy from the polymorphic_wrapper_moveable interface;
 //     - implement its member function in every derived class that will be used with polymorphic_wrapper<...>
-//       (the POLYMORPHIC_WRAPPER_MOVEABLE is recommended for providing a typical implementation).
+//       (the POLYMORPHIC_WRAPPER_MOVEABLE macro is recommended for providing a typical implementation).
 class polymorphic_wrapper_moveable
 {
 public:
@@ -121,11 +121,11 @@ protected:
     inline ~polymorphic_wrapper_moveable() noexcept { }
 };
 
-// In order to use move and copy constructors of derived objects owned by polymorphic_wrapper<...> instances
+// In order to use move and copy constructors of derived objects (which will be owned by polymorphic_wrapper<...> instances)
 // from polymorphic_wrapper's own move/copy operations, do the following actions:
 //     - inherit the base class of the polymorphic hierarchy from the polymorphic_wrapper_copyable interface;
 //     - implement its member functions in every derived class that will be used with polymorphic_wrapper<...>
-//       (the POLYMORPHIC_WRAPPER_COPYABLE is recommended for providing typical implementations).
+//       (the POLYMORPHIC_WRAPPER_COPYABLE macro is recommended for providing typical implementations).
 class polymorphic_wrapper_copyable : public polymorphic_wrapper_moveable
 {
 public:
@@ -145,7 +145,6 @@ protected:
     virtual void _move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && override \
     { \
         POLYMORPHIC_WRAPPER_ASSERT(!!dest_buffer_begin); \
-        POLYMORPHIC_WRAPPER_ASSERT(dest_buffer_size > 0); \
         POLYMORPHIC_WRAPPER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_WRAPPER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
         (void)dest_buffer_size; \
@@ -164,7 +163,6 @@ protected:
     virtual void _copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const override \
     { \
         POLYMORPHIC_WRAPPER_ASSERT(!!dest_buffer_begin); \
-        POLYMORPHIC_WRAPPER_ASSERT(dest_buffer_size > 0); \
         POLYMORPHIC_WRAPPER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_WRAPPER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
         (void)dest_buffer_size; \
@@ -213,14 +211,13 @@ namespace polymorphic_wrapper_lib
 }
 
 // Auxiliary macro for mixins.
-#define POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(c) \
-    protected: \
-        inline c() noexcept { } \
-        inline c(const c &) noexcept { } \
-        inline c & operator = (const c &) noexcept { return *this; } \
-        inline c(c &&) noexcept { } \
-        inline c & operator = (c &&) noexcept { return *this; } \
-        inline ~c() noexcept { }
+#define POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(c) \
+    inline c() noexcept { } \
+    inline c(const c &) noexcept { } \
+    inline c & operator = (const c &) noexcept { return *this; } \
+    inline c(c &&) noexcept { } \
+    inline c & operator = (c &&) noexcept { return *this; } \
+    inline ~c() noexcept { }
 
 // Namespace for polymorphic_wrapper's Moving/Copying Policies.
 // These policies specify how a polymorphic_wrapper should move and - if supported - copy its contents.
@@ -254,7 +251,7 @@ namespace polymorphic_wrapper_MCP
         inline void MCP_copy_construct_from(const PolymorphicWrapperSelf & other) = delete;
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(bitwise_exclusive_move)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_exclusive_move)
     };
 
     // Implements both moving and copying of polymorphic_wrapper<...> instances as if they were POD
@@ -276,7 +273,7 @@ namespace polymorphic_wrapper_MCP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(bitwise_copying)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_copying)
     };
 
     // Implements both moving and copying of polymorphic_wrapper<...> instances as if they were POD
@@ -300,7 +297,7 @@ namespace polymorphic_wrapper_MCP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(bitwise_copy_and_exclusive_move)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_copy_and_exclusive_move)
     };
 
     // Implements moving of polymorphic_wrapper<...> instances using the "virtual move constructor" provided by
@@ -318,7 +315,7 @@ namespace polymorphic_wrapper_MCP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(virtual_move_constructor_only)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(virtual_move_constructor_only)
     };
 
     // Implements both moving and copying of polymorphic_wrapper<...> instances
@@ -341,7 +338,7 @@ namespace polymorphic_wrapper_MCP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(virtual_constructors)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(virtual_constructors)
     };
 }
 
@@ -385,7 +382,7 @@ namespace polymorphic_wrapper_DRP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(bytes_array_only)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bytes_array_only)
     };
 
     // Representation of polymorphic_wrapper that stores an offset to base subobject
@@ -414,7 +411,7 @@ namespace polymorphic_wrapper_DRP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(offset_before_bytes)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(offset_before_bytes)
     };
 
     // Representation of polymorphic_wrapper that stores an offset to base subobject
@@ -443,7 +440,7 @@ namespace polymorphic_wrapper_DRP
         }
 
     protected:
-        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_PROTECTED_SPECIAL_MEMBER_FUNCTIONS(offset_after_bytes)
+        POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(offset_after_bytes)
     };
 }
 
@@ -456,8 +453,7 @@ namespace polymorphic_wrapper_DRP
 // Be extremely careful with bitwise copying/moving if you choose them as Moving/Copying Policy,
 // since far from all classes can work correctly with this kind of operations.
 //
-// Virtual inheritance is not supported!
-// But that's no big deal since nobody uses it anyway, right? ;)
+// Virtual inheritance is not supported! But that's no big deal since nobody uses it anyway, right? ;)
 template<class BaseType, size_t MaxObjectSize, size_t Alignment,
          template<class> class MovingCopyingPolicy = polymorphic_wrapper_MCP::virtual_constructors,
          template<size_t, size_t> class DataRepresentationPolicy = polymorphic_wrapper_DRP::offset_before_bytes>
@@ -617,6 +613,8 @@ public:
         }
     }
 };
+
+#undef POLYMORPHIC_WRAPPER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS
 
 #if defined(_MSC_VER) && !defined(__clang__)
 #   pragma warning( pop )
