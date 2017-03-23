@@ -3,17 +3,27 @@
 #ifndef TEST_HIERARCHY_WITH_VIRTUAL_CONSTRUCTORS_HPP_INCLUDED
 #define TEST_HIERARCHY_WITH_VIRTUAL_CONSTRUCTORS_HPP_INCLUDED
 
-#include "polymorphic_wrapper.hpp"
+#include "polymorphic_holder.hpp"
 
-class Widget : public polymorphic_wrapper_copyable
+class Widget : public polymorphic_holder_utils::copyable_and_moveable
 {
 public:
     virtual void draw() const = 0;
     virtual ~Widget() { }
 };
 
-using widget_wrapper = polymorphic_wrapper<Widget, 56, 8, polymorphic_wrapper_MCP::virtual_constructors>;
+#ifndef NDEBUG
+#   define MAX_SIZEOF_DERIVED_WIDGET (64)
+#else
+#   define MAX_SIZEOF_DERIVED_WIDGET (56)
+#endif
 
-extern void make_specific_widget(const char * keyword, widget_wrapper & dest);
+using widget_holder = polymorphic_holder<Widget, MAX_SIZEOF_DERIVED_WIDGET, 8,
+                                         polymorphic_holder_MCP::virtual_constructors,
+                                         polymorphic_holder_DRP::offset_after_bytes_typed<unsigned int>>;
+
+extern void make_specific_widget(const char * keyword, widget_holder & dest);
+
+#undef MAX_SIZEOF_DERIVED_WIDGET
 
 #endif // TEST_HIERARCHY_WITH_VIRTUAL_CONSTRUCTORS_HPP_INCLUDED

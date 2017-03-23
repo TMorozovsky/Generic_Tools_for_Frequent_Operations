@@ -19,7 +19,7 @@ public:
         std::printf("SquareWidget [%d * %d] at (%d, %d)\n", _size, _size, _x, _y);
     }
 
-    POLYMORPHIC_WRAPPER_COPYABLE(SquareWidget)
+    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(SquareWidget)
 };
 
 class RectangleWidget : public Widget
@@ -38,7 +38,7 @@ public:
         std::printf("RectangleWidget [%d * %d] at (%d, %d)\n", _w, _h, _x, _y);
     }
 
-    POLYMORPHIC_WRAPPER_COPYABLE(RectangleWidget)
+    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(RectangleWidget)
 };
 
 class AnotherBaseWhichMakesOffsetNotNull
@@ -70,10 +70,10 @@ public:
         std::printf("WeirdWidget (%.12s)\n", _info.c_str());
     }
 
-    POLYMORPHIC_WRAPPER_COPYABLE(WeirdWidget)
+    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(WeirdWidget)
 };
 
-void make_specific_widget(const char * keyword, widget_wrapper & dest)
+void make_specific_widget(const char * keyword, widget_holder & dest)
 {
     assert(keyword != nullptr);
     if (std::strcmp(keyword, "SquareWidget") == 0) {
@@ -95,8 +95,12 @@ namespace {
             std::printf("sizeof(%s) is %zu\n", "RectangleWidget", sizeof(RectangleWidget));
             std::printf("sizeof(%s) is %zu\n", "WeirdWidget",     sizeof(WeirdWidget));
             std::printf("\n");
-            std::printf("sizeof(%s) is %zu\n", "widget_wrapper",  sizeof(widget_wrapper));
+            std::printf("sizeof(%s) is %zu\n", "widget_holder",   sizeof(widget_holder));
             std::printf("\n");
+
+            using tt_result = polymorphic_holder_utils::type_traits<SquareWidget, RectangleWidget, WeirdWidget>;
+            std::printf("max size of these types = %zu\n",        tt_result::max_size);
+            std::printf("max alignment of these types = %zu\n",   tt_result::max_alignment);
         }
     } print_sizes_of_derived_classes_instance;
 }

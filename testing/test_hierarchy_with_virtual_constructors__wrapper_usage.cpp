@@ -15,27 +15,27 @@ public:
         std::printf("OurOwnDerivedWidget\n");
     }
 
-    POLYMORPHIC_WRAPPER_COPYABLE(OurOwnDerivedWidget)
+    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(OurOwnDerivedWidget)
 };
 
 static int test()
 {
-    std::vector<widget_wrapper> widgets;
+    std::vector<widget_holder> widgets;
 
     const char * keywords[] = { "SquareWidget", "RectangleWidget", "WeirdWidget" };
     int iter = 0;
     for (auto keyword : keywords) {
-        widget_wrapper tmp_w;
+        widget_holder tmp_w;
         ::make_specific_widget(keyword, tmp_w);
         assert(tmp_w);
 
-        // Try different ways of pushing a polymorphic_wrapper into a vector:
+        // Try different ways of pushing a polymorphic_holder into a vector:
         if (iter == 0) {
             widgets.push_back(tmp_w); // copy construction
         } else if (iter == 1) {
             widgets.push_back(std::move(tmp_w)); // move construction
         } else if (iter == 2) {
-            widgets.push_back(widget_wrapper()); // default construction + copy assignment
+            widgets.push_back(widget_holder()); // default construction + copy assignment
             widgets.back() = tmp_w;
         }
 
@@ -44,7 +44,7 @@ static int test()
     }
 
     widgets.emplace_back();
-    widgets.back() = widget_wrapper::make<OurOwnDerivedWidget>(); // default construction + move assignment
+    widgets.back() = widget_holder::make<OurOwnDerivedWidget>(); // default construction + move assignment
 
     auto widgets_copy = widgets; // make a copy of the whole vector
     widgets = std::move(widgets_copy); // now move it back
