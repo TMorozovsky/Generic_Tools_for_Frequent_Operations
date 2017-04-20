@@ -1,10 +1,8 @@
-#pragma once
-
 #ifndef POLYMORPHIC_HOLDER_HPP_INCLUDED
 #define POLYMORPHIC_HOLDER_HPP_INCLUDED
 
-#if !defined(_MSC_VER) && !defined(__clang__) && !defined(__GNUG__)
-#   define POLYMORPHIC_HOLDER_USE_STD_TYPE_TRAITS
+#if defined(_MSC_VER) || defined(__clang__) || defined(__GNUG__)
+#   define POLYMORPHIC_HOLDER_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
 #endif
 
 #include <cstdint> // std::uintptr_t
@@ -12,20 +10,17 @@
 #include <utility> // std::move, std::forward
 #include <new>     // placement new
 
-#ifdef POLYMORPHIC_HOLDER_USE_STD_TYPE_TRAITS
+#ifndef POLYMORPHIC_HOLDER_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
 #   include <type_traits> // std::is_polymorphic, std::is_base_of
 #endif
 
-#ifndef POLYMORPHIC_HOLDER_ASSERT
-#   include <cassert> // assert
+#include <cassert> // assert
 
 //  Macro used by polymorphic_holder<...> for assertions.
-//  Can be "overridden" by the user if they define this macro before including current header.
-#   define POLYMORPHIC_HOLDER_ASSERT(x) \
-        { \
-            assert((x)); \
-        }
-#endif
+#define POLYMORPHIC_HOLDER_ASSERT(x) \
+    { \
+        assert((x)); \
+    }
 
 #if defined(_MSC_VER) && !defined(__clang__)
 #   pragma warning( push )
@@ -64,7 +59,7 @@ namespace polymorphic_holder_lib
         {
             static_assert(sizeof(T) > 0, "incomplete types are not allowed");
 
-#ifndef POLYMORPHIC_HOLDER_USE_STD_TYPE_TRAITS
+#ifdef POLYMORPHIC_HOLDER_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
             static constexpr bool value = __is_polymorphic(T);
 #else
             static constexpr bool value = ::std::is_polymorphic<T>::value;
@@ -77,7 +72,7 @@ namespace polymorphic_holder_lib
             static_assert(sizeof(B) > 0, "incomplete types are not allowed");
             static_assert(sizeof(D) > 0, "incomplete types are not allowed");
 
-#ifndef POLYMORPHIC_HOLDER_USE_STD_TYPE_TRAITS
+#ifdef POLYMORPHIC_HOLDER_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
             static constexpr bool value = __is_base_of(B, D);
 #else
             static constexpr bool value = ::std::is_base_of<B, D>::value;
@@ -91,10 +86,72 @@ namespace polymorphic_holder_lib
         template<>           struct is_unsigned_integral_type<unsigned long int>      { static constexpr bool value = true; };
         template<>           struct is_unsigned_integral_type<unsigned long long int> { static constexpr bool value = true; };
     }
+
+    // Interface that must be implemented by a hierarchy of nothrow-moveable polymorphic objects.
+    // This interface will be used by polymorphic_holder to move-construct its owned object
+    // when the polymorphic_holder itself is being moved.
+    // Essentially, this interface declares a "virtual move constructor" in the owned objects' hierarchy.
+    class i_nothrow_moveable
+    {
+    public:
+        // Move-constructs a derived object at given uninitialized, properly aligned buffer.
+        virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && noexcept = 0;
+
+    protected:
+        constexpr i_nothrow_moveable() noexcept = default;
+        inline ~i_nothrow_moveable() noexcept { }
+    };
+
+    // Interface that must be implemented by a hierarchy of moveable polymorphic objects
+    // move constructors of which might throw exceptions.
+    // This interface will be used by polymorphic_holder to move-construct its owned object
+    // when the polymorphic_holder itself is being moved.
+    // Essentially, this interface declares a "virtual move constructor" in the owned objects' hierarchy.
+    class i_throwing_moveable
+    {
+    public:
+        // Move-constructs a derived object at given uninitialized, properly aligned buffer. Might throw exceptions.
+        virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && = 0;
+
+    protected:
+        constexpr i_throwing_moveable() noexcept = default;
+        inline ~i_throwing_moveable() noexcept { }
+    };
+
+    // Interface that must be implemented by a hierarchy of nothrow-copyable polymorphic objects.
+    // This interface will be used by polymorphic_holder to copy-construct its owned object
+    // when the polymorphic_holder itself is being copied.
+    // Essentially, this interface declares a "virtual copy constructor" in the owned objects' hierarchy.
+    class i_nothrow_copyable
+    {
+    public:
+        // Copy-constructs a derived object at given uninitialized, properly aligned buffer.
+        virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const noexcept = 0;
+
+    protected:
+        constexpr i_nothrow_copyable() noexcept = default;
+        inline ~i_nothrow_copyable() noexcept { }
+    };
+
+    // Interface that must be implemented by a hierarchy of copyable polymorphic objects
+    // copy constructors of which might throw exceptions.
+    // This interface will be used by polymorphic_holder to copy-construct its owned object
+    // when the polymorphic_holder itself is being copied.
+    // Essentially, this interface declares a "virtual copy constructor" in the owned objects' hierarchy.
+    class i_throwing_copyable
+    {
+    public:
+        // Copy-constructs a derived object at given uninitialized, properly aligned buffer.
+        virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const = 0;
+
+    protected:
+        constexpr i_throwing_copyable() noexcept = default;
+        inline ~i_throwing_copyable() noexcept { }
+    };
 }
 
-// Utilities that are not used by the polymorphic_holder<...> implementation
-// but might be useful for client code.
+// Utilities that are not used by polymorphic_holder directly
+// but still might be useful for client code.
 namespace polymorphic_holder_utils
 {
     namespace detail
@@ -134,92 +191,113 @@ namespace polymorphic_holder_utils
         static constexpr size_t value = detail::ctm::_max<size_t, alignof(Ts)...>::value;
     };
 
+    // "Returns" common max_size and max_alignment for all argument types.
     template<typename... Ts>
     struct type_traits
     {
         static constexpr size_t max_size = max_size_of<Ts...>::value;
         static constexpr size_t max_alignment = max_alignment_of<Ts...>::value;
     };
-}
 
-namespace polymorphic_holder_lib
-{
-    // Base interface for polymorphic_holder_moveable_only, polymorphic_holder_copyable_only
-    // and polymorphic_holder_copyable_and_moveable.
-    class i_moveable
-    {
-    public:
-        // Move-constructs a derived object at given uninitialized, properly aligned buffer.
-        virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && noexcept = 0;
-
-    protected:
-        constexpr i_moveable() noexcept = default;
-        inline ~i_moveable() noexcept { }
-    };
-
-    // Base interface for polymorphic_holder_copyable_only and polymorphic_holder_copyable_and_moveable.
-    class i_copyable
-    {
-    public:
-        // Copy-constructs a derived object at given uninitialized, properly aligned buffer.
-        virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const = 0;
-
-    protected:
-        constexpr i_copyable() noexcept = default;
-        inline ~i_copyable() noexcept { }
-    };
-}
-
-namespace polymorphic_holder_utils
-{
-    // In order to use move constructors of derived objects (which will be owned by polymorphic_holder<...> instances)
-    // from polymorphic_holder's own move operations, do the following actions:
-    //     - inherit the base class of the polymorphic hierarchy from polymorphic_holder_utils::moveable_only;
-    //     - implement its member function in every derived class that will be used with polymorphic_holder<...>
-    //       (the POLYMORPHIC_HOLDER_MOVEABLE_ONLY macro is recommended for providing a typical implementation).
-    class moveable_only : public polymorphic_holder_lib::i_moveable
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_ONLY macro
+    // to allow polymorphic_holder objects to use the nothrow move constructors
+    // of those derived objects. Copying will not be allowed.
+    class nothrow_moveable_only : public polymorphic_holder_lib::i_nothrow_moveable
     {
     public:
         void copy_construct_at(unsigned char *, size_t) const = delete;
 
     protected:
-        constexpr moveable_only() noexcept = default;
-        inline ~moveable_only() noexcept {}
+        constexpr nothrow_moveable_only() noexcept = default;
+        inline ~nothrow_moveable_only() noexcept { }
     };
 
-    // In order to use copy constructors of derived objects (which will be owned by polymorphic_holder<...> instances)
-    // from polymorphic_holder's own move and copy operations, do the following actions:
-    //     - inherit the base class of the polymorphic hierarchy from the polymorphic_holder_utils::copyable_only interface;
-    //     - implement its member function in every derived class that will be used with polymorphic_holder<...>
-    //       (the POLYMORPHIC_HOLDER_COPYABLE_ONLY macro is recommended for providing a typical implementation).
-    class copyable_only : public polymorphic_holder_lib::i_copyable
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_THROWING_MOVEABLE_ONLY macro
+    // to allow polymorphic_holder objects to use the throwing move constructors
+    // of those derived objects. Copying will not be allowed.
+    class throwing_moveable_only : public polymorphic_holder_lib::i_throwing_moveable
+    {
+    public:
+        void copy_construct_at(unsigned char *, size_t) const = delete;
+
+    protected:
+        constexpr throwing_moveable_only() noexcept = default;
+        inline ~throwing_moveable_only() noexcept { }
+    };
+
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_NOTHROW_COPYABLE_ONLY macro
+    // to allow polymorphic_holder objects to use the nothrow copy constructors
+    // of those derived objects.
+    class nothrow_copyable_only : public polymorphic_holder_lib::i_nothrow_copyable
     {
     public:
         void move_construct_at(unsigned char *, size_t) && = delete;
 
     protected:
-        constexpr copyable_only() noexcept = default;
-        inline ~copyable_only() noexcept {}
+        constexpr nothrow_copyable_only() noexcept = default;
+        inline ~nothrow_copyable_only() noexcept { }
     };
 
-    // In order to use move and copy constructors of derived objects (which will be owned by polymorphic_holder<...> instances)
-    // from polymorphic_holder's own move/copy operations, do the following actions:
-    //     - inherit the base class of the polymorphic hierarchy from the polymorphic_holder_copyable_and_moveable interface;
-    //     - implement both of its member functions in every derived class that will be used with polymorphic_holder<...>
-    //       (the POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE macro is recommended for providing typical implementations).
-    class copyable_and_moveable : public polymorphic_holder_lib::i_moveable, public polymorphic_holder_lib::i_copyable
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_THROWING_COPYABLE_ONLY macro
+    // to allow polymorphic_holder objects to use the throwing copy constructors
+    // of those derived objects.
+    class throwing_copyable_only : public polymorphic_holder_lib::i_throwing_copyable
+    {
+    public:
+        void move_construct_at(unsigned char *, size_t) && = delete;
+
+    protected:
+        constexpr throwing_copyable_only() noexcept = default;
+        inline ~throwing_copyable_only() noexcept { }
+    };
+
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_NOTHROW_COPYABLE macro
+    // to allow polymorphic_holder objects to use the nothrow copy constructors and nothrow move constructors
+    // of those derived objects.
+    class nothrow_moveable_and_nothrow_copyable : public polymorphic_holder_lib::i_nothrow_moveable, public polymorphic_holder_lib::i_nothrow_copyable
     {
     protected:
-        constexpr copyable_and_moveable() noexcept = default;
-        inline ~copyable_and_moveable() noexcept {}
+        constexpr nothrow_moveable_and_nothrow_copyable() noexcept = default;
+        inline ~nothrow_moveable_and_nothrow_copyable() noexcept { }
+    };
+
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE macro
+    // to allow polymorphic_holder objects to use the throwing copy constructors and nothrow move constructors
+    // of those derived objects.
+    class nothrow_moveable_and_throwing_copyable : public polymorphic_holder_lib::i_nothrow_moveable, public polymorphic_holder_lib::i_throwing_copyable
+    {
+    protected:
+        constexpr nothrow_moveable_and_throwing_copyable() noexcept = default;
+        inline ~nothrow_moveable_and_throwing_copyable() noexcept { }
+    };
+
+    // Interface that must be inherited by the base class of a polymorphic hierarchy
+    // and implemented in each derived class via using the POLYMORPHIC_HOLDER_THROWING_MOVEABLE_AND_THROWING_COPYABLE macro
+    // to allow polymorphic_holder objects to use the throwing copy constructors and throwing move constructors
+    // of those derived objects.
+    class throwing_moveable_and_throwing_copyable : public polymorphic_holder_lib::i_throwing_moveable, public polymorphic_holder_lib::i_throwing_copyable
+    {
+    protected:
+        constexpr throwing_moveable_and_throwing_copyable() noexcept = default;
+        inline ~throwing_moveable_and_throwing_copyable() noexcept { }
     };
 }
 
-// Helper macro that shall be used inside a class definition
-// in order to provide a typical implementation of the move_construct_at() virtual function.
-#define POLYMORPHIC_HOLDER_OVERRIDE_MOVE_CONSTRUCT_AT(c) \
+// Helper macro that can be used inside a class definition
+// in order to provide a typical implementation of the move_construct_at() noexcept virtual function.
+#define POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_MOVE_CONSTRUCT_AT(c) \
     virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && noexcept override \
     { \
+        static_assert(polymorphic_holder_lib::is_base_of<polymorphic_holder_lib::i_nothrow_moveable, c>::value, \
+                      "base class of this polymorphic hierarchy must inherit from one of the \"nothrow moveable\" interfaces " \
+                      "from namespace polymorphic_holder_utils"); \
+        static_assert(noexcept(c(polymorphic_holder_lib::move(*this))), "move construction of objects of this class is required to be noexcept"); \
         POLYMORPHIC_HOLDER_ASSERT(dest_buffer_begin != nullptr); \
         POLYMORPHIC_HOLDER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_HOLDER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
@@ -227,11 +305,45 @@ namespace polymorphic_holder_utils
         ::new (dest_buffer_begin) c(polymorphic_holder_lib::move(*this)); \
     }
 
-// Helper macro that shall be used inside a class definition
-// in order to provide a typical implementation of the copy_construct_at() virtual function.
-#define POLYMORPHIC_HOLDER_OVERRIDE_COPY_CONSTRUCT_AT(c) \
+// Helper macro that can be used inside a class definition
+// in order to provide a typical implementation of the throwing move_construct_at() virtual function.
+#define POLYMORPHIC_HOLDER_OVERRIDE_THROWING_MOVE_CONSTRUCT_AT(c) \
+    virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && override \
+    { \
+        static_assert(polymorphic_holder_lib::is_base_of<polymorphic_holder_lib::i_throwing_moveable, c>::value, \
+                      "base class of this polymorphic hierarchy must inherit from one of the \"throwing moveable\" interfaces " \
+                      "from namespace polymorphic_holder_utils"); \
+        POLYMORPHIC_HOLDER_ASSERT(dest_buffer_begin != nullptr); \
+        POLYMORPHIC_HOLDER_ASSERT(sizeof(c) <= dest_buffer_size); \
+        POLYMORPHIC_HOLDER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
+        (void)dest_buffer_size; \
+        ::new (dest_buffer_begin) c(polymorphic_holder_lib::move(*this)); \
+    }
+
+// Helper macro that can be used inside a class definition
+// in order to provide a typical implementation of the copy_construct_at() noexcept virtual function.
+#define POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_COPY_CONSTRUCT_AT(c) \
+    virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const noexcept override \
+    { \
+        static_assert(polymorphic_holder_lib::is_base_of<polymorphic_holder_lib::i_nothrow_copyable, c>::value, \
+                      "base class of this polymorphic hierarchy must inherit from one of the \"nothrow copyable\" interfaces " \
+                      "from namespace polymorphic_holder_utils"); \
+        static_assert(noexcept(c(*this)), "copy construction of objects of this class is required to be noexcept"); \
+        POLYMORPHIC_HOLDER_ASSERT(dest_buffer_begin != nullptr); \
+        POLYMORPHIC_HOLDER_ASSERT(sizeof(c) <= dest_buffer_size); \
+        POLYMORPHIC_HOLDER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
+        (void)dest_buffer_size; \
+        ::new (dest_buffer_begin) c(*this); \
+    }
+
+// Helper macro that can be used inside a class definition
+// in order to provide a typical implementation of the throwing copy_construct_at() virtual function.
+#define POLYMORPHIC_HOLDER_OVERRIDE_THROWING_COPY_CONSTRUCT_AT(c) \
     virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const override \
     { \
+        static_assert(polymorphic_holder_lib::is_base_of<polymorphic_holder_lib::i_throwing_copyable, c>::value, \
+                      "base class of this polymorphic hierarchy must inherit from one of the \"throwing copyable\" interfaces " \
+                      "from namespace polymorphic_holder_utils"); \
         POLYMORPHIC_HOLDER_ASSERT(dest_buffer_begin != nullptr); \
         POLYMORPHIC_HOLDER_ASSERT(sizeof(c) <= dest_buffer_size); \
         POLYMORPHIC_HOLDER_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
@@ -241,132 +353,240 @@ namespace polymorphic_holder_utils
 
 // Helper macro that can be used inside a class definition in order to delete the copy_construct_at() function.
 #define POLYMORPHIC_HOLDER_DELETE_COPY_CONSTRUCT_AT() \
-    void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const = delete;
+    void copy_construct_at(unsigned char *, size_t) const = delete;
 
 // Helper macro that can be used inside a class definition in order to delete the move_construct_at() function.
 #define POLYMORPHIC_HOLDER_DELETE_MOVE_CONSTRUCT_AT() \
-    void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const = delete;
+    void move_construct_at(unsigned char *, size_t) && = delete;
 
-// Macro that can be used inside the definition of a derived class
-// objects of which will be owned by polymorphic_holder<...> template instances,
-// if move constructor of polymorphic_holder<...> instances
-// is reqiured to invoke move constructor of this derived class.
-// The base class of such hierarchy must inherit from polymorphic_holder_moveable_only.
-#define POLYMORPHIC_HOLDER_MOVEABLE_ONLY(c) \
-    POLYMORPHIC_HOLDER_OVERRIDE_MOVE_CONSTRUCT_AT(c) \
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move operations are reqiured to invoke the
+// noexcept move constructor of that derived class.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::nothrow_moveable_only.
+#define POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_ONLY(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_MOVE_CONSTRUCT_AT(c) \
     POLYMORPHIC_HOLDER_DELETE_COPY_CONSTRUCT_AT()
 
-// Macro that can be used inside the definition of a derived class
-// objects of which will be owned by polymorphic_holder<...> template instances,
-// if both move and copy constructors of polymorphic_holder<...> instances
-// are reqiured to invoke copy constructor of this derived class.
-// The base class of such hierarchy must inherit from polymorphic_holder_copyable_only.
-#define POLYMORPHIC_HOLDER_COPYABLE_ONLY(c) \
-    POLYMORPHIC_HOLDER_OVERRIDE_COPY_CONSTRUCT_AT(c) \
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move operations are reqiured to invoke the
+// throwing move constructor of that derived class.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::throwing_moveable_only.
+#define POLYMORPHIC_HOLDER_THROWING_MOVEABLE_ONLY(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_THROWING_MOVE_CONSTRUCT_AT(c) \
+    POLYMORPHIC_HOLDER_DELETE_COPY_CONSTRUCT_AT()
+
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move and copy operations are reqiured to invoke the
+// noexcept copy constructor of that derived class.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::nothrow_copyable_only.
+#define POLYMORPHIC_HOLDER_NOTHROW_COPYABLE_ONLY(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_COPY_CONSTRUCT_AT(c) \
     POLYMORPHIC_HOLDER_DELETE_MOVE_CONSTRUCT_AT()
 
-// Macro that can be used inside the definition of a derived class
-// objects of which will be owned by polymorphic_holder<...> template instances,
-// if move and copy constructors of polymorphic_holder<...> instances
-// are reqiured to invoke respective move/copy constructors of this derived class.
-// The base class of such hierarchy must inherit from polymorphic_holder_copyable_and_moveable.
-#define POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(c) \
-    POLYMORPHIC_HOLDER_OVERRIDE_MOVE_CONSTRUCT_AT(c) \
-    POLYMORPHIC_HOLDER_OVERRIDE_COPY_CONSTRUCT_AT(c)
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move and copy operations are reqiured to invoke the
+// throwing copy constructor of that derived class.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::throwing_copyable_only.
+#define POLYMORPHIC_HOLDER_THROWING_COPYABLE_ONLY(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_THROWING_COPY_CONSTRUCT_AT(c) \
+    POLYMORPHIC_HOLDER_DELETE_MOVE_CONSTRUCT_AT()
+
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move and copy operations are reqiured to invoke the
+// nothrow move constructor and nothrow copy constructor of that derived class, respectively.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::nothrow_moveable_and_nothrow_copyable.
+#define POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_NOTHROW_COPYABLE(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_MOVE_CONSTRUCT_AT(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_COPY_CONSTRUCT_AT(c)
+
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move and copy operations are reqiured to invoke the
+// nothrow move constructor and throwing copy constructor of that derived class, respectively.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::nothrow_moveable_and_throwing_copyable.
+#define POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_NOTHROW_MOVE_CONSTRUCT_AT(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_THROWING_COPY_CONSTRUCT_AT(c)
+
+// Macro that can be used inside definition of a derived class
+// instances of which will be owned by polymorphic_holder<...> objects
+// if polymorphic_holder's move and copy operations are reqiured to invoke the
+// throwing move constructor and throwing copy constructor of that derived class, respectively.
+// The base class of such hierarchy must inherit from polymorphic_holder_utils::throwing_moveable_and_throwing_copyable.
+#define POLYMORPHIC_HOLDER_THROWING_MOVEABLE_AND_THROWING_COPYABLE(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_THROWING_MOVE_CONSTRUCT_AT(c) \
+    POLYMORPHIC_HOLDER_OVERRIDE_THROWING_COPY_CONSTRUCT_AT(c)
 
 namespace polymorphic_holder_lib
 {
     template<class BitwiseCopyablePolymorphicHolder>
-    inline void copy_as_bytes(BitwiseCopyablePolymorphicHolder & dest, const BitwiseCopyablePolymorphicHolder & src)
+    inline void copy_as_bytes(BitwiseCopyablePolymorphicHolder & dest, const BitwiseCopyablePolymorphicHolder & src) noexcept
     {
         static_assert(sizeof(dest) >= BitwiseCopyablePolymorphicHolder::max_object_size, "");
         polymorphic_holder_lib::memcpy_s(static_cast<void *>(&dest), sizeof(dest), static_cast<const void *>(&src), sizeof(src));
     }
 
     template<class PolymorphicHolder>
-    inline void set_bytes_to_zero(PolymorphicHolder & dest)
+    inline void set_bytes_to_zero(PolymorphicHolder & dest) noexcept
     {
         static_assert(sizeof(dest) >= PolymorphicHolder::max_object_size, "");
         polymorphic_holder_lib::memset(static_cast<void *>(&dest), 0, sizeof(dest));
     }
 
+    // Guard that will be used inside a code block where throwing construction takes place.
+    // If an exception is thrown during construction
+    // before guard's set_constructed() member function was invoked
+    // its destructor will fill PolymorphicHolder's bytes with zeroes
+    // in order to prevent it from remaining partially constructed.
     template<class PolymorphicHolder>
-    inline void move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept
+    class scoped_throwing_construction_guard
     {
-        i_moveable * p = static_cast<i_moveable *>(src.object_ptr_safe());
+    private:
+        PolymorphicHolder & _ref_polymorphic_holder;
+        bool _is_constructed;
+
+    public:
+        inline explicit scoped_throwing_construction_guard(PolymorphicHolder & ref_polymorphic_holder) noexcept
+            : _ref_polymorphic_holder(ref_polymorphic_holder), _is_constructed(false)
+        {
+        }
+
+        scoped_throwing_construction_guard              (const scoped_throwing_construction_guard &) = delete;
+        scoped_throwing_construction_guard & operator = (const scoped_throwing_construction_guard &) = delete;
+        scoped_throwing_construction_guard              (scoped_throwing_construction_guard &&)      = delete;
+        scoped_throwing_construction_guard & operator = (scoped_throwing_construction_guard &&)      = delete;
+
+        // Invoke this function when throwing construction has successfully been finished
+        // to disable the guard.
+        inline void set_constructed() noexcept
+        {
+            POLYMORPHIC_HOLDER_ASSERT(_is_constructed == false);
+            _is_constructed = true;
+        }
+
+        inline ~scoped_throwing_construction_guard()
+        {
+            if (!_is_constructed) {
+                polymorphic_holder_lib::set_bytes_to_zero(_ref_polymorphic_holder);
+            }
+        }
+    };
+
+    template<class PolymorphicHolder>
+    inline void nothrow_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept
+    {
+        i_nothrow_moveable * p = static_cast<i_nothrow_moveable *>(src.object_ptr_safe());
         if (p) {
-            uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
             polymorphic_holder_lib::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
             polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
         }
     }
 
     template<class PolymorphicHolder>
-    inline void copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src)
+    inline void throwing_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src)
     {
-        const i_copyable * p = static_cast<const i_copyable *>(src.object_ptr_safe());
+        i_throwing_moveable * p = static_cast<i_throwing_moveable *>(src.object_ptr_safe());
         if (p) {
+            polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
+            polymorphic_holder_lib::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            guard.set_constructed();
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
+        } else {
+            polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
+        }
+    }
+
+    template<class PolymorphicHolder>
+    inline void nothrow_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src) noexcept
+    {
+        const i_nothrow_copyable * p = static_cast<const i_nothrow_copyable *>(src.object_ptr_safe());
+        if (p) {
             p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
+        } else {
+            polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
+        }
+    }
+
+    template<class PolymorphicHolder>
+    inline void throwing_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src)
+    {
+        const i_throwing_copyable * p = static_cast<const i_throwing_copyable *>(src.object_ptr_safe());
+        if (p) {
+            polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
+            p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            guard.set_constructed();
+            uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
             polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
         }
     }
 }
 
-// Auxiliary macro for mixins.
-#define POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(c) \
-    inline c() noexcept { } \
-    inline c(const c &) noexcept { } \
-    inline c & operator = (const c &) noexcept { return *this; } \
-    inline c(c &&) noexcept { } \
-    inline c & operator = (c &&) noexcept { return *this; } \
-    inline ~c() noexcept { }
-
 // Namespace for polymorphic_holder's Moving/Copying Policies.
+//
 // These policies specify how a polymorphic_holder should move and - if supported - copy its contents.
+// A Moving/Copying Policy will be inherited by polymorphic_holder<...> implementation.
 //
 // Move-only policies must provide a member function
-//     void MCP_move_construct_from(polymorphic_holder &&) noexcept
-// to polymorphic_holder<...> template instance.
+//     void MCP_move_construct_from(polymorphic_holder &&)
+// to polymorphic_holder<...> template instances.
 //
 // Policies that support both moving and copying must provide both
-//     void MCP_move_construct_from(polymorphic_holder &&) noexcept
+//     void MCP_move_construct_from(polymorphic_holder &&)
 // and
 //     void MCP_copy_construct_from(const polymorphic_holder &)
 // to polymorphic_holder.
+//
+// Also, each Moving/Copying Policy must provide static boolean constants
+// MCP_is_nothrow_move_constructible and MCP_is_nothrow_copy_constructible
+// that will tell whether the respective construction functions are noexcept.
+//
+// The MCP_move_construct_from() function will be used by polymorphic_holder's
+// move constructor and move assignment operator, while MCP_copy_construct_from() will be used
+// by polymorphic_holder's copy constructor and copy assignment operator.
+// These functions are marked as noexcept where possible, but in some policies they still might throw.
 namespace polymorphic_holder_MCP
 {
-    // Implements moving of polymorphic_holder<...> instances as if they were POD
-    // (despite they are not, so be careful).
-    // Move-constructing from a polymorphic_holder that uses this policy also sets
-    // all of the polymorphic_holder's bits to zero.
+    // Implements moving of polymorphic_holder<...> instances as if they were POD.
+    // Move-constructing from a polymorphic_holder which uses this policy also sets all of its bits to zero.
     // Does not allow copying.
     template<class PolymorphicHolderSelf>
     class bitwise_exclusive_move
     {
-    public:
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
         {
             polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
             polymorphic_holder_lib::set_bytes_to_zero(other);
         }
 
-        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other) = delete;
+        void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
 
-    protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_exclusive_move)
+        constexpr bitwise_exclusive_move() noexcept = default;
+        inline ~bitwise_exclusive_move() noexcept { }
     };
 
-    // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD
-    // (despite they are not, so be careful).
+    // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD.
     // Bits of moved-from objects are not modified, moving and copying is essentially
     // the same operation with this policy.
     template<class PolymorphicHolderSelf>
     class bitwise_copying
     {
-    public:
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = true;
+
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
         {
             polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
@@ -377,19 +597,20 @@ namespace polymorphic_holder_MCP
             polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
         }
 
-    protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_copying)
+        constexpr bitwise_copying() noexcept = default;
+        inline ~bitwise_copying() noexcept { }
     };
 
-    // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD
-    // (despite they are not, so be careful).
-    // Move-constructing from a polymorphic_holder that uses this policy also sets
-    // all of the polymorphic_holder's bits to zero.
-    // Copy-constructing is supported as well. As expected, it leaves bits of the source object unchanged.
+    // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD.
+    // Move-constructing from a polymorphic_holder which uses this policy also sets all of its bits to zero.
+    // Copy-constructing is supported as well; it leaves bits of the source object unchanged.
     template<class PolymorphicHolderSelf>
     class bitwise_copy_and_exclusive_move
     {
-    public:
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = true;
+
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
         {
             polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
@@ -401,42 +622,83 @@ namespace polymorphic_holder_MCP
             polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
         }
 
-    protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bitwise_copy_and_exclusive_move)
+        constexpr bitwise_copy_and_exclusive_move() noexcept = default;
+        inline ~bitwise_copy_and_exclusive_move() noexcept { }
     };
 
-    // Implements moving of polymorphic_holder<...> instances using the "virtual move constructor" provided by
-    //     - inheriting the base class of the hierarchy from the polymorphic_holder_moveable_only interface
+    // Implements moving of polymorphic_holder<...> instances
+    // using the noexcept "virtual move constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::nothrow_moveable_only
     // and
-    //     - adding the POLYMORPHIC_HOLDER_MOVEABLE_ONLY(DerivedType) macro to all of derived classes' definitions.
+    //     - adding the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_ONLY(DerivedType) macro
+    //       to all of derived classes' definitions.
     // Does not allow copying.
     template<class PolymorphicHolderSelf>
-    class virtual_move_constructor_only
+    class nothrow_moveable_only
     {
-    public:
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
         {
-            polymorphic_holder_lib::move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
+            polymorphic_holder_lib::nothrow_move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
         }
 
-        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other) = delete;
+        void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
 
-    protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(virtual_move_constructor_only)
+        constexpr nothrow_moveable_only() noexcept = default;
+        inline ~nothrow_moveable_only() noexcept { }
     };
 
-    // Implements copying of polymorphic_holder<...> instances using the "virtual copy constructor" provided by
-    //     - inheriting the base class of the hierarchy from the polymorphic_holder_copyable_only interface
+    // Implements moving of polymorphic_holder<...> instances
+    // using the throwing "virtual move constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::throwing_moveable_only
     // and
-    //     - adding the POLYMORPHIC_HOLDER_COPYABLE_ONLY(DerivedType) macro to all of derived classes' definitions.
-    // Moving is expressed through copy operations as well.
+    //     - adding the POLYMORPHIC_HOLDER_THROWING_MOVEABLE_ONLY(DerivedType) macro
+    //       to all of derived classes' definitions.
+    // Does not allow copying.
     template<class PolymorphicHolderSelf>
-    class virtual_copy_constructor_only
+    class throwing_moveable_only
     {
-    public:
-        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other)
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = false;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
+        inline void MCP_move_construct_from(PolymorphicHolderSelf && other)
         {
-            polymorphic_holder_lib::copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
+            polymorphic_holder_lib::throwing_move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
+        }
+
+        void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
+
+        constexpr throwing_moveable_only() noexcept = default;
+        inline ~throwing_moveable_only() noexcept { }
+    };
+
+    // Implements copying of polymorphic_holder<...> instances
+    // using the noexcept "virtual copy constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::nothrow_copyable_only
+    // and
+    //     - adding the POLYMORPHIC_HOLDER_NOTHROW_COPYABLE_ONLY(DerivedType) macro
+    //       to all of derived classes' definitions.
+    // Moving is the same operation as copying.
+    template<class PolymorphicHolderSelf>
+    class nothrow_copyable_only
+    {
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = true;
+
+        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other) noexcept
+        {
+            polymorphic_holder_lib::nothrow_copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
         }
 
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
@@ -444,41 +706,132 @@ namespace polymorphic_holder_MCP
             this->MCP_copy_construct_from(other);
         }
 
+        constexpr nothrow_copyable_only() noexcept = default;
+        inline ~nothrow_copyable_only() noexcept { }
+    };
+
+    // Implements copying of polymorphic_holder<...> instances
+    // using the throwing "virtual copy constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::throwing_copyable_only
+    // and
+    //     - adding the POLYMORPHIC_HOLDER_THROWING_COPYABLE_ONLY(DerivedType) macro
+    //       to all of derived classes' definitions.
+    // Moving is the same operation as copying.
+    template<class PolymorphicHolderSelf>
+    class throwing_copyable_only
+    {
     protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(virtual_copy_constructor_only)
+        static constexpr bool MCP_is_nothrow_move_constructible = false;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
+        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other)
+        {
+            polymorphic_holder_lib::throwing_copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
+        }
+
+        inline void MCP_move_construct_from(PolymorphicHolderSelf && other)
+        {
+            this->MCP_copy_construct_from(other);
+        }
+
+        constexpr throwing_copyable_only() noexcept = default;
+        inline ~throwing_copyable_only() noexcept { }
     };
 
     // Implements both moving and copying of polymorphic_holder<...> instances
-    // using the "virtual move constructor" and "virtual copy constructor" provided by
-    //     - inheriting the base class of the hierarchy from the polymorphic_holder_copyable_only
-    //       or polymorphic_holder_copyable_and_moveable interface
+    // using the noexcept "virtual move constructor" and noexcept "virtual copy constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::nothrow_moveable_and_nothrow_copyable
     // and
-    //     - adding the POLYMORPHIC_HOLDER_COPYABLE_ONLY(DerivedType)
-    //       or POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(DerivedType) macro
+    //     - adding the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_NOTHROW_COPYABLE(DerivedType) macro
     //       to all of derived classes' definitions.
     template<class PolymorphicHolderSelf>
-    class virtual_constructors
+    class nothrow_moveable_and_nothrow_copyable
     {
-    public:
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = true;
+
         inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
         {
-            polymorphic_holder_lib::move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
+            polymorphic_holder_lib::nothrow_move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
+        }
+
+        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other) noexcept
+        {
+            polymorphic_holder_lib::nothrow_copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
+        }
+
+        constexpr nothrow_moveable_and_nothrow_copyable() noexcept = default;
+        inline ~nothrow_moveable_and_nothrow_copyable() noexcept { }
+    };
+
+    // Implements both moving and copying of polymorphic_holder<...> instances
+    // using the noexcept "virtual move constructor" and throwing "virtual copy constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::nothrow_moveable_and_throwing_copyable
+    // and
+    //     - adding the POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(DerivedType) macro
+    //       to all of derived classes' definitions.
+    template<class PolymorphicHolderSelf>
+    class nothrow_moveable_and_throwing_copyable
+    {
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = true;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
+        inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
+        {
+            polymorphic_holder_lib::nothrow_move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
         }
 
         inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other)
         {
-            polymorphic_holder_lib::copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
+            polymorphic_holder_lib::throwing_copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
         }
 
+        constexpr nothrow_moveable_and_throwing_copyable() noexcept = default;
+        inline ~nothrow_moveable_and_throwing_copyable() noexcept { }
+    };
+
+    // Implements both moving and copying of polymorphic_holder<...> instances
+    // using the throwing "virtual move constructor" and throwing "virtual copy constructor"
+    // provided by
+    //     - inheriting the base class of a polymorphic hierarchy from
+    //       polymorphic_holder_utils::throwing_moveable_and_throwing_copyable
+    // and
+    //     - adding the POLYMORPHIC_HOLDER_THROWING_MOVEABLE_AND_THROWING_COPYABLE(DerivedType) macro
+    //       to all of derived classes' definitions.
+    template<class PolymorphicHolderSelf>
+    class throwing_moveable_and_throwing_copyable
+    {
     protected:
-        POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(virtual_constructors)
+        static constexpr bool MCP_is_nothrow_move_constructible = false;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
+        inline void MCP_move_construct_from(PolymorphicHolderSelf && other)
+        {
+            polymorphic_holder_lib::throwing_move_construct(static_cast<PolymorphicHolderSelf &>(*this), polymorphic_holder_lib::move(other));
+        }
+
+        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other)
+        {
+            polymorphic_holder_lib::throwing_copy_construct(static_cast<PolymorphicHolderSelf &>(*this), other);
+        }
+
+        constexpr throwing_moveable_and_throwing_copyable() noexcept = default;
+        inline ~throwing_moveable_and_throwing_copyable() noexcept { }
     };
 }
 
 // Namespace for polymorphic_holder's Data Representation Policies.
 //
 // A Data Representation Policy will be inherited by polymorphic_holder<...> implementation.
-// It must implement the following "interface":
+// It must comply with the following template:
 //
 // (pseudocode)
 // template<size_t MaxObjectSize, size_t ObjectAlignment>
@@ -492,9 +845,9 @@ namespace polymorphic_holder_MCP
 // };
 //
 // The DRP_object_bytes field must be a properly aligned bytes' array of required size on which
-// the derived objects owned by polymorphic_holder<...> will be constructed.
+// the derived objects owned by polymorphic_holder will be constructed.
 //
-// The DRP_offset_to_base() and DRP_set_offset_to_base() functions will be used as a setter and a getter
+// The DRP_offset_to_base() and DRP_set_offset_to_base() functions will be used to get/set value
 // of the offset between the first byte of the currently stored derived class instance
 // and the first byte of its base class subobject.
 namespace polymorphic_holder_DRP
@@ -519,7 +872,7 @@ namespace polymorphic_holder_DRP
     //     template<typename OffsetType>
     //     class offset_before_bytes_typed
     // define similar nested ...::implementation templates.
-    namespace _implementation
+    namespace detail
     {
         // Implementation of the bytes_array_only policy.
         template<size_t MaxObjectSize, size_t ObjectAlignment>
@@ -544,7 +897,12 @@ namespace polymorphic_holder_DRP
             }
 
         protected:
-            POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(bytes_array_only_impl)
+            constexpr bytes_array_only_impl() noexcept                                         = default;
+            inline bytes_array_only_impl(const bytes_array_only_impl &) noexcept               { }
+            inline bytes_array_only_impl & operator = (const bytes_array_only_impl &) noexcept { return *this; }
+            inline bytes_array_only_impl(bytes_array_only_impl &&) noexcept                    { }
+            inline bytes_array_only_impl & operator = (bytes_array_only_impl &&) noexcept      { return *this; }
+            inline ~bytes_array_only_impl() noexcept                                           { }
         };
 
         // Implementation of the offset_before_bytes and offset_before_bytes_typed<...> policies.
@@ -576,7 +934,12 @@ namespace polymorphic_holder_DRP
             }
 
         protected:
-            POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(offset_before_bytes_impl)
+            constexpr offset_before_bytes_impl() noexcept                                            = default;
+            inline offset_before_bytes_impl(const offset_before_bytes_impl &) noexcept               { }
+            inline offset_before_bytes_impl & operator = (const offset_before_bytes_impl &) noexcept { return *this; }
+            inline offset_before_bytes_impl(offset_before_bytes_impl &&) noexcept                    { }
+            inline offset_before_bytes_impl & operator = (offset_before_bytes_impl &&) noexcept      { return *this; }
+            inline ~offset_before_bytes_impl() noexcept                                              { }
         };
 
         // Implementation of the offset_after_bytes and offset_after_bytes_typed<...> policies.
@@ -608,7 +971,12 @@ namespace polymorphic_holder_DRP
             }
 
         protected:
-            POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS(offset_after_bytes_impl)
+            constexpr offset_after_bytes_impl() noexcept                                           = default;
+            inline offset_after_bytes_impl(const offset_after_bytes_impl &) noexcept               { }
+            inline offset_after_bytes_impl & operator = (const offset_after_bytes_impl &) noexcept { return *this; }
+            inline offset_after_bytes_impl(offset_after_bytes_impl &&) noexcept                    { }
+            inline offset_after_bytes_impl & operator = (offset_after_bytes_impl &&) noexcept      { return *this; }
+            inline ~offset_after_bytes_impl() noexcept                                             { }
         };
     }
 
@@ -618,7 +986,7 @@ namespace polymorphic_holder_DRP
     {
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
-        using implementation = _implementation::bytes_array_only_impl<MaxObjectSize, ObjectAlignment>;
+        using implementation = detail::bytes_array_only_impl<MaxObjectSize, ObjectAlignment>;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -630,9 +998,8 @@ namespace polymorphic_holder_DRP
     {
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
-        using implementation = _implementation::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
+        using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
     };
-
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
     // before an aligned array of bytes.
@@ -644,7 +1011,7 @@ namespace polymorphic_holder_DRP
     {
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
-        using implementation = _implementation::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
+        using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -656,7 +1023,7 @@ namespace polymorphic_holder_DRP
     {
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
-        using implementation = _implementation::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
+        using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -669,11 +1036,21 @@ namespace polymorphic_holder_DRP
     {
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
-        using implementation = _implementation::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
+        using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
     };
 }
 
-// Holder that stores one object of any type that is derived from BaseType (may also be BaseType itself),
+namespace polymorphic_holder_lib
+{
+    struct nothrow_tag { };
+    struct throwing_tag { };
+
+    template<bool nothrow_flag> struct get_noexcept_specification_tag;
+    template<>                  struct get_noexcept_specification_tag<true>  { using result = polymorphic_holder_lib::nothrow_tag; };
+    template<>                  struct get_noexcept_specification_tag<false> { using result = polymorphic_holder_lib::throwing_tag; };
+}
+
+// Holder that stores one object of any type derived from BaseType (may also be BaseType itself),
 // provided that its size and alignment meet given MaxObjectSize and ObjectAlignment requirements.
 //
 // Allows the user to work with these objects via pointers/references to BaseType polymorphically
@@ -684,7 +1061,7 @@ namespace polymorphic_holder_DRP
 //
 // Virtual inheritance is not supported! But that's no big deal since nobody uses it anyway, right? ;)
 template<class BaseType, size_t MaxObjectSize, size_t ObjectAlignment,
-         template<class> class MovingCopyingPolicy = polymorphic_holder_MCP::virtual_constructors,
+         template<class> class MovingCopyingPolicy = polymorphic_holder_MCP::nothrow_moveable_and_throwing_copyable,
          class DataRepresentationPolicy = polymorphic_holder_DRP::offset_before_bytes>
 class polymorphic_holder
     : private MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>
@@ -692,14 +1069,15 @@ class polymorphic_holder
 {
     static_assert(polymorphic_holder_lib::is_polymorphic<BaseType>::value, "base type must be polymorphic");
 
-    template<class PolymorphicHolder> friend void polymorphic_holder_lib::move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept;
-    template<class PolymorphicHolder> friend void polymorphic_holder_lib::copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src);
+    template<class PolymorphicHolder> friend void polymorphic_holder_lib::nothrow_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept;
+    template<class PolymorphicHolder> friend void polymorphic_holder_lib::throwing_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src);
+    template<class PolymorphicHolder> friend void polymorphic_holder_lib::nothrow_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src) noexcept;
+    template<class PolymorphicHolder> friend void polymorphic_holder_lib::throwing_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src);
 
     friend class MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
     friend typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
 
-    using MCP_mixin = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
-    using DRP_mixin = typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
+    using _mcp_type = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
 
 public:
     using base_type = BaseType;
@@ -741,38 +1119,57 @@ public:
 
 private:
     template<class DesiredType, typename... CtorArgs>
-    inline void impl_construct(CtorArgs&&... args)
+    inline void _impl_construct(polymorphic_holder_lib::throwing_tag, CtorArgs&&... args)
     {
         static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
         static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
         static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this holder");
 
+        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
+        polymorphic_holder_lib::scoped_throwing_construction_guard<polymorphic_holder> guard(*this);
+        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        guard.set_constructed();
+
         const DesiredType *const test_ptr_d = reinterpret_cast<const DesiredType *>(uintptr_t(-1) / 2);
         const base_type *const test_ptr_b = static_cast<const base_type *>(test_ptr_d);
         const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
+        this->DRP_set_offset_to_base(offset);
+    }
 
-        polymorphic_holder other;
-        other.DRP_set_offset_to_base(offset);
-        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(other.object_bytes_begin()) % object_alignment == 0);
+    template<class DesiredType, typename... CtorArgs>
+    inline void _impl_construct(polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args) noexcept
+    {
+        static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
+        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
+        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this holder");
+
+        static_assert(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)), "nothrow construction excepted");
         POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
-        ::new (other.object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
 
-        *this = polymorphic_holder_lib::move(other);
+        const DesiredType *const test_ptr_d = reinterpret_cast<const DesiredType *>(uintptr_t(-1) / 2);
+        const base_type *const test_ptr_b = static_cast<const base_type *>(test_ptr_d);
+        const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
+        this->DRP_set_offset_to_base(offset);
     }
 
 public:
     template<class DesiredType, typename... CtorArgs>
-    inline void construct(CtorArgs&&... args)
+    inline void construct(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
     {
         POLYMORPHIC_HOLDER_ASSERT(!this->is_constructed());
-        this->impl_construct<DesiredType>(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
+        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
+        this->_impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
     }
 
     template<class DesiredType, typename... CtorArgs>
-    inline static polymorphic_holder make(CtorArgs&&... args)
+    inline static polymorphic_holder make(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)) && _mcp_type::MCP_is_nothrow_move_constructible)
     {
         polymorphic_holder tmp;
-        tmp.construct<DesiredType>(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
+        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
+        tmp._impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
         return tmp;
     }
 
@@ -783,18 +1180,14 @@ private:
         this->object_ptr_unsafe()->~base_type();
     }
 
+    inline void destroy_object_safe() noexcept
+    {
+        if (this->is_constructed()) {
+            this->destroy_object_unsafe();
+        }
+    }
+
 public:
-    template<class DesiredType, typename... CtorArgs>
-    inline void reset(CtorArgs&&... args)
-    {
-        this->impl_construct<DesiredType>(polymorphic_holder_lib::forward<CtorArgs>(args)...);
-    }
-
-    inline void reset() noexcept
-    {
-        this->clear();
-    }
-
     inline void clear() noexcept
     {
         if (this->is_constructed()) {
@@ -803,50 +1196,101 @@ public:
         }
     }
 
+    template<class DesiredType, typename... CtorArgs>
+    inline void reset(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
+    {
+        this->destroy_object_safe();
+        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
+        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
+        this->_impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
+    }
+
+    inline void reset() noexcept
+    {
+        this->clear();
+    }
+
 public:
     inline polymorphic_holder() noexcept
     {
         polymorphic_holder_lib::set_bytes_to_zero(*this);
     }
 
-    inline polymorphic_holder(polymorphic_holder && other) noexcept
+    inline polymorphic_holder(polymorphic_holder && other) noexcept(_mcp_type::MCP_is_nothrow_move_constructible)
     {
+        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == _mcp_type::MCP_is_nothrow_move_constructible, "");
         this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
     }
 
-    inline polymorphic_holder(const polymorphic_holder & other)
+    inline polymorphic_holder(const polymorphic_holder & other) noexcept(_mcp_type::MCP_is_nothrow_copy_constructible)
     {
+        static_assert(noexcept(this->MCP_copy_construct_from(other)) == _mcp_type::MCP_is_nothrow_copy_constructible, "");
         this->MCP_copy_construct_from(other);
-    }
-
-    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept
-    {
-        if (this->is_constructed()) {
-            this->destroy_object_unsafe();
-        }
-        this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
-        return *this;
-    }
-
-    inline polymorphic_holder & operator = (const polymorphic_holder & other)
-    {
-        polymorphic_holder temp(other);
-        *this = polymorphic_holder_lib::move(temp);
-        return *this;
     }
 
     inline ~polymorphic_holder() noexcept
     {
-        if (this->is_constructed()) {
-            this->destroy_object_unsafe();
-        }
+        this->destroy_object_safe();
+    }
+
+    // If move construction cannot throw, move assignment operator gives
+    // no-throw guarantee as well.
+    // If move construction may throw, only basic guarantee can be given:
+    // the destination object (*this) will be left empty in case of exception,
+    // its previous contents will be destroyed.
+    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept(_mcp_type::MCP_is_nothrow_move_constructible)
+    {
+        this->destroy_object_safe();
+        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == _mcp_type::MCP_is_nothrow_move_constructible, "");
+        this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
+        return *this;
+    }
+
+private:
+    // Copy construction may not throw, so we can simply destroy the old object
+    // and construct a new one inplace with no-throw guarantee.
+    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::nothrow_tag, polymorphic_holder_lib::nothrow_tag) noexcept
+    {
+        this->destroy_object_safe();
+        static_assert(noexcept(this->MCP_copy_construct_from(other)), "");
+        this->MCP_copy_construct_from(other);
+    }
+
+    // Copy construction may throw but move assignment cannot,
+    // so we create a temporary copy of other object and move-assign it to *this,
+    // thus guaranteeing strong exception safety.
+    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::nothrow_tag)
+    {
+        polymorphic_holder temp(other);
+        static_assert(noexcept(*this = polymorphic_holder_lib::move(temp)), "");
+        *this = polymorphic_holder_lib::move(temp);
+    }
+
+    // In the worst case, when even move construction may throw, we can give only basic guarantee:
+    // if copy construction fails, the destination object (*this) will be left empty.
+    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::throwing_tag)
+    {
+        this->destroy_object_safe();
+        this->MCP_copy_construct_from(other);
+    }
+
+public:
+    inline polymorphic_holder & operator = (const polymorphic_holder & other) noexcept(_mcp_type::MCP_is_nothrow_copy_constructible)
+    {
+        using copy_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<_mcp_type::MCP_is_nothrow_copy_constructible>::result;
+        using move_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<_mcp_type::MCP_is_nothrow_move_constructible>::result;
+        static_assert(noexcept(this->_impl_copy_assign(other, copy_tag(), move_tag())) == _mcp_type::MCP_is_nothrow_copy_constructible, "");
+        this->_impl_copy_assign(other, copy_tag(), move_tag());
+        return *this;
     }
 };
 
-#undef POLYMORPHIC_HOLDER_DEFINE_EMPTY_SPECIAL_MEMBER_FUNCTIONS
-
 #if defined(_MSC_VER) && !defined(__clang__)
 #   pragma warning( pop )
+#endif
+
+#if defined(_MSC_VER) || defined(__clang__) || defined(__GNUG__)
+#   undef POLYMORPHIC_HOLDER_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
 #endif
 
 #endif // POLYMORPHIC_HOLDER_HPP_INCLUDED

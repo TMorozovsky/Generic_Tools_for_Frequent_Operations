@@ -15,7 +15,7 @@ public:
         std::printf("OurOwnDerivedWidget\n");
     }
 
-    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(OurOwnDerivedWidget)
+    POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(OurOwnDerivedWidget)
 };
 
 static int test()

@@ -19,7 +19,7 @@ public:
         std::printf("SquareWidget [%d * %d] at (%d, %d)\n", _size, _size, _x, _y);
     }
 
-    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(SquareWidget)
+    POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(SquareWidget)
 };
 
 class RectangleWidget : public Widget
@@ -38,7 +38,7 @@ public:
         std::printf("RectangleWidget [%d * %d] at (%d, %d)\n", _w, _h, _x, _y);
     }
 
-    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(RectangleWidget)
+    POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(RectangleWidget)
 };
 
 class AnotherBaseWhichMakesOffsetNotNull
@@ -70,7 +70,7 @@ public:
         std::printf("WeirdWidget (%.12s)\n", _info.c_str());
     }
 
-    POLYMORPHIC_HOLDER_COPYABLE_AND_MOVEABLE(WeirdWidget)
+    POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(WeirdWidget)
 };
 
 void make_specific_widget(const char * keyword, widget_holder & dest)

@@ -39,7 +39,6 @@
     <ClInclude Include="testing\test_hierarchy_with_virtual_constructors.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="testing\testing_common.cpp" />
     <ClCompile Include="testing\test_hierarchy_with_virtual_constructors__derived_classes.cpp" />
     <ClCompile Include="testing\test_hierarchy_with_virtual_constructors__wrapper_usage.cpp" />
   </ItemGroup>

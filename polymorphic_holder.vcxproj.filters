@@ -18,8 +18,5 @@
     <ClCompile Include="testing\test_hierarchy_with_virtual_constructors__wrapper_usage.cpp">
       <Filter>testing</Filter>
     </ClCompile>
-    <ClCompile Include="testing\testing_common.cpp">
-      <Filter>testing</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
