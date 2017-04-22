@@ -1048,6 +1048,21 @@ namespace polymorphic_holder_lib
     template<bool nothrow_flag> struct get_noexcept_specification_tag;
     template<>                  struct get_noexcept_specification_tag<true>  { using result = polymorphic_holder_lib::nothrow_tag; };
     template<>                  struct get_noexcept_specification_tag<false> { using result = polymorphic_holder_lib::throwing_tag; };
+
+    template<class BaseType, class DerivedType>
+    inline size_t get_offset_to_base_from_derived() noexcept
+    {
+        static_assert(polymorphic_holder_lib::is_base_of<BaseType, DerivedType>::value, "invalid base and derived types");
+
+        using derived_type_ptr = const DerivedType *;
+        using base_type_ptr = const BaseType *;
+
+        const derived_type_ptr test_ptr_d = reinterpret_cast<derived_type_ptr>(uintptr_t(-1) / 2);
+        const base_type_ptr test_ptr_b = static_cast<base_type_ptr>(test_ptr_d);
+        const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
+
+        return offset;
+    }
 }
 
 // Holder that stores one object of any type derived from BaseType (may also be BaseType itself),
@@ -1056,8 +1071,13 @@ namespace polymorphic_holder_lib
 // Allows the user to work with these objects via pointers/references to BaseType polymorphically
 // and still avoid the unwanted dynamic memory allocations.
 //
+// See namespace polymorphic_holder_MCP to choose a Moving/Copying Policy
+// that will specify how polymorphic_holder instances shall be moved and copied.
 // Be extremely careful with bitwise copying/moving if you choose them as Moving/Copying Policy,
 // since far from all classes can work correctly with this kind of operations.
+//
+// See namespace polymorphic_holder_DRP to choose a Data Representation Policy
+// that will specify how polymorphic_holder's internal state shall be stored.
 //
 // Virtual inheritance is not supported! But that's no big deal since nobody uses it anyway, right? ;)
 template<class BaseType, size_t MaxObjectSize, size_t ObjectAlignment,
@@ -1077,7 +1097,7 @@ class polymorphic_holder
     friend class MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
     friend typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
 
-    using _mcp_type = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
+    using mcp_type = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
 
 public:
     using base_type = BaseType;
@@ -1085,146 +1105,29 @@ public:
     static constexpr size_t object_alignment = ObjectAlignment;
 
 public:
-    inline bool is_constructed() const noexcept
-    {
-        for (size_t i = 0; i < max_object_size; ++i) {
-            if (this->DRP_object_bytes[i])
-                return true;
-        }
-        return false;
-    }
-
-private:
-    inline       unsigned char * object_bytes_begin()       noexcept { return &this->DRP_object_bytes[0]; }
-    inline const unsigned char * object_bytes_begin() const noexcept { return &this->DRP_object_bytes[0]; }
-
-public:
-    inline       base_type * object_ptr_unsafe()       noexcept { return reinterpret_cast<      base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
-    inline const base_type * object_ptr_unsafe() const noexcept { return reinterpret_cast<const base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
-
-    inline       base_type * object_ptr_safe()       noexcept { return this->is_constructed() ? this->object_ptr_unsafe() : nullptr; }
-    inline const base_type * object_ptr_safe() const noexcept { return this->is_constructed() ? this->object_ptr_unsafe() : nullptr; }
-
-    inline       base_type & object_ref()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->is_constructed()); return *(this->object_ptr_unsafe()); }
-    inline const base_type & object_ref() const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->is_constructed()); return *(this->object_ptr_unsafe()); }
-
     inline       base_type & operator * ()       noexcept { return this->object_ref(); }
     inline const base_type & operator * () const noexcept { return this->object_ref(); }
 
-    inline       base_type * operator -> ()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->is_constructed()); return this->object_ptr_unsafe(); }
-    inline const base_type * operator -> () const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->is_constructed()); return this->object_ptr_unsafe(); }
+    inline       base_type * operator -> ()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
+    inline const base_type * operator -> () const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
 
-    inline explicit operator bool() const noexcept { return  this->is_constructed(); }
-    inline bool     operator !   () const noexcept { return !this->is_constructed(); }
+    inline explicit operator bool() const noexcept { return  this->owns_object(); }
+    inline bool     operator !   () const noexcept { return !this->owns_object(); }
 
-private:
-    template<class DesiredType, typename... CtorArgs>
-    inline void _impl_construct(polymorphic_holder_lib::throwing_tag, CtorArgs&&... args)
-    {
-        static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
-        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
-        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this holder");
-
-        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
-        polymorphic_holder_lib::scoped_throwing_construction_guard<polymorphic_holder> guard(*this);
-        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
-        guard.set_constructed();
-
-        const DesiredType *const test_ptr_d = reinterpret_cast<const DesiredType *>(uintptr_t(-1) / 2);
-        const base_type *const test_ptr_b = static_cast<const base_type *>(test_ptr_d);
-        const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
-        this->DRP_set_offset_to_base(offset);
-    }
-
-    template<class DesiredType, typename... CtorArgs>
-    inline void _impl_construct(polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args) noexcept
-    {
-        static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
-        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
-        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this holder");
-
-        static_assert(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)), "nothrow construction excepted");
-        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
-        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
-
-        const DesiredType *const test_ptr_d = reinterpret_cast<const DesiredType *>(uintptr_t(-1) / 2);
-        const base_type *const test_ptr_b = static_cast<const base_type *>(test_ptr_d);
-        const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
-        this->DRP_set_offset_to_base(offset);
-    }
-
-public:
-    template<class DesiredType, typename... CtorArgs>
-    inline void construct(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
-    {
-        POLYMORPHIC_HOLDER_ASSERT(!this->is_constructed());
-        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
-        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
-        this->_impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
-    }
-
-    template<class DesiredType, typename... CtorArgs>
-    inline static polymorphic_holder make(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)) && _mcp_type::MCP_is_nothrow_move_constructible)
-    {
-        polymorphic_holder tmp;
-        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
-        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
-        tmp._impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
-        return tmp;
-    }
-
-private:
-    inline void destroy_object_unsafe() noexcept
-    {
-        POLYMORPHIC_HOLDER_ASSERT(this->is_constructed());
-        this->object_ptr_unsafe()->~base_type();
-    }
-
-    inline void destroy_object_safe() noexcept
-    {
-        if (this->is_constructed()) {
-            this->destroy_object_unsafe();
-        }
-    }
-
-public:
-    inline void clear() noexcept
-    {
-        if (this->is_constructed()) {
-            this->destroy_object_unsafe();
-            polymorphic_holder_lib::set_bytes_to_zero(*this);
-        }
-    }
-
-    template<class DesiredType, typename... CtorArgs>
-    inline void reset(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
-    {
-        this->destroy_object_safe();
-        static constexpr bool nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
-        using specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<nothrow_flag>::result;
-        this->_impl_construct<DesiredType>(specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
-    }
-
-    inline void reset() noexcept
-    {
-        this->clear();
-    }
-
-public:
     inline polymorphic_holder() noexcept
     {
         polymorphic_holder_lib::set_bytes_to_zero(*this);
     }
 
-    inline polymorphic_holder(polymorphic_holder && other) noexcept(_mcp_type::MCP_is_nothrow_move_constructible)
+    inline polymorphic_holder(polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
     {
-        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == _mcp_type::MCP_is_nothrow_move_constructible, "");
+        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == mcp_type::MCP_is_nothrow_move_constructible, "");
         this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
     }
 
-    inline polymorphic_holder(const polymorphic_holder & other) noexcept(_mcp_type::MCP_is_nothrow_copy_constructible)
+    inline polymorphic_holder(const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
     {
-        static_assert(noexcept(this->MCP_copy_construct_from(other)) == _mcp_type::MCP_is_nothrow_copy_constructible, "");
+        static_assert(noexcept(this->MCP_copy_construct_from(other)) == mcp_type::MCP_is_nothrow_copy_constructible, "");
         this->MCP_copy_construct_from(other);
     }
 
@@ -1233,23 +1136,227 @@ public:
         this->destroy_object_safe();
     }
 
-    // If move construction cannot throw, move assignment operator gives
-    // no-throw guarantee as well.
-    // If move construction may throw, only basic guarantee can be given:
-    // the destination object (*this) will be left empty in case of exception,
-    // its previous contents will be destroyed.
-    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept(_mcp_type::MCP_is_nothrow_move_constructible)
+    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
     {
-        this->destroy_object_safe();
-        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == _mcp_type::MCP_is_nothrow_move_constructible, "");
-        this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
+        this->assign(polymorphic_holder_lib::move(other));
         return *this;
     }
 
+    inline polymorphic_holder & operator = (const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
+    {
+        this->assign(other);
+        return *this;
+    }
+
+    // Move-assigns contents of other polymorphic_holder to *this.
+    //
+    // This effectively destroys the derived object previously stored in *this
+    // and move-constructs a new one using the move construction function provided by
+    // polymorphic_holder's Moving/Copying Policy.
+    //
+    // If move construction cannot throw, move assignment gives no-throw guarantee as well.
+    //
+    // If move construction may throw, only basic exception safety is guaranteed:
+    // the destination object (*this) will be left empty in case of exception, its previous contents will be destroyed.
+    inline void assign(polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
+    {
+        this->destroy_object_safe();
+        this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
+    }
+
+    // Copy-assigns contents of other polymorphic_holder to *this.
+    //
+    // This effectively destroys the derived object previously stored in *this
+    // and copy-constructs a new one using the copy construction function provided by
+    // polymorphic_holder's Moving/Copying Policy.
+    //
+    // If copy construction cannot throw, copy assignment gives no-throw guarantee as well.
+    //
+    // If copy construction may throw but move construction cannot,
+    // a temporary object is copy-constructed and then move-assigned to *this,
+    // thus guaranteeing strong exception safety.
+    //
+    // If both copy construction and move construction may throw, only basic guarantee is given:
+    // the destination object (*this) will be left empty in case of exception, its previous contents will be destroyed.
+    inline void assign(const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
+    {
+        using copy_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<mcp_type::MCP_is_nothrow_copy_constructible>::result;
+        using move_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<mcp_type::MCP_is_nothrow_move_constructible>::result;
+        static_assert(noexcept(this->impl_copy_assign(other, copy_tag(), move_tag())) == mcp_type::MCP_is_nothrow_copy_constructible, "");
+        this->impl_copy_assign(other, copy_tag(), move_tag());
+    }
+
+    // Constructs a new object of DesiredType that must be derived from polymorphic_holder's BaseType.
+    // sizeof(DesiredType) and alignof(DesiredType) must comply with
+    // polymorphic_holder's MaxObjectSize and ObjectAlignment.
+    //
+    // Precondition: *this polymorphic_holder object must be initially empty.
+    // If you are not sure whether a polymorphic_holder object is empty,
+    // use its reset() member function instead.
+    //
+    // May throw if and only if the required constructor of DesiredType throws. Otherwise is noexcept.
+    //
+    // If an exception is thrown during construction, *this object is guaranteed to be left in empty state.
+    template<class DesiredType, typename... CtorArgs>
+    inline void construct(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
+    {
+        POLYMORPHIC_HOLDER_ASSERT(!this->owns_object());
+        constexpr bool construction_nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
+        using construction_specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<construction_nothrow_flag>::result;
+        this->impl_construct<DesiredType>(construction_specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
+    }
+
+    // Constructs a new object of DesiredType that must be derived from polymorphic_holder's BaseType.
+    // sizeof(DesiredType) and alignof(DesiredType) must comply with
+    // polymorphic_holder's MaxObjectSize and ObjectAlignment.
+    //
+    // The old object previously owned by *this polymorphic_holder (if any) will be destroyed.
+    //
+    // If the required constructor of DesiredType cannot throw, gives no-throw guarantee.
+    //
+    // If DesiredType's constructor may throw but polymorphic_holder's move construction/assignment cannot,
+    // creates a temporary polymorphic_holder object and then move-assigns it to *this,
+    // thus guaranteeing strong exception safety.
+    //
+    // If both DesiredType's constructor and polymorphic_holder's move construction/assignment may throw,
+    // gives basic guarantee: the destination polymorphic_holder object will be left empty in case of exception,
+    // with its previous contents destroyed.
+    template<class DesiredType, typename... CtorArgs>
+    inline void reset(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)))
+    {
+        constexpr bool construction_nothrow_flag = noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...));
+        using construction_specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<construction_nothrow_flag>::result;
+        using move_specification_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<mcp_type::MCP_is_nothrow_move_constructible>::result;
+        this->impl_reset<DesiredType>(construction_specification_tag(), move_specification_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
+    }
+
+    // Same as clear().
+    inline void reset() noexcept
+    {
+        this->clear();
+    }
+
+    // Destroys the derived class' instance that was previously owned by *this polymorphic_holder (if any),
+    // leaving the polymorphic_holder in empty state.
+    inline void clear() noexcept
+    {
+        if (this->owns_object()) {
+            this->destroy_object_unsafe();
+            polymorphic_holder_lib::set_bytes_to_zero(*this);
+        }
+    }
+
+    // Creates and returns a polymorphic_holder that owns a new object of DesiredType
+    // constructed with given args.
+    //
+    // DesiredType must be derived from polymorphic_holder's BaseType.
+    // sizeof(DesiredType) and alignof(DesiredType) must comply with
+    // polymorphic_holder's MaxObjectSize and ObjectAlignment.
+    template<class DesiredType, typename... CtorArgs>
+    inline static polymorphic_holder make(CtorArgs&&... args) noexcept(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)) && mcp_type::MCP_is_nothrow_move_constructible)
+    {
+        polymorphic_holder temp;
+        temp.construct<DesiredType>(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        return temp;
+    }
+
+    // Creates and returns an empty polymorphic_holder.
+    inline static polymorphic_holder make() noexcept(mcp_type::MCP_is_nothrow_move_constructible)
+    {
+        return polymorphic_holder();
+    }
+
 private:
-    // Copy construction may not throw, so we can simply destroy the old object
+    // Checks whether an object of some type derived from BaseType
+    // is stored inside this polymorphic_holder.
+    inline bool owns_object() const noexcept
+    {
+        static_assert(sizeof(this->DRP_object_bytes) == max_object_size, "invalid size of DRP_object_bytes array");
+        for (size_t i = 0; i < max_object_size; ++i) {
+            if (this->DRP_object_bytes[i])
+                return true;
+        }
+        return false;
+    }
+
+    inline unsigned char * object_bytes_begin() noexcept { return &this->DRP_object_bytes[0]; }
+
+    inline       base_type * object_ptr_unsafe()       noexcept { return reinterpret_cast<      base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
+    inline const base_type * object_ptr_unsafe() const noexcept { return reinterpret_cast<const base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
+
+    inline       base_type * object_ptr_safe()       noexcept { return this->owns_object() ? this->object_ptr_unsafe() : nullptr; }
+    inline const base_type * object_ptr_safe() const noexcept { return this->owns_object() ? this->object_ptr_unsafe() : nullptr; }
+
+    inline       base_type & object_ref()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return *(this->object_ptr_unsafe()); }
+    inline const base_type & object_ref() const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return *(this->object_ptr_unsafe()); }
+
+    // Destroys the derived object owned by this polymorphic_holder.
+    // Precondition: such object must exist when this function is called.
+    inline void destroy_object_unsafe() noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        this->object_ptr_unsafe()->~base_type();
+    }
+
+    // Destroys the derived object owned by this polymorphic_holder.
+    // Does nothing if the polymorphic_holder is empty.
+    inline void destroy_object_safe() noexcept
+    {
+        if (this->owns_object()) {
+            this->destroy_object_unsafe();
+        }
+    }
+
+private: // impl_construct<DesiredType>(construction_specification_tag, args)
+         //
+         // Implementation of polymorphic_holder's member function construct<DesiredType>(CtorArgs&&... args).
+         // Dispatches on exception specification tag of DesiredType's constructor which takes given args pack.
+
+    // DesiredType's constructor cannot throw, so we just construct an object inplace with no-throw guarantee.
+    template<class DesiredType, typename... CtorArgs>
+    inline void impl_construct(polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args) noexcept
+    {
+        static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
+        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
+        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this polymorphic_holder");
+
+        static_assert(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)), "");
+        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
+        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+
+        const size_t offset = polymorphic_holder_lib::get_offset_to_base_from_derived<base_type, DesiredType>();
+        this->DRP_set_offset_to_base(offset);
+    }
+
+    // DesiredType's constructor may throw, so we use a scoped guard to ensure that *this object
+    // will not be left in a partially constructed state if an exception is thrown during construction.
+    template<class DesiredType, typename... CtorArgs>
+    inline void impl_construct(polymorphic_holder_lib::throwing_tag, CtorArgs&&... args)
+    {
+        static_assert(polymorphic_holder_lib::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
+        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
+        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this polymorphic_holder");
+
+        polymorphic_holder_lib::scoped_throwing_construction_guard<polymorphic_holder> guard(*this);
+        POLYMORPHIC_HOLDER_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
+        ::new (this->object_bytes_begin()) DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        guard.set_constructed();
+
+        const size_t offset = polymorphic_holder_lib::get_offset_to_base_from_derived<base_type, DesiredType>();
+        this->DRP_set_offset_to_base(offset);
+    }
+
+private: // impl_copy_assign(const polymorphic_holder & other, copy_construction_specification_tag, move_assignment_specification_tag)
+         //
+         // Implementation of polymorphic_holder's copy assignment operator.
+         // Dispatches on two exception specification tags:
+         // 1) is polymorphic_holder's copy construction noexcept?
+         // 2) is polymorphic_holder's move assignment noexcept?
+
+    // Copy construction cannot throw, so we can simply destroy the old object
     // and construct a new one inplace with no-throw guarantee.
-    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::nothrow_tag, polymorphic_holder_lib::nothrow_tag) noexcept
+    template<typename move_assignment_specification_tag>
+    inline void impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::nothrow_tag, move_assignment_specification_tag) noexcept
     {
         this->destroy_object_safe();
         static_assert(noexcept(this->MCP_copy_construct_from(other)), "");
@@ -1259,7 +1366,7 @@ private:
     // Copy construction may throw but move assignment cannot,
     // so we create a temporary copy of other object and move-assign it to *this,
     // thus guaranteeing strong exception safety.
-    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::nothrow_tag)
+    inline void impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::nothrow_tag)
     {
         polymorphic_holder temp(other);
         static_assert(noexcept(*this = polymorphic_holder_lib::move(temp)), "");
@@ -1268,20 +1375,48 @@ private:
 
     // In the worst case, when even move construction may throw, we can give only basic guarantee:
     // if copy construction fails, the destination object (*this) will be left empty.
-    inline void _impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::throwing_tag)
+    inline void impl_copy_assign(const polymorphic_holder & other, polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::throwing_tag)
     {
         this->destroy_object_safe();
         this->MCP_copy_construct_from(other);
     }
 
-public:
-    inline polymorphic_holder & operator = (const polymorphic_holder & other) noexcept(_mcp_type::MCP_is_nothrow_copy_constructible)
+private: // impl_reset<DesiredType>(construction_specification_tag, move_specification_tag, args)
+         //
+         // Implementation of polymorphic_holder's member function reset<DesiredType>(CtorArgs&&... args).
+         // Dispatches on two exception specification tags:
+         // 1) is DesiredType's constructor (the one which takes given args pack) noexcept?
+         // 2) is polymorphic_holder's move assignment operator noexcept?
+
+    // DesiredType's constructor is noexcept, so we don't care whether polymorphic_holder's move assignment operator is noexcept;
+    // we just destroy the old object and construct a new one inplace with no-throw guarantee.
+    template<class DesiredType, typename move_specification_tag, typename... CtorArgs>
+    inline void impl_reset(polymorphic_holder_lib::nothrow_tag, move_specification_tag, CtorArgs&&... args) noexcept
     {
-        using copy_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<_mcp_type::MCP_is_nothrow_copy_constructible>::result;
-        using move_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<_mcp_type::MCP_is_nothrow_move_constructible>::result;
-        static_assert(noexcept(this->_impl_copy_assign(other, copy_tag(), move_tag())) == _mcp_type::MCP_is_nothrow_copy_constructible, "");
-        this->_impl_copy_assign(other, copy_tag(), move_tag());
-        return *this;
+        static_assert(noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)), "");
+        this->destroy_object_safe();
+        this->impl_construct<DesiredType>(polymorphic_holder_lib::nothrow_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
+    }
+
+    // DesiredType's constructor may throw, but polymorphic_holder's move assignment operator will not,
+    // so we construct a temporary object and move-assign it to *this, thus guaranteeing strong exception safety.
+    template<class DesiredType, typename... CtorArgs>
+    inline void impl_reset(polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args)
+    {
+        polymorphic_holder temp;
+        static_assert(!noexcept(DesiredType(polymorphic_holder_lib::forward<CtorArgs>(args)...)), "");
+        static_assert(noexcept(*this = polymorphic_holder_lib::move(temp)), "");
+        temp.impl_construct<DesiredType>(polymorphic_holder_lib::throwing_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
+        *this = polymorphic_holder_lib::move(temp);
+    }
+
+    // In the worst case, when both DesiredType's constructor and polymorphic_holder's move assignment operator may throw,
+    // we can give only basic guarantee: if DesiredType's construction fails, the destination object (*this) will be left empty.
+    template<class DesiredType, typename... CtorArgs>
+    inline void impl_reset(polymorphic_holder_lib::throwing_tag, polymorphic_holder_lib::throwing_tag, CtorArgs&&... args)
+    {
+        this->destroy_object_safe();
+        this->impl_construct<DesiredType>(polymorphic_holder_lib::throwing_tag(), polymorphic_holder_lib::forward<CtorArgs>(args)...);
     }
 };
 
