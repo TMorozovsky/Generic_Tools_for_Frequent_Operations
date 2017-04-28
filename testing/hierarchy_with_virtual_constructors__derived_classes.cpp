@@ -1,7 +1,7 @@
-#include "test_hierarchy_with_virtual_constructors.hpp"
 #include <string>
 #include <cstdio>
 #include <cstring>
+#include "testing/hierarchy_with_virtual_constructors.hpp"
 
 class SquareWidget : public Widget
 {
@@ -102,5 +102,5 @@ namespace {
             std::printf("max size of these types = %zu\n",        tt_result::max_size);
             std::printf("max alignment of these types = %zu\n",   tt_result::max_alignment);
         }
-    } print_sizes_of_derived_classes_instance;
+    };// print_sizes_of_derived_classes_instance;
 }

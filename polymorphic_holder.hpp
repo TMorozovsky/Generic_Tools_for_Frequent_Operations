@@ -545,16 +545,34 @@ namespace polymorphic_holder_lib
 //     void MCP_copy_construct_from(const polymorphic_holder &)
 // to polymorphic_holder.
 //
+// These construction functions must either be noexcept or guarantee that
+// if an exception is thrown during construction, the destination polymorphic_holder's data buffer
+// will be filled with zeroes, so that it will not contain any partially constructed data.
+//
 // Also, each Moving/Copying Policy must provide static boolean constants
-// MCP_is_nothrow_move_constructible and MCP_is_nothrow_copy_constructible
+//     static constexpr bool MCP_is_nothrow_move_constructible
+// and
+//     static constexpr bool MCP_is_nothrow_copy_constructible
 // that will tell whether the respective construction functions are noexcept.
 //
 // The MCP_move_construct_from() function will be used by polymorphic_holder's
 // move constructor and move assignment operator, while MCP_copy_construct_from() will be used
 // by polymorphic_holder's copy constructor and copy assignment operator.
-// These functions are marked as noexcept where possible, but in some policies they still might throw.
 namespace polymorphic_holder_MCP
 {
+    // Stub that can be used instead of a valid Moving/Copying Policy in those rare cases
+    // where no support of moving or copying is required at all.
+    template<class PolymorphicHolderSelf>
+    class no_moving_or_copying
+    {
+    protected:
+        static constexpr bool MCP_is_nothrow_move_constructible = false;
+        static constexpr bool MCP_is_nothrow_copy_constructible = false;
+
+        void MCP_move_construct_from(PolymorphicHolderSelf &&) = delete;
+        void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
+    };
+
     // Implements moving of polymorphic_holder<...> instances as if they were POD.
     // Move-constructing from a polymorphic_holder which uses this policy also sets all of its bits to zero.
     // Does not allow copying.
@@ -599,31 +617,6 @@ namespace polymorphic_holder_MCP
 
         constexpr bitwise_copying() noexcept = default;
         inline ~bitwise_copying() noexcept { }
-    };
-
-    // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD.
-    // Move-constructing from a polymorphic_holder which uses this policy also sets all of its bits to zero.
-    // Copy-constructing is supported as well; it leaves bits of the source object unchanged.
-    template<class PolymorphicHolderSelf>
-    class bitwise_copy_and_exclusive_move
-    {
-    protected:
-        static constexpr bool MCP_is_nothrow_move_constructible = true;
-        static constexpr bool MCP_is_nothrow_copy_constructible = true;
-
-        inline void MCP_move_construct_from(PolymorphicHolderSelf && other) noexcept
-        {
-            polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
-            polymorphic_holder_lib::set_bytes_to_zero(other);
-        }
-
-        inline void MCP_copy_construct_from(const PolymorphicHolderSelf & other) noexcept
-        {
-            polymorphic_holder_lib::copy_as_bytes(static_cast<PolymorphicHolderSelf &>(*this), other);
-        }
-
-        constexpr bitwise_copy_and_exclusive_move() noexcept = default;
-        inline ~bitwise_copy_and_exclusive_move() noexcept { }
     };
 
     // Implements moving of polymorphic_holder<...> instances
@@ -1105,47 +1098,34 @@ public:
     static constexpr size_t object_alignment = ObjectAlignment;
 
 public:
-    inline       base_type & operator * ()       noexcept { return this->object_ref(); }
-    inline const base_type & operator * () const noexcept { return this->object_ref(); }
-
-    inline       base_type * operator -> ()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
-    inline const base_type * operator -> () const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
-
-    inline explicit operator bool() const noexcept { return  this->owns_object(); }
-    inline bool     operator !   () const noexcept { return !this->owns_object(); }
-
+    // Constructs a polymorphic_holder that doesn't store any object.
     inline polymorphic_holder() noexcept
     {
         polymorphic_holder_lib::set_bytes_to_zero(*this);
     }
 
+    // Move-constructs a polymorphic_holder using the move construction function
+    // provided by polymorphic_holder's Moving/Copying Policy.
     inline polymorphic_holder(polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
     {
-        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == mcp_type::MCP_is_nothrow_move_constructible, "");
+        static_assert(noexcept(this->MCP_move_construct_from(polymorphic_holder_lib::move(other))) == mcp_type::MCP_is_nothrow_move_constructible,
+                      "conflicting \"MCP_is_nothrow_move_constructible\" static constant in current Moving/Copying Policy");
         this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
     }
 
+    // Copy-constructs a polymorphic_holder using the copy construction function
+    // provided by polymorphic_holder's Moving/Copying Policy.
     inline polymorphic_holder(const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
     {
-        static_assert(noexcept(this->MCP_copy_construct_from(other)) == mcp_type::MCP_is_nothrow_copy_constructible, "");
+        static_assert(noexcept(this->MCP_copy_construct_from(other)) == mcp_type::MCP_is_nothrow_copy_constructible,
+                      "conflicting \"MCP_is_nothrow_copy_constructible\" static constant in current Moving/Copying Policy");
         this->MCP_copy_construct_from(other);
     }
 
+    // Destroys the stored object from the BaseType hierarchy (if any).
     inline ~polymorphic_holder() noexcept
     {
         this->destroy_object_safe();
-    }
-
-    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
-    {
-        this->assign(polymorphic_holder_lib::move(other));
-        return *this;
-    }
-
-    inline polymorphic_holder & operator = (const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
-    {
-        this->assign(other);
-        return *this;
     }
 
     // Move-assigns contents of other polymorphic_holder to *this.
@@ -1158,10 +1138,11 @@ public:
     //
     // If move construction may throw, only basic exception safety is guaranteed:
     // the destination object (*this) will be left empty in case of exception, its previous contents will be destroyed.
-    inline void assign(polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
+    inline polymorphic_holder & operator = (polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
     {
         this->destroy_object_safe();
         this->MCP_move_construct_from(polymorphic_holder_lib::move(other));
+        return *this;
     }
 
     // Copy-assigns contents of other polymorphic_holder to *this.
@@ -1178,13 +1159,28 @@ public:
     //
     // If both copy construction and move construction may throw, only basic guarantee is given:
     // the destination object (*this) will be left empty in case of exception, its previous contents will be destroyed.
-    inline void assign(const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
+    inline polymorphic_holder & operator = (const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
     {
         using copy_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<mcp_type::MCP_is_nothrow_copy_constructible>::result;
         using move_tag = typename polymorphic_holder_lib::get_noexcept_specification_tag<mcp_type::MCP_is_nothrow_move_constructible>::result;
         static_assert(noexcept(this->impl_copy_assign(other, copy_tag(), move_tag())) == mcp_type::MCP_is_nothrow_copy_constructible, "");
         this->impl_copy_assign(other, copy_tag(), move_tag());
+        return *this;
     }
+
+    // Returns a reference to the stored object from the BaseType hierarchy.
+    // The behavior is undefined if this polymorphic_holder is empty.
+    inline       base_type & operator * ()       noexcept { return this->object_ref(); }
+    inline const base_type & operator * () const noexcept { return this->object_ref(); }
+
+    // Returns a pointer to the stored object from the BaseType hierarchy.
+    // The behavior is undefined if this polymorphic_holder is empty.
+    inline       base_type * operator -> ()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
+    inline const base_type * operator -> () const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
+
+    // Checks whether this polymorphic_holder stores an object from the BaseType hierarchy.
+    inline explicit operator bool() const noexcept { return  this->owns_object(); }
+    inline bool     operator !   () const noexcept { return !this->owns_object(); }
 
     // Constructs a new object of DesiredType that must be derived from polymorphic_holder's BaseType.
     // sizeof(DesiredType) and alignof(DesiredType) must comply with

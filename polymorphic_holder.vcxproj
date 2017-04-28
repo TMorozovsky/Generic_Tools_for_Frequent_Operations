@@ -36,11 +36,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="polymorphic_holder.hpp" />
-    <ClInclude Include="testing\test_hierarchy_with_virtual_constructors.hpp" />
+    <ClInclude Include="testing\hierarchy_with_virtual_constructors.hpp" />
+    <ClInclude Include="testing\testing.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="testing\test_hierarchy_with_virtual_constructors__derived_classes.cpp" />
-    <ClCompile Include="testing\test_hierarchy_with_virtual_constructors__wrapper_usage.cpp" />
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors__derived_classes.cpp" />
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors__wrapper_usage.cpp" />
+    <ClCompile Include="testing\testing.cpp" />
+    <ClCompile Include="testing\test_bitwise_copying.cpp" />
+    <ClCompile Include="testing\test_bitwise_exclusive_move.cpp" />
+    <ClCompile Include="testing\test_no_moving_or_copying.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E2142809-7234-4030-9AE5-DFDA1FC331EF}</ProjectGuid>

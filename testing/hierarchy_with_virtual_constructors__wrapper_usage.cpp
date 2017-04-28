@@ -1,7 +1,8 @@
-#include "test_hierarchy_with_virtual_constructors.hpp"
 #include <cstdio>
 #include <vector>
 #include <utility>
+#include "testing/hierarchy_with_virtual_constructors.hpp"
+#include "testing/testing.hpp"
 
 class OurOwnDerivedWidget : public Widget
 {
@@ -18,12 +19,13 @@ public:
     POLYMORPHIC_HOLDER_NOTHROW_MOVEABLE_AND_THROWING_COPYABLE(OurOwnDerivedWidget)
 };
 
-static int test()
+void widget_hierarchy_test()
 {
     std::vector<widget_holder> widgets;
 
-    const char * keywords[] = { "SquareWidget", "RectangleWidget", "WeirdWidget" };
-    int iter = 0;
+    const char *const keywords[] = { "SquareWidget", "RectangleWidget", "WeirdWidget" };
+    const size_t num_keywords = std::end(keywords) - std::begin(keywords);
+    size_t iter = 0;
     for (auto keyword : keywords) {
         widget_holder tmp_w;
         ::make_specific_widget(keyword, tmp_w);
@@ -39,7 +41,7 @@ static int test()
             widgets.back() = tmp_w;
         }
 
-        assert(iter < 3);
+        assert(iter < num_keywords);
         ++iter;
     }
 
@@ -54,15 +56,9 @@ static int test()
         std::putchar('\t');
         w->draw();
     }
-
-    return 0;
 }
 
-int main()
-{
-    int res = test();
-#ifdef _MSC_VER
-    std::getchar();
-#endif
-    return res;
-}
+//TEST_FUN_BEGIN
+//    ::test();
+//TEST_FUN_END
+
