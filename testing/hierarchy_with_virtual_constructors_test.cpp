@@ -29,7 +29,7 @@ void widget_hierarchy_test()
     for (auto keyword : keywords) {
         widget_holder tmp_w;
         ::make_specific_widget(keyword, tmp_w);
-        assert(tmp_w);
+        ASSERT(tmp_w);
 
         // Try different ways of pushing a polymorphic_holder into a vector:
         if (iter == 0) {
@@ -41,7 +41,7 @@ void widget_hierarchy_test()
             widgets.back() = tmp_w;
         }
 
-        assert(iter < num_keywords);
+        ASSERT(iter < num_keywords);
         ++iter;
     }
 
@@ -51,14 +51,14 @@ void widget_hierarchy_test()
     auto widgets_copy = widgets; // make a copy of the whole vector
     widgets = std::move(widgets_copy); // now move it back
 
-    std::printf("Looping through a vector of %zu objects derived from Widget:\n", widgets.size());
-    for (auto & w : widgets) {
-        std::putchar('\t');
-        w->draw();
-    }
+    //std::printf("Looping through a vector of %zu objects derived from Widget:\n", widgets.size());
+    //for (auto & w : widgets) {
+    //    std::putchar('\t');
+    //    w->draw();
+    //}
 }
 
-//TEST_FUN_BEGIN
-//    ::test();
-//TEST_FUN_END
+TEST_FUN_BEGIN
+    widget_hierarchy_test();
+TEST_FUN_END
 

@@ -18,12 +18,6 @@
     <ClCompile Include="testing\testing.cpp">
       <Filter>testing</Filter>
     </ClCompile>
-    <ClCompile Include="testing\hierarchy_with_virtual_constructors__derived_classes.cpp">
-      <Filter>testing</Filter>
-    </ClCompile>
-    <ClCompile Include="testing\hierarchy_with_virtual_constructors__wrapper_usage.cpp">
-      <Filter>testing</Filter>
-    </ClCompile>
     <ClCompile Include="testing\test_no_moving_or_copying.cpp">
       <Filter>testing</Filter>
     </ClCompile>
@@ -31,6 +25,18 @@
       <Filter>testing</Filter>
     </ClCompile>
     <ClCompile Include="testing\test_bitwise_exclusive_move.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_derived_classes.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_test.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_nothrow_moveable_and_throwing_copyable.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_nothrow_moveable_only.cpp">
       <Filter>testing</Filter>
     </ClCompile>
   </ItemGroup>

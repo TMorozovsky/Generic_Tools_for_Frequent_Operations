@@ -150,8 +150,7 @@ namespace polymorphic_holder_lib
     };
 }
 
-// Utilities that are not used by polymorphic_holder directly
-// but still might be useful for client code.
+// Utilities that are not used by polymorphic_holder directly but can be useful for client code.
 namespace polymorphic_holder_utils
 {
     namespace detail
@@ -980,6 +979,9 @@ namespace polymorphic_holder_DRP
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
         using implementation = detail::bytes_array_only_impl<MaxObjectSize, ObjectAlignment>;
+
+        bytes_array_only() = delete;
+        ~bytes_array_only() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -992,6 +994,9 @@ namespace polymorphic_holder_DRP
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
         using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
+
+        offset_before_bytes() = delete;
+        ~offset_before_bytes() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -1005,6 +1010,9 @@ namespace polymorphic_holder_DRP
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
         using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
+
+        offset_before_bytes_typed() = delete;
+        ~offset_before_bytes_typed() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -1017,6 +1025,9 @@ namespace polymorphic_holder_DRP
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
         using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
+
+        offset_after_bytes() = delete;
+        ~offset_after_bytes() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -1030,6 +1041,9 @@ namespace polymorphic_holder_DRP
     public:
         template<size_t MaxObjectSize, size_t ObjectAlignment>
         using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
+
+        offset_after_bytes_typed() = delete;
+        ~offset_after_bytes_typed() = delete;
     };
 }
 
@@ -1074,8 +1088,8 @@ namespace polymorphic_holder_lib
 //
 // Virtual inheritance is not supported! But that's no big deal since nobody uses it anyway, right? ;)
 template<class BaseType, size_t MaxObjectSize, size_t ObjectAlignment,
-         template<class> class MovingCopyingPolicy = polymorphic_holder_MCP::nothrow_moveable_and_throwing_copyable,
-         class DataRepresentationPolicy = polymorphic_holder_DRP::offset_before_bytes>
+         template<class> class MovingCopyingPolicy = polymorphic_holder_MCP::no_moving_or_copying,
+         class DataRepresentationPolicy = polymorphic_holder_DRP::bytes_array_only>
 class polymorphic_holder
     : private MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>
     , private DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>

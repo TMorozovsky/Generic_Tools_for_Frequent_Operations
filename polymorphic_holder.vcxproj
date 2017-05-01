@@ -40,11 +40,13 @@
     <ClInclude Include="testing\testing.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="testing\hierarchy_with_virtual_constructors__derived_classes.cpp" />
-    <ClCompile Include="testing\hierarchy_with_virtual_constructors__wrapper_usage.cpp" />
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_derived_classes.cpp" />
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_test.cpp" />
     <ClCompile Include="testing\testing.cpp" />
     <ClCompile Include="testing\test_bitwise_copying.cpp" />
     <ClCompile Include="testing\test_bitwise_exclusive_move.cpp" />
+    <ClCompile Include="testing\test_nothrow_moveable_and_throwing_copyable.cpp" />
+    <ClCompile Include="testing\test_nothrow_moveable_only.cpp" />
     <ClCompile Include="testing\test_no_moving_or_copying.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

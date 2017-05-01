@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <atomic>
+#include <cassert>
 
 namespace detail
 {
@@ -103,5 +104,30 @@ namespace detail
             } \
         } _tester; \
     }
+
+// simple replacement for std::unique_ptr that's used in testing functions
+template <typename T>
+class simple_unique_ptr
+{
+private:
+    T * _ptr;
+
+public:
+    simple_unique_ptr() noexcept : _ptr(nullptr) { }
+    explicit simple_unique_ptr(T * owning_raw_pointer) noexcept : _ptr(owning_raw_pointer) { }
+    simple_unique_ptr(simple_unique_ptr && other) noexcept : _ptr(other._ptr) { other._ptr = nullptr; }
+    simple_unique_ptr(const simple_unique_ptr &) = delete;
+    simple_unique_ptr & operator = (simple_unique_ptr && other) noexcept { delete _ptr; _ptr = other._ptr; other._ptr = nullptr; return *this; }
+    simple_unique_ptr & operator = (const simple_unique_ptr &) = delete;
+    ~simple_unique_ptr() noexcept { delete _ptr; }
+
+    explicit operator bool () const noexcept { return _ptr != nullptr; }
+    bool     operator !    () const noexcept { return _ptr == nullptr; }
+
+    T & operator *  () const noexcept { assert(_ptr); return *_ptr; }
+    T * operator -> () const noexcept { assert(_ptr); return _ptr; }
+
+    T * get() const noexcept { return _ptr; }
+};
 
 #endif // TESTING_TESTING_HPP_INCLUDED

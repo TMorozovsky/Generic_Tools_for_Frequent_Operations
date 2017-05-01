@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include "testing/hierarchy_with_virtual_constructors.hpp"
+#include "testing/testing.hpp"
 
 class SquareWidget : public Widget
 {
@@ -57,11 +58,11 @@ public:
         : _info(info)
     {
         auto p_first_base = static_cast<AnotherBaseWhichMakesOffsetNotNull *>(this);
-        assert(uintptr_t(p_first_base) == uintptr_t(this));
+        ASSERT(uintptr_t(p_first_base) == uintptr_t(this));
         (void)p_first_base;
 
         auto p_Widget_base = static_cast<Widget *>(this);
-        assert(uintptr_t(p_Widget_base) > uintptr_t(this));
+        ASSERT(uintptr_t(p_Widget_base) > uintptr_t(this));
         (void)p_Widget_base;
     }
 
@@ -75,7 +76,7 @@ public:
 
 void make_specific_widget(const char * keyword, widget_holder & dest)
 {
-    assert(keyword != nullptr);
+    ASSERT(keyword != nullptr);
     if (std::strcmp(keyword, "SquareWidget") == 0) {
         dest.reset<SquareWidget>(5, 7, 20);
     } else if (std::strcmp(keyword, "RectangleWidget") == 0) {
@@ -83,7 +84,7 @@ void make_specific_widget(const char * keyword, widget_holder & dest)
     } else if (std::strcmp(keyword, "WeirdWidget") == 0) {
         dest.reset<WeirdWidget>("Hello world! Also, I wanted to make this string a little bit longer so that Small String Optimization won't be applied to it when it is stored inside a std::string =^__^=");
     } else {
-        assert(!"Unknown keyword!");
+        ASSERT(!"Unknown keyword!");
         dest.reset();
     }
 }
