@@ -48,6 +48,7 @@
     <ClCompile Include="testing\test_nothrow_moveable_and_throwing_copyable.cpp" />
     <ClCompile Include="testing\test_nothrow_moveable_only.cpp" />
     <ClCompile Include="testing\test_no_moving_or_copying.cpp" />
+    <ClCompile Include="testing\test_pending_member_function_calls.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E2142809-7234-4030-9AE5-DFDA1FC331EF}</ProjectGuid>

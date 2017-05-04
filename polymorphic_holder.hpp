@@ -1070,6 +1070,112 @@ namespace polymorphic_holder_lib
 
         return offset;
     }
+
+#ifndef POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+    namespace detail
+    {
+        template<class BaseType, typename DecoratedBaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits;
+
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          BaseType,                  ResultType, ArgTypes...> {
+            using base_object_pointer                                               = BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...);
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          const BaseType,            ResultType, ArgTypes...> {
+            using base_object_pointer                                               = const BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) const;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          volatile BaseType,         ResultType, ArgTypes...> {
+            using base_object_pointer                                               = volatile BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) volatile;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          const volatile BaseType,   ResultType, ArgTypes...> {
+            using base_object_pointer                                               = const volatile BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) const volatile;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          BaseType &,                ResultType, ArgTypes...> {
+            using base_object_pointer                                               = BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) &;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          const BaseType &,          ResultType, ArgTypes...> {
+            using base_object_pointer                                               = const BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) const &;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          volatile BaseType &,       ResultType, ArgTypes...> {
+            using base_object_pointer                                               = volatile BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) volatile &;
+        };
+        template<class BaseType, typename ResultType, typename ... ArgTypes>
+        struct pending_member_function_call_traits<BaseType,                          const volatile BaseType &, ResultType, ArgTypes...> {
+            using base_object_pointer                                               = const volatile BaseType *;
+            using pointer_to_member_function = ResultType (BaseType::*) (ArgTypes...) const volatile &;
+        };
+
+        template<class BaseType, typename DecoratedBaseType, typename ResultType, typename ... ArgTypes>
+        class pending_member_function_call_impl
+        {
+            using traits_type = detail::pending_member_function_call_traits<BaseType, DecoratedBaseType, ResultType, ArgTypes...>;
+
+            using base_object_pointer        = typename traits_type::base_object_pointer;
+            using pointer_to_member_function = typename traits_type::pointer_to_member_function;
+
+        private:
+            const base_object_pointer        _p_base_object;
+            const pointer_to_member_function _p_member_function;
+
+        public:
+            inline pending_member_function_call_impl(base_object_pointer p_base_object, pointer_to_member_function p_member_function) noexcept
+                : _p_base_object(p_base_object), _p_member_function(p_member_function)
+            {
+                POLYMORPHIC_HOLDER_ASSERT(p_base_object != nullptr);
+                POLYMORPHIC_HOLDER_ASSERT(p_member_function != nullptr);
+            }
+
+            inline ~pending_member_function_call_impl() noexcept
+            {
+            }
+
+            template<typename ... ForwardedArgs>
+            inline ResultType operator () (ForwardedArgs&&... args) const
+                noexcept(noexcept((_p_base_object->*_p_member_function)(polymorphic_holder_lib::forward<ForwardedArgs>(args)...)))
+            {
+                return (_p_base_object->*_p_member_function)(polymorphic_holder_lib::forward<ForwardedArgs>(args)...);
+            }
+        };
+
+    }
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_member_function_call                       = detail::pending_member_function_call_impl<BaseType, BaseType, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_const_member_function_call                 = detail::pending_member_function_call_impl<BaseType, const BaseType, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_volatile_member_function_call              = detail::pending_member_function_call_impl<BaseType, volatile BaseType, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_const_volatile_member_function_call        = detail::pending_member_function_call_impl<BaseType, const volatile BaseType, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_lvalue_member_function_call                = detail::pending_member_function_call_impl<BaseType, BaseType &, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_const_lvalue_member_function_call          = detail::pending_member_function_call_impl<BaseType, const BaseType &, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_volatile_lvalue_member_function_call       = detail::pending_member_function_call_impl<BaseType, volatile BaseType &, ResultType, ArgTypes...>;
+
+    template<class BaseType, typename ResultType, typename ... ArgTypes>
+    using pending_const_volatile_lvalue_member_function_call = detail::pending_member_function_call_impl<BaseType, const volatile BaseType &, ResultType, ArgTypes...>;
+#endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
 }
 
 // Holder that stores one object of any type derived from BaseType (may also be BaseType itself),
@@ -1191,6 +1297,72 @@ public:
     // The behavior is undefined if this polymorphic_holder is empty.
     inline       base_type * operator -> ()       noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
     inline const base_type * operator -> () const noexcept { POLYMORPHIC_HOLDER_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
+
+#ifndef POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...)) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_const_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_const_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_volatile_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) volatile) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_volatile_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_const_volatile_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_const_volatile_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) &) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_const_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const &) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_const_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) volatile &) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::pending_const_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile &) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        return polymorphic_holder_lib::pending_const_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
+    }
+#endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
 
     // Checks whether this polymorphic_holder stores an object from the BaseType hierarchy.
     inline explicit operator bool() const noexcept { return  this->owns_object(); }
