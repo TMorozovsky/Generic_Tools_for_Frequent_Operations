@@ -1175,6 +1175,14 @@ namespace polymorphic_holder_lib
 
     template<class BaseType, typename ResultType, typename ... ArgTypes>
     using pending_const_volatile_lvalue_member_function_call = detail::pending_member_function_call_impl<BaseType, const volatile BaseType &, ResultType, ArgTypes...>;
+#else
+    template<typename ResultType>
+    class deleted_callable_dummy
+    {
+    public:
+        template<typename ... ArgTypes>
+        ResultType operator () (ArgTypes&&...) const noexcept = delete;
+    };
 #endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
 }
 
@@ -1309,7 +1317,7 @@ public:
 
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::pending_const_member_function_call<base_type, ResultType, ArgTypes...>
-        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const) noexcept
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const) const noexcept
     {
         POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
         return polymorphic_holder_lib::pending_const_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
@@ -1325,7 +1333,7 @@ public:
 
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::pending_const_volatile_member_function_call<base_type, ResultType, ArgTypes...>
-        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile) noexcept
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile) const noexcept
     {
         POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
         return polymorphic_holder_lib::pending_const_volatile_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
@@ -1341,7 +1349,7 @@ public:
 
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::pending_const_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
-        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const &) noexcept
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const &) const noexcept
     {
         POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
         return polymorphic_holder_lib::pending_const_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
@@ -1357,12 +1365,32 @@ public:
 
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::pending_const_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>
-        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile &) noexcept
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...) const volatile &) const noexcept
     {
         POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
         return polymorphic_holder_lib::pending_const_volatile_lvalue_member_function_call<base_type, ResultType, ArgTypes...>(this->object_ptr_unsafe(), p_mem_fun);
     }
+#else
+    template<typename ResultType, typename ... ArgTypes>
+    inline polymorphic_holder_lib::deleted_callable_dummy<ResultType>
+        operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...)) const noexcept = delete;
 #endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+
+    template<typename MemberFieldType>
+    inline MemberFieldType & operator ->* (MemberFieldType base_type::*p_member_field) noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        POLYMORPHIC_HOLDER_ASSERT(p_member_field != nullptr);
+        return this->object_ptr_unsafe()->*p_member_field;
+    }
+
+    template<typename MemberFieldType>
+    inline const MemberFieldType & operator ->* (const MemberFieldType base_type::*p_member_field) const noexcept
+    {
+        POLYMORPHIC_HOLDER_ASSERT(this->owns_object());
+        POLYMORPHIC_HOLDER_ASSERT(p_member_field != nullptr);
+        return this->object_ptr_unsafe()->*p_member_field;
+    }
 
     // Checks whether this polymorphic_holder stores an object from the BaseType hierarchy.
     inline explicit operator bool() const noexcept { return  this->owns_object(); }
