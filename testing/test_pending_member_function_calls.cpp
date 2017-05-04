@@ -8,8 +8,6 @@ namespace
     class Base
     {
     public:
-        virtual ~Base() { }
-
         virtual int f_simple               (int x, int y)                  = 0;
         virtual int f_const                (int x, int y) const            = 0;
         virtual int f_volatile             (int x, int y) volatile         = 0;
@@ -30,10 +28,13 @@ namespace
             tmp = 10;
             ASSERT_EQ(tmp, 10);
         }
+
+        virtual ~Base() { }
     };
 
     class Derived : public Base
     {
+    public:
         virtual int f_simple               (int x, int y)                  override { return x + y + 1; }
         virtual int f_const                (int x, int y) const            override { return x + y + 2; }
         virtual int f_volatile             (int x, int y) volatile         override { return x + y + 3; }
