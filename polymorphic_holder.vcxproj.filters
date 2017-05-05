@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="polymorphic_holder.hpp" />
+    <ClInclude Include="testing\testing.hpp">
+      <Filter>testing</Filter>
+    </ClInclude>
+    <ClInclude Include="testing\hierarchy_with_virtual_constructors.hpp">
+      <Filter>testing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="testing">
+      <UniqueIdentifier>{500ddeb5-4187-44ba-b174-e923196299c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="testing\testing.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_no_moving_or_copying.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_bitwise_copying.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_bitwise_exclusive_move.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_derived_classes.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\hierarchy_with_virtual_constructors_test.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_nothrow_moveable_and_throwing_copyable.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_nothrow_moveable_only.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_pending_member_function_calls.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_member_fields_access_through_pointers.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+    <ClCompile Include="testing\test_throwing_moveable_only.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
