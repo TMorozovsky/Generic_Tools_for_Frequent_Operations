@@ -23,11 +23,11 @@ namespace gtfo
             template< typename Lhs, typename Rhs>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test
-                                                      <
-                                                          LhsArgument,
-                                                          RhsArgument
-                                                      >(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(test
+                                                 <
+                                                     LhsArgument,
+                                                     RhsArgument
+                                                 >(nullptr)) == sizeof(yes_type);
         };
     }
 }

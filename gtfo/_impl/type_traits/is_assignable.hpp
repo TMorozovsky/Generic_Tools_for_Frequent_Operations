@@ -28,10 +28,10 @@ namespace gtfo
             template<typename Lhs, typename Rhs>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test<To, From>(nullptr)) == sizeof(yes_type)
+            static constexpr bool value = sizeof(test<To, From>(nullptr)) == sizeof(yes_type)
 #ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
-                                               && !is_void<typename remove_reference<To>::type>::value
-                                               && !is_const<typename remove_reference<To>::type>::value
+                                          && !is_void<typename remove_reference<To>::type>::value
+                                          && !is_const<typename remove_reference<To>::type>::value
 #endif
                     ;
         };
@@ -39,4 +39,3 @@ namespace gtfo
 }
 
 #endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_ASSIGNABLE_HPP
-

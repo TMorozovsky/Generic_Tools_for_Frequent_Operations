@@ -24,12 +24,12 @@ namespace gtfo
             template<typename Fun, typename Lhs, typename Rhs>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test
-                                                      <
-                                                          BinaryOperation,
-                                                          LhsArgument,
-                                                          RhsArgument
-                                                      >(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(test
+                                                 <
+                                                     BinaryOperation,
+                                                     LhsArgument,
+                                                     RhsArgument
+                                                 >(nullptr)) == sizeof(yes_type);
         };
     }
 }

@@ -19,32 +19,32 @@ namespace gtfo
             template<typename F, typename T, bool f_is_invokable_with_t>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename F, typename T>
             struct impl<F, T, true>
             {
-                static GTFO_CONSTEXPR bool value = can_be_used_in_boolean_context
-                                                   <
-                                                       typename result_of_fun1
-                                                       <
-                                                           F,
-                                                           T
-                                                       >::type
-                                                   >::value;
+                static constexpr bool value = can_be_used_in_boolean_context
+                                              <
+                                                  typename result_of_fun1
+                                                  <
+                                                      F,
+                                                      T
+                                                  >::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   UnaryPredicate,
-                                                   Argument,
-                                                   is_invokable_fun1
-                                                   <
-                                                       UnaryPredicate,
-                                                       Argument
-                                                   >::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              UnaryPredicate,
+                                              Argument,
+                                              is_invokable_fun1
+                                              <
+                                                  UnaryPredicate,
+                                                  Argument
+                                              >::value
+                                          >::value;
         };
     }
 }

@@ -27,23 +27,23 @@ namespace gtfo
                 template<typename U, bool u_has_begin>
                 struct impl
                 {
-                    static GTFO_CONSTEXPR bool value = false;
+                    static constexpr bool value = false;
                 };
 
                 template<typename U>
                 struct impl<U, true>
                 {
-                    static GTFO_CONSTEXPR bool value = is_iterator
-                                                       <
-                                                           typename result_of_begin<U>::type
-                                                       >::value;
+                    static constexpr bool value = is_iterator
+                                                  <
+                                                      typename result_of_begin<U>::type
+                                                  >::value;
                 };
 
-                static GTFO_CONSTEXPR bool value = impl
-                                                   <
-                                                       T,
-                                                       has_begin<T>::value
-                                                   >::value;
+                static constexpr bool value = impl
+                                              <
+                                                  T,
+                                                  has_begin<T>::value
+                                              >::value;
             };
 
             /// defines static member constant value of type bool
@@ -57,23 +57,23 @@ namespace gtfo
                 template<typename U, bool u_has_end>
                 struct impl
                 {
-                    static GTFO_CONSTEXPR bool value = false;
+                    static constexpr bool value = false;
                 };
 
                 template<typename U>
                 struct impl<U, true>
                 {
-                    static GTFO_CONSTEXPR bool value = !is_void
-                                                       <
-                                                           typename result_of_end<U>::type
-                                                       >::value;
+                    static constexpr bool value = !is_void
+                                                  <
+                                                      typename result_of_end<U>::type
+                                                  >::value;
                 };
 
-                static GTFO_CONSTEXPR bool value = impl
-                                                   <
-                                                       T,
-                                                       has_end<T>::value
-                                                   >::value;
+                static constexpr bool value = impl
+                                              <
+                                                  T,
+                                                  has_end<T>::value
+                                              >::value;
             };
         }
 
@@ -96,31 +96,31 @@ namespace gtfo
             template<typename U, bool u_has_iterator_returning_begin_and_non_void_returning_end>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename U>
             struct impl<U, true>
             {
-                static GTFO_CONSTEXPR bool value = are_comparable_op_eq
-                                                   <
-                                                       typename result_of_begin<U>::type,
-                                                       typename result_of_end<U>::type
-                                                   >::value
-                                                   &&
-                                                   are_comparable_op_n_eq
-                                                   <
-                                                       typename result_of_begin<U>::type,
-                                                       typename result_of_end<U>::type
-                                                   >::value;
+                static constexpr bool value = are_comparable_op_eq
+                                              <
+                                                  typename result_of_begin<U>::type,
+                                                  typename result_of_end<U>::type
+                                              >::value
+                                              &&
+                                              are_comparable_op_n_eq
+                                              <
+                                                  typename result_of_begin<U>::type,
+                                                  typename result_of_end<U>::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   T,
-                                                   helpers::has_iterator_returning_begin<T>::value &&
-                                                   helpers::has_non_void_returning_end<T>::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              T,
+                                              helpers::has_iterator_returning_begin<T>::value &&
+                                              helpers::has_non_void_returning_end<T>::value
+                                          >::value;
         };
     }
 }

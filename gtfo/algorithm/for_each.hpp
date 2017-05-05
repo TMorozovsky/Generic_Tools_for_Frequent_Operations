@@ -19,9 +19,9 @@ namespace gtfo
              InputIterator _it_end,
              UnaryFunction _fun)
     {
-        return ::std::for_each(_utils::move(_it_begin),
-                               _utils::move(_it_end),
-                               _utils::move(_fun));
+        return ::std::for_each(::gtfo::move(_it_begin),
+                               ::gtfo::move(_it_end),
+                               ::gtfo::move(_fun));
     }
 
     template<typename Range, typename UnaryFunction>
@@ -32,7 +32,7 @@ namespace gtfo
     {
         return ::std::for_each(begin(_range),
                                end(_range),
-                               _utils::move(_fun));
+                               ::gtfo::move(_fun));
     }
 }
 

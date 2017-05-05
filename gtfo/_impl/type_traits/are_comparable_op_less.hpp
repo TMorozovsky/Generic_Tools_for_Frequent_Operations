@@ -3,6 +3,14 @@
 
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( push )
+//  Disable MSVC Compiler Warning C4018 ("'expression' : signed/unsigned mismatch")
+//  and Warning C4389 ("'operator' : signed/unsigned mismatch")
+#   pragma warning( disable : 4018 )
+#   pragma warning( disable : 4389 )
+#endif
+
 namespace gtfo
 {
     namespace _tt
@@ -15,7 +23,7 @@ namespace gtfo
                 template<typename V, typename W, bool v_and_w_are_not_void>
                 struct impl
                 {
-                    static GTFO_CONSTEXPR bool value = false;
+                    static constexpr bool value = false;
                 };
 
                 template<typename V, typename W>
@@ -30,15 +38,15 @@ namespace gtfo
                     template<typename X, typename Y>
                     static no_type test(...);
 
-                    static GTFO_CONSTEXPR bool value = sizeof(test<V, W>(nullptr)) == sizeof(yes_type);
+                    static constexpr bool value = sizeof(test<V, W>(nullptr)) == sizeof(yes_type);
                 };
 
-                static GTFO_CONSTEXPR bool value = impl
-                                                   <
-                                                       T,
-                                                       U,
-                                                       !is_void<T>::value && !is_void<U>::value
-                                                   >::value;
+                static constexpr bool value = impl
+                                              <
+                                                  T,
+                                                  U,
+                                                  !is_void<T>::value && !is_void<U>::value
+                                              >::value;
             };
 
             template<typename T, typename U, bool can_invoke_op_less_on_t_and_u>
@@ -73,34 +81,38 @@ namespace gtfo
             template<typename V, typename W, bool can_invoke_op_less_on_v_and_w>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename V, typename W>
             struct impl<V, W, true>
             {
-                static GTFO_CONSTEXPR bool value = can_be_used_in_boolean_context
-                                                   <
-                                                       typename helpers::result_of_op_less
-                                                       <
-                                                           V,
-                                                           W
-                                                       >::type
-                                                   >::value;
+                static constexpr bool value = can_be_used_in_boolean_context
+                                              <
+                                                  typename helpers::result_of_op_less
+                                                  <
+                                                      V,
+                                                      W
+                                                  >::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   LhsArgument,
-                                                   RhsArgument,
-                                                   helpers::can_invoke_op_less
-                                                   <
-                                                       LhsArgument,
-                                                       RhsArgument
-                                                   >::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              LhsArgument,
+                                              RhsArgument,
+                                              helpers::can_invoke_op_less
+                                              <
+                                                  LhsArgument,
+                                                  RhsArgument
+                                              >::value
+                                          >::value;
         };
     }
 }
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( pop )
+#endif
 
 #endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_HPP

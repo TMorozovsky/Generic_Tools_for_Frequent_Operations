@@ -21,7 +21,7 @@ namespace gtfo
                 template<typename U1, typename U2>
                 static no_type test(...);
 
-                static GTFO_CONSTEXPR bool value = sizeof(test<T1, T2>(nullptr)) == sizeof(yes_type);
+                static constexpr bool value = sizeof(test<T1, T2>(nullptr)) == sizeof(yes_type);
             };
 
             template<typename T1, typename T2, bool t1_and_t2_have_a_common_type>

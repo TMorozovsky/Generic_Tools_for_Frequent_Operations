@@ -51,9 +51,9 @@ namespace gtfo
              Size            _count,
              const Value &   _value)
     {
-        return ::std::search_n(_utils::move(_it_begin),
-                               _utils::move(_it_end),
-                               _utils::move(_count),
+        return ::std::search_n(::gtfo::move(_it_begin),
+                               ::gtfo::move(_it_end),
+                               ::gtfo::move(_count),
                                _value);
     }
 
@@ -66,11 +66,11 @@ namespace gtfo
              const Value &   _value,
              BinaryPredicate _pred)
     {
-        return ::std::search_n(_utils::move(_it_begin),
-                               _utils::move(_it_end),
-                               _utils::move(_count),
+        return ::std::search_n(::gtfo::move(_it_begin),
+                               ::gtfo::move(_it_end),
+                               ::gtfo::move(_count),
                                _value,
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
     template<typename Range, typename Size, typename Value>
@@ -82,7 +82,7 @@ namespace gtfo
     {
         return ::std::search_n(begin(_range),
                                end(_range),
-                               _utils::move(_count),
+                               ::gtfo::move(_count),
                                _value);
     }
 
@@ -98,9 +98,9 @@ namespace gtfo
     {
         return ::std::search_n(begin(_range),
                                end(_range),
-                               _utils::move(_count),
+                               ::gtfo::move(_count),
                                _value,
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
 #undef GTFO_RESULT_OF_SEARCH_N_PRED

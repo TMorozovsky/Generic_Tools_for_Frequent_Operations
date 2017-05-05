@@ -25,8 +25,15 @@ namespace gtfo
             template<typename U>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
         };
+
+#ifdef GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG
+        template<> struct can_be_used_in_boolean_context<void>                { static constexpr bool value = false; };
+        template<> struct can_be_used_in_boolean_context<const void>          { static constexpr bool value = false; };
+        template<> struct can_be_used_in_boolean_context<volatile void>       { static constexpr bool value = false; };
+        template<> struct can_be_used_in_boolean_context<const volatile void> { static constexpr bool value = false; };
+#endif
     }
 }
 

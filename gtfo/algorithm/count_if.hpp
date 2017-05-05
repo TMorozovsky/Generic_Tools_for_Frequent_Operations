@@ -23,9 +23,9 @@ namespace gtfo
                                                                _tt::declval< InputIterator >(),
                                                                _tt::declval< UnaryPredicate >()))
     {
-        return ::std::count_if(_utils::move(_it_begin),
-                               _utils::move(_it_end),
-                               _utils::move(_pred));
+        return ::std::count_if(::gtfo::move(_it_begin),
+                               ::gtfo::move(_it_end),
+                               ::gtfo::move(_pred));
     }
 
     template<typename Range, typename UnaryPredicate>
@@ -38,7 +38,7 @@ namespace gtfo
     {
         return ::std::count_if(begin(_range),
                                end(_range),
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 }
 

@@ -55,10 +55,10 @@ namespace gtfo
              ForwardIterator2 _it_begin_2,
              ForwardIterator2 _it_end_2)
     {
-        return ::std::find_end(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2));
+        return ::std::find_end(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2));
     }
 
     template<typename ForwardIterator1, typename ForwardIterator2, typename BinaryPredicate>
@@ -70,11 +70,11 @@ namespace gtfo
              ForwardIterator2 _it_end_2,
              BinaryPredicate  _pred)
     {
-        return ::std::find_end(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2),
-                               _utils::move(_pred));
+        return ::std::find_end(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2),
+                               ::gtfo::move(_pred));
     }
 
     template<typename ForwardIterator1, typename Range2>
@@ -85,8 +85,8 @@ namespace gtfo
              ForwardIterator1 _it_end_1,
              Range2 &&        _range2)
     {
-        return ::std::find_end(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
+        return ::std::find_end(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
                                begin(_range2),
                                end(_range2));
     }
@@ -101,11 +101,11 @@ namespace gtfo
              Range2 &&        _range2,
              BinaryPredicate  _pred)
     {
-        return ::std::find_end(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
+        return ::std::find_end(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
                                begin(_range2),
                                end(_range2),
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
     template<typename Range1, typename ForwardIterator2>
@@ -118,8 +118,8 @@ namespace gtfo
     {
         return ::std::find_end(begin(_range1),
                                end(_range1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2));
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2));
     }
 
     template<typename Range1, typename ForwardIterator2, typename BinaryPredicate>
@@ -134,9 +134,9 @@ namespace gtfo
     {
         return ::std::find_end(begin(_range1),
                                end(_range1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2),
-                               _utils::move(_pred));
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2),
+                               ::gtfo::move(_pred));
     }
 
     template<typename Range1, typename Range2>
@@ -164,7 +164,7 @@ namespace gtfo
                                end(_range1),
                                begin(_range2),
                                end(_range2),
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
 #undef GTFO_RESULT_OF_FIND_END_PRED

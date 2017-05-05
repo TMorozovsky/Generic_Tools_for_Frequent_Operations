@@ -43,11 +43,11 @@ namespace gtfo
                     template<typename U>
                     static no_type test_iterator_category(...);
 
-                    static GTFO_CONSTEXPR bool value = sizeof(test_value_type       <T>(nullptr)) == sizeof(yes_type) &&
-                                                       sizeof(test_difference_type  <T>(nullptr)) == sizeof(yes_type) &&
-                                                       sizeof(test_pointer          <T>(nullptr)) == sizeof(yes_type) &&
-                                                       sizeof(test_reference        <T>(nullptr)) == sizeof(yes_type) &&
-                                                       sizeof(test_iterator_category<T>(nullptr)) == sizeof(yes_type);
+                    static constexpr bool value = sizeof(test_value_type       <T>(nullptr)) == sizeof(yes_type) &&
+                                                  sizeof(test_difference_type  <T>(nullptr)) == sizeof(yes_type) &&
+                                                  sizeof(test_pointer          <T>(nullptr)) == sizeof(yes_type) &&
+                                                  sizeof(test_reference        <T>(nullptr)) == sizeof(yes_type) &&
+                                                  sizeof(test_iterator_category<T>(nullptr)) == sizeof(yes_type);
                 };
             }
         }
@@ -85,17 +85,17 @@ namespace gtfo
             static yes_type test_msvc_workaround(...);
     #endif
 
-            static GTFO_CONSTEXPR bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type)
+            static constexpr bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type)
     #ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
-                                               && !is_fundamental< typename remove_reference<T>::type >::value
-                                               && (
-                                                      sizeof(test_msvc_workaround<T>(nullptr)) == sizeof(yes_type)
-                                                      ||
-                                                      helpers::msvc_specific_workarounds::has_some_nested_iterator_typedefs
-                                                      <
-                                                          typename remove_reference<T>::type
-                                                      >::value
-                                                  )
+                                          && !is_fundamental< typename remove_reference<T>::type >::value
+                                          && (
+                                                 sizeof(test_msvc_workaround<T>(nullptr)) == sizeof(yes_type)
+                                                 ||
+                                                 helpers::msvc_specific_workarounds::has_some_nested_iterator_typedefs
+                                                 <
+                                                     typename remove_reference<T>::type
+                                                 >::value
+                                             )
     #endif
                     ;
         };

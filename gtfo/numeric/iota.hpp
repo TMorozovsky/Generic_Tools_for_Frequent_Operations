@@ -40,8 +40,8 @@ namespace gtfo
     iota(ForwardIterator it_begin,
          ForwardIterator it_end)
     {
-        ::std::iota(_utils::move(it_begin),
-                    _utils::move(it_end),
+        ::std::iota(::gtfo::move(it_begin),
+                    ::gtfo::move(it_end),
                     typename _tt::value_of_dereferenced< ForwardIterator >::type());
     }
 
@@ -52,9 +52,9 @@ namespace gtfo
          ForwardIterator it_end,
          Value           init)
     {
-        ::std::iota(_utils::move(it_begin),
-                    _utils::move(it_end),
-                    _utils::move(init));
+        ::std::iota(::gtfo::move(it_begin),
+                    ::gtfo::move(it_end),
+                    ::gtfo::move(init));
     }
 
     template<typename Range>
@@ -76,7 +76,7 @@ namespace gtfo
     {
         ::std::iota(begin(range),
                     end(range),
-                    _utils::move(init));
+                    ::gtfo::move(init));
     }
 
 #undef GTFO_RESULT_OF_IOTA

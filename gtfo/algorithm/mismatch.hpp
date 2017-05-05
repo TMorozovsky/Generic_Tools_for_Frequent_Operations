@@ -67,9 +67,9 @@ namespace gtfo
              InputIterator1    _it_end_1,
              InputIterator2 && _it_begin_2)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::forward<InputIterator2>(_it_begin_2));
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::forward<InputIterator2>(_it_begin_2));
     }
 
     template<typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
@@ -86,10 +86,10 @@ namespace gtfo
              InputIterator2 && _it_begin_2,
              BinaryPredicate   _pred)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::forward<InputIterator2>(_it_begin_2),
-                               _utils::move(_pred));
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::forward<InputIterator2>(_it_begin_2),
+                               ::gtfo::move(_pred));
     }
 
 #ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
@@ -102,10 +102,10 @@ namespace gtfo
              InputIterator2 _it_begin_2,
              InputIterator2 _it_end_2)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2));
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2));
     }
 
     template<typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
@@ -117,11 +117,11 @@ namespace gtfo
              InputIterator2  _it_end_2,
              BinaryPredicate _pred)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2),
-                               _utils::move(_pred));
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2),
+                               ::gtfo::move(_pred));
     }
 #endif // GTFO_USE_CPP14_MISMATCH_ALGORITHM
 
@@ -133,8 +133,8 @@ namespace gtfo
              InputIterator1 _it_end_1,
              Range2 &&      _range_2)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
                                begin(_range_2)
 #ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
                 ,              end(_range_2)
@@ -152,13 +152,13 @@ namespace gtfo
              Range2 &&       _range_2,
              BinaryPredicate _pred)
     {
-        return ::std::mismatch(_utils::move(_it_begin_1),
-                               _utils::move(_it_end_1),
+        return ::std::mismatch(::gtfo::move(_it_begin_1),
+                               ::gtfo::move(_it_end_1),
                                begin(_range_2),
 #ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
                                end(_range_2),
 #endif
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
     template<typename Range1, typename InputIterator2>
@@ -174,7 +174,7 @@ namespace gtfo
     {
         return ::std::mismatch(begin(_range_1),
                                end(_range_1),
-                               _utils::forward<InputIterator2>(_it_begin_2));
+                               ::gtfo::forward<InputIterator2>(_it_begin_2));
     }
 
     template<typename Range1, typename InputIterator2, typename BinaryPredicate>
@@ -192,8 +192,8 @@ namespace gtfo
     {
         return ::std::mismatch(begin(_range_1),
                                end(_range_1),
-                               _utils::forward<InputIterator2>(_it_begin_2),
-                               _utils::move(_pred));
+                               ::gtfo::forward<InputIterator2>(_it_begin_2),
+                               ::gtfo::move(_pred));
     }
 
 #ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
@@ -207,8 +207,8 @@ namespace gtfo
     {
         return ::std::mismatch(begin(_range_1),
                                end(_range_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2));
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2));
     }
 
     template<typename Range1, typename InputIterator2, typename BinaryPredicate>
@@ -223,9 +223,9 @@ namespace gtfo
     {
         return ::std::mismatch(begin(_range_1),
                                end(_range_1),
-                               _utils::move(_it_begin_2),
-                               _utils::move(_it_end_2),
-                               _utils::move(_pred));
+                               ::gtfo::move(_it_begin_2),
+                               ::gtfo::move(_it_end_2),
+                               ::gtfo::move(_pred));
     }
 #endif // GTFO_USE_CPP14_MISMATCH_ALGORITHM
 
@@ -261,7 +261,7 @@ namespace gtfo
 #ifdef GTFO_USE_CPP14_MISMATCH_ALGORITHM
                                end(_range_2),
 #endif
-                               _utils::move(_pred));
+                               ::gtfo::move(_pred));
     }
 
 #undef GTFO_RESULT_OF_MISMATCH_PRED

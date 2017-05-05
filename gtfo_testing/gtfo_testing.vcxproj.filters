@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="runtime\runtime_tests.cpp">
+      <Filter>gtfo_testing\runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_derived_classes.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_copying.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_exclusive_move.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_member_fields_access_through_pointers.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_no_moving_or_copying.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_only.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_pending_member_function_calls.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_throwing_moveable_only.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\adjacent_find.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\all_of.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\any_of.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\count.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\count_if.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\equal.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\find.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\find_end.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\find_first_of.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\find_if.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\find_if_not.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\for_each.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\is_permutation.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\mismatch.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\none_of.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\search.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\algorithm\search_n.cpp">
+      <Filter>gtfo_testing\runtime\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\numeric\accumulate.cpp">
+      <Filter>gtfo_testing\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\numeric\adjacent_difference.cpp">
+      <Filter>gtfo_testing\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\numeric\inner_product.cpp">
+      <Filter>gtfo_testing\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\numeric\iota.cpp">
+      <Filter>gtfo_testing\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\numeric\partial_sum.cpp">
+      <Filter>gtfo_testing\runtime\numeric</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_addable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_op_eq.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_op_less.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_op_n_eq.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_pred.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_multipliable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_subtractable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\can_be_used_in_boolean_context.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\common_type_2.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\has_begin.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\has_end.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_assignable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_dereferenceable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_incrementable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_invokable_fun0.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_invokable_fun1.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_invokable_fun2.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_iterator.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_predicate1.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_predicate2.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_range.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_range_castable_to_its_iterator.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_range_with_same_begin_end.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\iterator_of_range.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_addition.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_begin.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_dereferencing.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_end.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_fun0.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_fun1.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_fun2.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_multiplication.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_range_iterator_dereferencing.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_subtraction.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\value_from_range.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\value_of_dereferenced.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\functional\arithmetic_operations.cpp">
+      <Filter>gtfo_testing\functional</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\functional\comparisons.cpp">
+      <Filter>gtfo_testing\functional</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="runtime\runtime_tests.hpp">
+      <Filter>gtfo_testing\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors.hpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\reversed_range.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\utils\polymorphic_holder.hpp">
+      <Filter>gtfo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\_common_definitions.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\utility.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\_type_traits_definitions.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_addable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_less.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_n_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_pred.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_multipliable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_subtractable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\can_be_used_in_boolean_context.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\common_type_2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\has_begin.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\has_end.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_assignable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_dereferenceable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_incrementable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_invokable_fun0.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_invokable_fun1.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_invokable_fun2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_predicate1.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_predicate2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_range_castable_to_its_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_range_with_same_begin_end.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\iterator_of_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_addition.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_begin.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_dereferencing.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_end.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_fun0.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_fun1.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_fun2.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_multiplication.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_range_iterator_dereferencing.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_subtraction.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\value_from_range.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\value_of_dereferenced.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\adjacent_find.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\all_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\any_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\count.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\count_if.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\equal.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\find.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\find_end.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\find_first_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\find_if.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\find_if_not.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\for_each.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\is_permutation.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\mismatch.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\none_of.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\search.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\algorithm\search_n.hpp">
+      <Filter>gtfo\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric\accumulate.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric\adjacent_difference.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric\inner_product.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric\iota.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\numeric\partial_sum.hpp">
+      <Filter>gtfo\numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\less.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\multiplies.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\plus.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional.hpp">
+      <Filter>gtfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\divides.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\minus.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\modulus.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\negate.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\equal_to.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\greater_equal.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\less_equal.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\not_equal_to.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\greater.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\mem.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="gtfo_testing">
+      <UniqueIdentifier>{f4fcba77-ed3a-4930-9364-5365da9044cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\static">
+      <UniqueIdentifier>{631cb829-32f2-4879-b322-8789811b165c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime">
+      <UniqueIdentifier>{48a92c91-8c8d-418c-9472-de2e22d7aab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\algorithm">
+      <UniqueIdentifier>{e3ec08d2-667e-4bfb-bc24-95472196049b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\numeric">
+      <UniqueIdentifier>{e1335140-3a5c-46de-87a3-3d083b530772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\utils">
+      <UniqueIdentifier>{e738a401-230a-42cb-812d-6ae4b6ce7c65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\utils\polymorphic_holder">
+      <UniqueIdentifier>{e4e6e7d9-cca9-49fd-aa12-98b5bf1cf6e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo">
+      <UniqueIdentifier>{a87bb421-86d8-4b57-bab0-1a89bd0b7dba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\utils">
+      <UniqueIdentifier>{129b21ad-dc81-4026-a021-16070d95f272}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl">
+      <UniqueIdentifier>{f286380a-add1-4fbb-b1b3-a1edc697a3ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl\type_traits">
+      <UniqueIdentifier>{550e058c-6012-4d0c-84b5-32e8c2c53b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\algorithm">
+      <UniqueIdentifier>{cae38a3c-e027-4daf-a500-88c27ce21df2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\numeric">
+      <UniqueIdentifier>{4868422f-ec48-4ee5-8ed8-fc580958e0b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\functional">
+      <UniqueIdentifier>{ddf48836-7cb6-4148-826e-de96d5524b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\functional">
+      <UniqueIdentifier>{3a054575-bc52-4de4-bc8d-a9f2a4e62cbd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -24,26 +24,26 @@ namespace gtfo
             template<typename U, bool u_is_incrementable_dereferenceable_and_comparable>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename U>
             struct impl<U, true>
             {
-                static GTFO_CONSTEXPR bool value = !is_void
-                                                   <
-                                                       typename value_of_dereferenced<U>::type
-                                                   >::value;
+                static constexpr bool value = !is_void
+                                              <
+                                                  typename value_of_dereferenced<U>::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   T,
-                                                   is_incrementable<T>::value &&
-                                                   is_dereferenceable<T>::value &&
-                                                   are_comparable_op_eq<T, T>::value &&
-                                                   are_comparable_op_n_eq<T, T>::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              T,
+                                              is_incrementable<T>::value &&
+                                              is_dereferenceable<T>::value &&
+                                              are_comparable_op_eq<T, T>::value &&
+                                              are_comparable_op_n_eq<T, T>::value
+                                          >::value;
         };
     }
 }

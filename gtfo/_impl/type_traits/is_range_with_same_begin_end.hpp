@@ -21,24 +21,24 @@ namespace gtfo
             template<typename U, bool u_is_range>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename U>
             struct impl<U, true>
             {
-                static GTFO_CONSTEXPR bool value = is_same
-                                                   <
-                                                       typename decay< typename result_of_begin<U>::type >::type,
-                                                       typename decay< typename result_of_end<U>::type >::type
-                                                   >::value;
+                static constexpr bool value = is_same
+                                              <
+                                                  typename decay< typename result_of_begin<U>::type >::type,
+                                                  typename decay< typename result_of_end<U>::type >::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   T,
-                                                   is_range<T>::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              T,
+                                              is_range<T>::value
+                                          >::value;
         };
     }
 }

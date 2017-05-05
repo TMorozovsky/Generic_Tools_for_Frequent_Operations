@@ -23,7 +23,7 @@ namespace gtfo
             template<typename Fun>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test<Function>(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(test<Function>(nullptr)) == sizeof(yes_type);
         };
     }
 }

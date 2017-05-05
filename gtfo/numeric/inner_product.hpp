@@ -92,9 +92,9 @@ namespace gtfo
                   InputIterator1    it_end_1,
                   InputIterator2 && it_begin_2)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
                                                            InputIterator2)());
     }
@@ -109,8 +109,8 @@ namespace gtfo
                   InputIterator1 it_end_1,
                   Range2 &&      range2)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
                                     begin(range2),
                                     GTFO_ITER_COMMON_VALUE(InputIterator1,
                                                            typename _tt::iterator_of_range< Range2 >::type)());
@@ -130,10 +130,10 @@ namespace gtfo
                   InputIterator2 && it_begin_2,
                   Value             init)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
-                                    _utils::move(init));
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
+                                    ::gtfo::move(init));
     }
 
     template<typename InputIterator1, typename Range2, typename Value>
@@ -146,10 +146,10 @@ namespace gtfo
                   Range2 &&      range2,
                   Value          init)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
                                     begin(range2),
-                                    _utils::move(init));
+                                    ::gtfo::move(init));
     }
 
     template<typename InputIterator1, typename InputIterator2, typename Value,
@@ -171,12 +171,12 @@ namespace gtfo
                   BinaryOperation1  op1,
                   BinaryOperation2  op2)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
-                                    _utils::move(init),
-                                    _utils::move(op1),
-                                    _utils::move(op2));
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename InputIterator1, typename Range2, typename Value,
@@ -194,12 +194,12 @@ namespace gtfo
                   BinaryOperation1 op1,
                   BinaryOperation2 op2)
     {
-        return ::std::inner_product(_utils::move(it_begin_1),
-                                    _utils::move(it_end_1),
+        return ::std::inner_product(::gtfo::move(it_begin_1),
+                                    ::gtfo::move(it_end_1),
                                     begin(range2),
-                                    _utils::move(init),
-                                    _utils::move(op1),
-                                    _utils::move(op2));
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename Range1, typename InputIterator2>
@@ -217,7 +217,7 @@ namespace gtfo
     {
         return ::std::inner_product(begin(range1),
                                     end(range1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
                                     GTFO_ITER_COMMON_VALUE(typename _tt::iterator_of_range< Range1 >::type,
                                                            InputIterator2)());
     }
@@ -253,8 +253,8 @@ namespace gtfo
     {
         return ::std::inner_product(begin(range1),
                                     end(range1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
-                                    _utils::move(init));
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
+                                    ::gtfo::move(init));
     }
 
     template<typename Range1, typename Range2, typename Value>
@@ -269,7 +269,7 @@ namespace gtfo
         return ::std::inner_product(begin(range1),
                                     end(range1),
                                     begin(range2),
-                                    _utils::move(init));
+                                    ::gtfo::move(init));
     }
 
     template<typename Range1, typename InputIterator2, typename Value,
@@ -292,10 +292,10 @@ namespace gtfo
     {
         return ::std::inner_product(begin(range1),
                                     end(range1),
-                                    _utils::forward<InputIterator2>(it_begin_2),
-                                    _utils::move(init),
-                                    _utils::move(op1),
-                                    _utils::move(op2));
+                                    ::gtfo::forward<InputIterator2>(it_begin_2),
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
     template<typename Range1, typename Range2, typename Value,
@@ -315,9 +315,9 @@ namespace gtfo
         return ::std::inner_product(begin(range1),
                                     end(range1),
                                     begin(range2),
-                                    _utils::move(init),
-                                    _utils::move(op1),
-                                    _utils::move(op2));
+                                    ::gtfo::move(init),
+                                    ::gtfo::move(op1),
+                                    ::gtfo::move(op2));
     }
 
 #undef GTFO_ITER_COMMON_VALUE

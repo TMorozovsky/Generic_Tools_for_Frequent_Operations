@@ -19,7 +19,7 @@ namespace gtfo
             template<typename U, bool u_is_range>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename U>
@@ -36,14 +36,14 @@ namespace gtfo
                 template<typename V>
                 static no_type test(...);
 
-                static GTFO_CONSTEXPR bool value = sizeof(test<U>(nullptr)) == sizeof(yes_type);
+                static constexpr bool value = sizeof(test<U>(nullptr)) == sizeof(yes_type);
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   T,
-                                                   is_range<T>::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              T,
+                                              is_range<T>::value
+                                          >::value;
         };
     }
 }

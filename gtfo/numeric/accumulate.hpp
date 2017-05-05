@@ -62,8 +62,8 @@ namespace gtfo
     accumulate(InputIterator it_begin,
                InputIterator it_end)
     {
-        return ::std::accumulate(_utils::move(it_begin),
-                                 _utils::move(it_end),
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
                                  typename _tt::value_of_dereferenced< InputIterator >::type());
     }
 
@@ -75,9 +75,9 @@ namespace gtfo
                InputIterator it_end,
                Value         init)
     {
-        return ::std::accumulate(_utils::move(it_begin),
-                                 _utils::move(it_end),
-                                 _utils::move(init));
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
+                                 ::gtfo::move(init));
     }
 
     template<typename InputIterator, typename Value, typename BinaryOperation>
@@ -88,10 +88,10 @@ namespace gtfo
                Value           init,
                BinaryOperation op)
     {
-        return ::std::accumulate(_utils::move(it_begin),
-                                 _utils::move(it_end),
-                                 _utils::move(init),
-                                 _utils::move(op));
+        return ::std::accumulate(::gtfo::move(it_begin),
+                                 ::gtfo::move(it_end),
+                                 ::gtfo::move(init),
+                                 ::gtfo::move(op));
     }
 
     template<typename Range>
@@ -113,7 +113,7 @@ namespace gtfo
     {
         return ::std::accumulate(begin(range),
                                  end(range),
-                                 _utils::move(init));
+                                 ::gtfo::move(init));
     }
 
     template<typename Range, typename Value, typename BinaryOperation>
@@ -127,8 +127,8 @@ namespace gtfo
     {
         return ::std::accumulate(begin(range),
                                  end(range),
-                                 _utils::move(init),
-                                 _utils::move(op));
+                                 ::gtfo::move(init),
+                                 ::gtfo::move(op));
     }
 
 #undef GTFO_RESULT_OF_ACCUMULATE_OP

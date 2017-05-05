@@ -23,11 +23,11 @@ namespace gtfo
             template<typename Fun, typename Arg>
             static no_type test(...);
 
-            static GTFO_CONSTEXPR bool value = sizeof(test
-                                                      <
-                                                          UnaryOperation,
-                                                          Argument
-                                                      >(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(test
+                                                 <
+                                                     UnaryOperation,
+                                                     Argument
+                                                 >(nullptr)) == sizeof(yes_type);
         };
     }
 }

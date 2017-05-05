@@ -48,8 +48,8 @@ namespace gtfo
     adjacent_find(ForwardIterator _it_begin,
                   ForwardIterator _it_end)
     {
-        return ::std::adjacent_find(_utils::move(_it_begin),
-                                    _utils::move(_it_end));
+        return ::std::adjacent_find(::gtfo::move(_it_begin),
+                                    ::gtfo::move(_it_end));
     }
 
     template<typename ForwardIterator, typename BinaryPredicate>
@@ -59,9 +59,9 @@ namespace gtfo
                   ForwardIterator _it_end,
                   BinaryPredicate _pred)
     {
-        return ::std::adjacent_find(_utils::move(_it_begin),
-                                    _utils::move(_it_end),
-                                    _utils::move(_pred));
+        return ::std::adjacent_find(::gtfo::move(_it_begin),
+                                    ::gtfo::move(_it_end),
+                                    ::gtfo::move(_pred));
     }
 
     template<typename Range>
@@ -82,7 +82,7 @@ namespace gtfo
     {
         return ::std::adjacent_find(begin(_range),
                                     end(_range),
-                                    _utils::move(_pred));
+                                    ::gtfo::move(_pred));
     }
 }
 

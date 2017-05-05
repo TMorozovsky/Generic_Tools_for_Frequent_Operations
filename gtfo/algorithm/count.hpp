@@ -23,8 +23,8 @@ namespace gtfo
                                                          _tt::declval< InputIterator >(),
                                                          _tt::declval< const Value & >()))
     {
-        return ::std::count(_utils::move(_it_begin),
-                            _utils::move(_it_end),
+        return ::std::count(::gtfo::move(_it_begin),
+                            ::gtfo::move(_it_end),
                             _value);
     }
 

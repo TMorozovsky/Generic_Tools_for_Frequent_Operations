@@ -19,9 +19,9 @@ namespace gtfo
            InputIterator  _it_end,
            UnaryPredicate _pred)
     {
-        return ::std::all_of(_utils::move(_it_begin),
-                             _utils::move(_it_end),
-                             _utils::move(_pred));
+        return ::std::all_of(::gtfo::move(_it_begin),
+                             ::gtfo::move(_it_end),
+                             ::gtfo::move(_pred));
     }
 
     template<typename Range, typename UnaryPredicate>
@@ -32,7 +32,7 @@ namespace gtfo
     {
         return ::std::all_of(begin(_range),
                              end(_range),
-                             _utils::move(_pred));
+                             ::gtfo::move(_pred));
     }
 }
 

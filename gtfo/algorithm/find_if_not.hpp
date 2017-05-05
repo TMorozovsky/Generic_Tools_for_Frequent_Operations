@@ -20,9 +20,9 @@ namespace gtfo
                 InputIterator it_end,
                 UnaryPredicate pred)
     {
-        return ::std::find_if_not(_utils::move(it_begin),
-                                  _utils::move(it_end),
-                                  _utils::move(pred));
+        return ::std::find_if_not(::gtfo::move(it_begin),
+                                  ::gtfo::move(it_end),
+                                  ::gtfo::move(pred));
     }
 
     template<typename Range, typename UnaryPredicate>
@@ -33,7 +33,7 @@ namespace gtfo
     {
         return ::std::find_if_not(begin(range),
                                   end(range),
-                                  _utils::move(pred));
+                                  ::gtfo::move(pred));
     }
 }
 

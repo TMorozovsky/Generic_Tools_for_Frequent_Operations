@@ -20,8 +20,8 @@ namespace gtfo
          InputIterator it_end,
          const Value & value)
     {
-        return ::std::find(_utils::move(it_begin),
-                           _utils::move(it_end),
+        return ::std::find(::gtfo::move(it_begin),
+                           ::gtfo::move(it_end),
                            value);
     }
 

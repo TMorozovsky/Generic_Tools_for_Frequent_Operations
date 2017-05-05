@@ -20,35 +20,35 @@ namespace gtfo
             template<typename F, typename T, typename U, bool f_is_invokable_with_t_and_u>
             struct impl
             {
-                static GTFO_CONSTEXPR bool value = false;
+                static constexpr bool value = false;
             };
 
             template<typename F, typename T, typename U>
             struct impl<F, T, U, true>
             {
-                static GTFO_CONSTEXPR bool value = can_be_used_in_boolean_context
-                                                   <
-                                                       typename result_of_fun2
-                                                       <
-                                                           F,
-                                                           T,
-                                                           U
-                                                       >::type
-                                                   >::value;
+                static constexpr bool value = can_be_used_in_boolean_context
+                                              <
+                                                  typename result_of_fun2
+                                                  <
+                                                      F,
+                                                      T,
+                                                      U
+                                                  >::type
+                                              >::value;
             };
 
-            static GTFO_CONSTEXPR bool value = impl
-                                               <
-                                                   BinaryPredicate,
-                                                   Argument1,
-                                                   Argument2,
-                                                   is_invokable_fun2
-                                                   <
-                                                       BinaryPredicate,
-                                                       Argument1,
-                                                       Argument2
-                                                   >::value
-                                               >::value;
+            static constexpr bool value = impl
+                                          <
+                                              BinaryPredicate,
+                                              Argument1,
+                                              Argument2,
+                                              is_invokable_fun2
+                                              <
+                                                  BinaryPredicate,
+                                                  Argument1,
+                                                  Argument2
+                                              >::value
+                                          >::value;
         };
     }
 }

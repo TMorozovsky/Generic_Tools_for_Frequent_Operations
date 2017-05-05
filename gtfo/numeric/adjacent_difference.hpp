@@ -59,9 +59,9 @@ namespace gtfo
                         InputIterator  it_end,
                         OutputIterator it_out)
     {
-        return ::std::adjacent_difference(_utils::move(it_begin),
-                                          _utils::move(it_end),
-                                          _utils::move(it_out));
+        return ::std::adjacent_difference(::gtfo::move(it_begin),
+                                          ::gtfo::move(it_end),
+                                          ::gtfo::move(it_out));
     }
 
     template<typename InputIterator, typename OutputIterator, typename BinaryOperation>
@@ -83,7 +83,7 @@ namespace gtfo
     {
         return ::std::adjacent_difference(begin(range),
                                           end(range),
-                                          _utils::move(it_out));
+                                          ::gtfo::move(it_out));
     }
 
     template<typename Range, typename OutputIterator, typename BinaryOperation>
@@ -97,8 +97,8 @@ namespace gtfo
     {
         return ::std::adjacent_difference(begin(range),
                                           end(range),
-                                          _utils::move(it_out),
-                                          _utils::move(op));
+                                          ::gtfo::move(it_out),
+                                          ::gtfo::move(op));
     }
 
 #undef GTFO_RESULT_OF_ADJACENT_DIFFERENCE_OP

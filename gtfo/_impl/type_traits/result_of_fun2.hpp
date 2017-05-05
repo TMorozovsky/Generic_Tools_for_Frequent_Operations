@@ -4,6 +4,12 @@
 #include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 #include "gtfo/_impl/type_traits/is_invokable_fun2.hpp"
 
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( push )
+//  Disable MSVC Compiler Warning C4244 ("'argument' : conversion from 'type1' to 'type2', possible loss of data")
+#   pragma warning( disable : 4244 )
+#endif
+
 namespace gtfo
 {
     namespace _tt
@@ -33,5 +39,9 @@ namespace gtfo
         };
     }
 }
+
+#if defined(_MSC_VER) && !defined(__clang__)
+#   pragma warning( pop )
+#endif
 
 #endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_RESULT_OF_FUN2_HPP
