@@ -20,6 +20,4 @@ static_assert( GTFO_IS_INVOKABLE_FUN0(void(*)(void)), "");
 static_assert( GTFO_IS_INVOKABLE_FUN0(void(&)(void)), "");
 static_assert( GTFO_IS_INVOKABLE_FUN0(decltype(foo)), "");
 static_assert( GTFO_IS_INVOKABLE_FUN0(bar), "");
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_IS_INVOKABLE_FUN0(baz), "");
-#endif

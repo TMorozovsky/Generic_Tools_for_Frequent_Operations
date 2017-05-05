@@ -28,12 +28,7 @@ namespace gtfo
             template<typename Lhs, typename Rhs>
             static no_type test(...);
 
-            static constexpr bool value = sizeof(test<To, From>(nullptr)) == sizeof(yes_type)
-#ifdef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC
-                                          && !is_void<typename remove_reference<To>::type>::value
-                                          && !is_const<typename remove_reference<To>::type>::value
-#endif
-                    ;
+            static constexpr bool value = sizeof(test<To, From>(nullptr)) == sizeof(yes_type);
         };
     }
 }

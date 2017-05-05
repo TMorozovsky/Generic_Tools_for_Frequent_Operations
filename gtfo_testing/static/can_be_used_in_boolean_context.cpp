@@ -10,6 +10,13 @@ namespace
 }
 
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(void), "");
+static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(const void), "");
+static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(volatile void), "");
+static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(const volatile void), "");
+
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(void *), "");
+static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(volatile void *const &), "");
+
 static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(bool), "");
 static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(const bool &), "");
 static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(volatile bool &&), "");
@@ -17,9 +24,5 @@ static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(int), "");
 static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(unsigned char), "");
 
 static_assert( GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(Bool), "");
-#if !defined(GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC) && !defined(GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG) // a bug in VC 2012 and VC/clang
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(PrivateBool), "");
-#endif
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG // a bug in VC/clang
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(NotBool), "");
-#endif

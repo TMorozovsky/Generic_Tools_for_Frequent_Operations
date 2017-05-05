@@ -70,14 +70,10 @@ static_assert(GTFO_ARE_COMPARABLE_OP_EQ(DL, DR), "");
 
 static_assert(GTFO_CAN_INVOKE_OP_EQ(EL, ER), "");
 static_assert(GTFO_RESULT_OF_OP_EQ_IS(EL, ER, PrivateBool), "");
-#if !defined(GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC) && !defined(GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG) // a bug in VC 2012 and VC/clang
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(PrivateBool), "");
 static_assert(!GTFO_ARE_COMPARABLE_OP_EQ(EL, ER), "");
-#endif
 
 static_assert(GTFO_CAN_INVOKE_OP_EQ(FL, FR), "");
 static_assert(GTFO_RESULT_OF_OP_EQ_IS(FL, FR, NotBool), "");
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG // a bug in VC/clang
 static_assert(!GTFO_CAN_BE_USED_IN_BOOLEAN_CONTEXT(NotBool), "");
 static_assert(!GTFO_ARE_COMPARABLE_OP_EQ(FL, FR), "");
-#endif

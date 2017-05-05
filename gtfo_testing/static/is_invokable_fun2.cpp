@@ -15,19 +15,13 @@ namespace
 static_assert( GTFO_IS_INVOKABLE_FUN2(void (int, A), char, A), "");
 static_assert(!GTFO_IS_INVOKABLE_FUN2(void (int, A), char, B), "");
 static_assert( GTFO_IS_INVOKABLE_FUN2(void (int, A), char, C), "");
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_IS_INVOKABLE_FUN2(void (int, A), char, D), "");
-#endif
 
 static_assert( GTFO_IS_INVOKABLE_FUN2(bar, char, A), "");
 static_assert(!GTFO_IS_INVOKABLE_FUN2(bar, char, B), "");
 static_assert( GTFO_IS_INVOKABLE_FUN2(bar, char, C), "");
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_IS_INVOKABLE_FUN2(bar, char, D), "");
-#endif
 
-#ifndef GTFO_NEED_WORKAROUNDS_FOR_OLD_MSVC // a bug in VC 2012
 static_assert(!GTFO_IS_INVOKABLE_FUN2(baz, char, A), "");
 static_assert(!GTFO_IS_INVOKABLE_FUN2(baz, char, C), "");
 static_assert(!GTFO_IS_INVOKABLE_FUN2(baz, char, D), "");
-#endif

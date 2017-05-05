@@ -19,7 +19,7 @@ namespace gtfo
             template<typename U>
             static yes_type test(typename remove_reference
                                  <
-                                     decltype( static_cast<bool>(declval<T>()) )
+                                     decltype( static_cast<bool>(declval<U>()) )
                                  >::type *);
 
             template<typename U>
@@ -27,13 +27,6 @@ namespace gtfo
 
             static constexpr bool value = sizeof(test<T>(nullptr)) == sizeof(yes_type);
         };
-
-#ifdef GTFO_NEED_WORKAROUNDS_FOR_MSVC_CLANG
-        template<> struct can_be_used_in_boolean_context<void>                { static constexpr bool value = false; };
-        template<> struct can_be_used_in_boolean_context<const void>          { static constexpr bool value = false; };
-        template<> struct can_be_used_in_boolean_context<volatile void>       { static constexpr bool value = false; };
-        template<> struct can_be_used_in_boolean_context<const volatile void> { static constexpr bool value = false; };
-#endif
     }
 }
 
