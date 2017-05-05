@@ -74,6 +74,9 @@ namespace
         ASSERT_EQ(DynamicallyAllocatedObject::count(), 1u);
         ASSERT_EQ(Derived::num_moves(), 1u);
 
+        static_assert(noexcept(base_holder(std::move(holder))),   "invalid noexcept-specification");
+        static_assert(noexcept(holder = std::move(holder_moved)), "invalid noexcept-specification");
+
         holder = std::move(holder_moved);
         ASSERT(holder && holder->dynamic_value() == 42);
         ASSERT(holder_moved && !holder_moved->has_dynamic_value());

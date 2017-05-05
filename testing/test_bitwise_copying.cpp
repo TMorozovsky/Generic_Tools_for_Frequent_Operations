@@ -36,6 +36,11 @@ namespace
         base_holder holder_copy(holder);
         ASSERT(holder_copy && holder_copy->as_Derived() && (holder_copy->as_Derived()->value() == 42));
 
+        static_assert(noexcept(base_holder(std::move(holder))),  "invalid noexcept-specification");
+        static_assert(noexcept(base_holder(holder)),             "invalid noexcept-specification");
+        static_assert(noexcept(holder = std::move(holder_copy)), "invalid noexcept-specification");
+        static_assert(noexcept(holder = holder_copy),            "invalid noexcept-specification");
+
         base_holder holder_moved(std::move(holder));
         ASSERT(holder_moved && holder_moved->as_Derived() && (holder_moved->as_Derived()->value() == 42));
         // despite being moved-from, the object should still exist and have the same value

@@ -128,6 +128,9 @@ public:
     T * operator -> () const noexcept { assert(_ptr); return _ptr; }
 
     T * get() const noexcept { return _ptr; }
+
+    void reset()                       { delete _ptr; _ptr = nullptr;            }
+    void reset(T * owning_raw_pointer) { delete _ptr; _ptr = owning_raw_pointer; }
 };
 
 #endif // TESTING_TESTING_HPP_INCLUDED

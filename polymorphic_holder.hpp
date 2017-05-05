@@ -468,7 +468,7 @@ namespace polymorphic_holder_lib
             _is_constructed = true;
         }
 
-        inline ~scoped_throwing_construction_guard()
+        inline ~scoped_throwing_construction_guard() noexcept
         {
             if (!_is_constructed) {
                 polymorphic_holder_lib::set_bytes_to_zero(_ref_polymorphic_holder);
@@ -479,7 +479,7 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void nothrow_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept
     {
-        i_nothrow_moveable * p = static_cast<i_nothrow_moveable *>(src.object_ptr_safe());
+        polymorphic_holder_lib::i_nothrow_moveable * p = static_cast<polymorphic_holder_lib::i_nothrow_moveable *>(src.object_ptr_safe());
         if (p) {
             polymorphic_holder_lib::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
@@ -491,7 +491,7 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void throwing_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src)
     {
-        i_throwing_moveable * p = static_cast<i_throwing_moveable *>(src.object_ptr_safe());
+        polymorphic_holder_lib::i_throwing_moveable * p = static_cast<polymorphic_holder_lib::i_throwing_moveable *>(src.object_ptr_safe());
         if (p) {
             polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
             polymorphic_holder_lib::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
@@ -505,7 +505,7 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void nothrow_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src) noexcept
     {
-        const i_nothrow_copyable * p = static_cast<const i_nothrow_copyable *>(src.object_ptr_safe());
+        const polymorphic_holder_lib::i_nothrow_copyable * p = static_cast<const polymorphic_holder_lib::i_nothrow_copyable *>(src.object_ptr_safe());
         if (p) {
             p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
@@ -517,7 +517,7 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void throwing_copy_construct(PolymorphicHolder & uninitialized_dest, const PolymorphicHolder & src)
     {
-        const i_throwing_copyable * p = static_cast<const i_throwing_copyable *>(src.object_ptr_safe());
+        const polymorphic_holder_lib::i_throwing_copyable * p = static_cast<const polymorphic_holder_lib::i_throwing_copyable *>(src.object_ptr_safe());
         if (p) {
             polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
             p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);

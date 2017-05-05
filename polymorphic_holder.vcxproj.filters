@@ -45,5 +45,8 @@
     <ClCompile Include="testing\test_member_fields_access_through_pointers.cpp">
       <Filter>testing</Filter>
     </ClCompile>
+    <ClCompile Include="testing\test_throwing_moveable_only.cpp">
+      <Filter>testing</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
