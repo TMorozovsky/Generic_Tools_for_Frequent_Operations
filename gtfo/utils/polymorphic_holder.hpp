@@ -1,5 +1,5 @@
-#ifndef POLYMORPHIC_HOLDER_HPP_INCLUDED
-#define POLYMORPHIC_HOLDER_HPP_INCLUDED
+#ifndef GTFO_FILE_INCLUDED_UTILS_POLYMORPHIC_HOLDER_HPP
+#define GTFO_FILE_INCLUDED_UTILS_POLYMORPHIC_HOLDER_HPP
 
 #include "gtfo/_impl/utility.hpp"
 #include "gtfo/_impl/mem.hpp"
@@ -1012,7 +1012,7 @@ namespace polymorphic_holder_lib
         return offset;
     }
 
-#ifndef POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+#ifndef GTFO_POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
     namespace detail
     {
         template<class BaseType, typename ResultType, typename ... ArgTypes>
@@ -1120,7 +1120,7 @@ namespace polymorphic_holder_lib
         template<typename ... ArgTypes>
         ResultType operator () (ArgTypes&&...) const noexcept = delete;
     };
-#endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+#endif // !defined GTFO_POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
 }
 
 // Holder that stores one object of any type derived from BaseType (may also be BaseType itself),
@@ -1243,7 +1243,7 @@ public:
     inline       base_type * operator -> ()       noexcept { GTFO_DEBUG_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
     inline const base_type * operator -> () const noexcept { GTFO_DEBUG_ASSERT(this->owns_object()); return this->object_ptr_unsafe(); }
 
-#ifndef POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+#ifndef GTFO_POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::pending_member_function_call<base_type, ResultType, ArgTypes...>
         operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...)) noexcept
@@ -1311,7 +1311,7 @@ public:
     template<typename ResultType, typename ... ArgTypes>
     inline polymorphic_holder_lib::deleted_callable_dummy<ResultType>
         operator ->* (ResultType (base_type::*p_mem_fun)(ArgTypes...)) const noexcept = delete;
-#endif // !defined POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
+#endif // !defined GTFO_POLYMORPHIC_HOLDER_DISABLE_OVERLOADED_PENDING_MEMBER_FUNCTION_CALL_OPERATOR
 
     template<typename MemberFieldType>
     inline MemberFieldType & operator ->* (MemberFieldType base_type::*p_member_field) noexcept
@@ -1574,4 +1574,4 @@ private: // impl_reset<DesiredType>(construction_specification_tag, move_specifi
 #   pragma warning( pop )
 #endif
 
-#endif // POLYMORPHIC_HOLDER_HPP_INCLUDED
+#endif // GTFO_FILE_INCLUDED_UTILS_POLYMORPHIC_HOLDER_HPP
