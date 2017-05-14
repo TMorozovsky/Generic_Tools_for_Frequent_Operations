@@ -11,6 +11,7 @@
 #include "gtfo/functional/modulus.hpp"
 #include "gtfo/functional/multiplies.hpp"
 #include "gtfo/functional/negate.hpp"
+#include "gtfo/functional/not_.hpp"
 #include "gtfo/functional/not_equal_to.hpp"
 #include "gtfo/functional/plus.hpp"
 

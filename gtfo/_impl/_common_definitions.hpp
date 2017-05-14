@@ -16,6 +16,12 @@ namespace gtfo
     using ::std::end;
 }
 
+#if defined(_MSC_VER) && !defined(__clang__) && (_MSC_VER <= 1900)
+#   define GTFO_CONSTEXPR_FUNCTION inline
+#else
+#   define GTFO_CONSTEXPR_FUNCTION constexpr
+#endif
+
 #define GTFO_DEBUG_ASSERT(x) \
     { \
         assert((x)); \

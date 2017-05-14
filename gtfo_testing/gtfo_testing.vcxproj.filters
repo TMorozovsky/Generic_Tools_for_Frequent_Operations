@@ -214,6 +214,39 @@
     <ClCompile Include="runtime\functional\comparisons.cpp">
       <Filter>gtfo_testing\functional</Filter>
     </ClCompile>
+    <ClCompile Include="static\is_invokable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_nothrow_invokable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\functional\not_.cpp">
+      <Filter>gtfo_testing\functional</Filter>
+    </ClCompile>
+    <ClCompile Include="static\static_test_functional_not_.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\mem_fun_invoke_call_result.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\mem_fun_invoke_is_callable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\mem_fun_invoke_is_nothrow_callable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_invocation.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_logically_negatable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\is_nothrow_logically_negatable.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\result_of_logical_negation.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">
@@ -462,6 +495,39 @@
     <ClInclude Include="..\gtfo\_impl\mem.hpp">
       <Filter>gtfo\_impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\functional\function_object_holder.hpp">
+      <Filter>gtfo\_impl\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_invokable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_nothrow_invokable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\functional\not_.hpp">
+      <Filter>gtfo\functional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\mem_fun_invoke_is_callable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\mem_fun_invoke_is_nothrow_callable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\mem_fun_invoke_call_result.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_invocation.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_logically_negatable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_nothrow_logically_negatable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\result_of_logical_negation.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="gtfo_testing">
@@ -508,6 +574,9 @@
     </Filter>
     <Filter Include="gtfo_testing\functional">
       <UniqueIdentifier>{3a054575-bc52-4de4-bc8d-a9f2a4e62cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl\functional">
+      <UniqueIdentifier>{ae5d62da-f3c5-468d-9868-b76723236eae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
