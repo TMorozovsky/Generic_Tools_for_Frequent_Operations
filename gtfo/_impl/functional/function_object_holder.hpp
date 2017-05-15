@@ -33,9 +33,13 @@ namespace gtfo
                 GTFO_CONSTEXPR_FUNCTION volatile       F &  _get_fun() volatile       &  noexcept { return static_cast<volatile       F &>(*this); }
                 constexpr               const volatile F &  _get_fun() const volatile &  noexcept { return static_cast<const volatile F &>(*this); }
 
-                GTFO_CONSTEXPR_FUNCTION                F && _get_fun()                && noexcept { return static_cast<               F &&>(::gtfo::move(*this)); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr                              F && _get_fun()                && noexcept { return static_cast<               F &&>(::gtfo::move(*this)); }
+#endif
                 constexpr               const          F && _get_fun() const          && noexcept { return static_cast<const          F &&>(::gtfo::move(*this)); }
-                GTFO_CONSTEXPR_FUNCTION volatile       F && _get_fun() volatile       && noexcept { return static_cast<volatile       F &&>(::gtfo::move(*this)); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr               volatile       F && _get_fun() volatile       && noexcept { return static_cast<volatile       F &&>(::gtfo::move(*this)); }
+#endif
                 constexpr               const volatile F && _get_fun() const volatile && noexcept { return static_cast<const volatile F &&>(::gtfo::move(*this)); }
             };
 
@@ -62,9 +66,13 @@ namespace gtfo
                 GTFO_CONSTEXPR_FUNCTION volatile       F &  _get_fun() volatile       &  noexcept { return _stored_f; }
                 constexpr               const volatile F &  _get_fun() const volatile &  noexcept { return _stored_f; }
 
-                GTFO_CONSTEXPR_FUNCTION                F && _get_fun()                && noexcept { return ::gtfo::move(_stored_f); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr                              F && _get_fun()                && noexcept { return ::gtfo::move(_stored_f); }
+#endif
                 constexpr               const          F && _get_fun() const          && noexcept { return ::gtfo::move(_stored_f); }
-                GTFO_CONSTEXPR_FUNCTION volatile       F && _get_fun() volatile       && noexcept { return ::gtfo::move(_stored_f); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr               volatile       F && _get_fun() volatile       && noexcept { return ::gtfo::move(_stored_f); }
+#endif
                 constexpr               const volatile F && _get_fun() const volatile && noexcept { return ::gtfo::move(_stored_f); }
             };
 
@@ -91,9 +99,13 @@ namespace gtfo
                 GTFO_CONSTEXPR_FUNCTION volatile       F &  _get_fun() volatile       &  noexcept { return _stored_f; }
                 constexpr               const volatile F &  _get_fun() const volatile &  noexcept { return _stored_f; }
 
-                GTFO_CONSTEXPR_FUNCTION                F && _get_fun()                && noexcept { return ::gtfo::move(_stored_f); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr                              F && _get_fun()                && noexcept { return ::gtfo::move(_stored_f); }
+#endif
                 constexpr               const          F && _get_fun() const          && noexcept { return ::gtfo::move(_stored_f); }
-                GTFO_CONSTEXPR_FUNCTION volatile       F && _get_fun() volatile       && noexcept { return ::gtfo::move(_stored_f); }
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
+                constexpr               volatile       F && _get_fun() volatile       && noexcept { return ::gtfo::move(_stored_f); }
+#endif
                 constexpr               const volatile F && _get_fun() const volatile && noexcept { return ::gtfo::move(_stored_f); }
             };
 
@@ -161,8 +173,9 @@ namespace gtfo
                     return      this->_get_fun()(::gtfo::forward<Args>(args)...);
                 }
 
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
                 template<typename... Args>
-                GTFO_CONSTEXPR_FUNCTION
+                constexpr
                     auto
                     invoke(Args&&... args) &&
                     noexcept(noexcept(::gtfo::_tt::declval<function_object_holder>()._get_fun()(::gtfo::forward<Args>(args)...)))
@@ -170,6 +183,7 @@ namespace gtfo
                 {
                     return      (::gtfo::move(*this))._get_fun()(::gtfo::forward<Args>(args)...);
                 }
+#endif
 
                 template<typename... Args>
                 constexpr
@@ -181,8 +195,9 @@ namespace gtfo
                     return      (::gtfo::move(*this))._get_fun()(::gtfo::forward<Args>(args)...);
                 }
 
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
                 template<typename... Args>
-                GTFO_CONSTEXPR_FUNCTION
+                constexpr
                     auto
                     invoke(Args&&... args) volatile &&
                     noexcept(noexcept(::gtfo::_tt::declval<volatile function_object_holder>()._get_fun()(::gtfo::forward<Args>(args)...)))
@@ -190,6 +205,7 @@ namespace gtfo
                 {
                     return      (::gtfo::move(*this))._get_fun()(::gtfo::forward<Args>(args)...);
                 }
+#endif
 
                 template<typename... Args>
                 constexpr

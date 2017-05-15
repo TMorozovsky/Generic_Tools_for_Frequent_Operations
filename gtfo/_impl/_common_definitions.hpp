@@ -16,10 +16,11 @@ namespace gtfo
     using ::std::end;
 }
 
-#if defined(_MSC_VER) && !defined(__clang__) && (_MSC_VER <= 1900)
-#   define GTFO_CONSTEXPR_FUNCTION inline
-#else
+#if (__cplusplus >= 201402L) || defined(__clang__) || (defined(__GNUG__) && (__GNUC__ >= 5)) || (defined(_MSC_VER) && (_MSC_VER >= 1910))
 #   define GTFO_CONSTEXPR_FUNCTION constexpr
+#else
+#   define GTFO_CONSTEXPR_FUNCTION inline
+#   define GTFO_LIMITED_CONSTEXPR_SUPPORT
 #endif
 
 #define GTFO_DEBUG_ASSERT(x) \

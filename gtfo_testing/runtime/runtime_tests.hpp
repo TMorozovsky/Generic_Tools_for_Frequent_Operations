@@ -16,8 +16,8 @@ namespace gtfo
         {
         };
 
-        extern std::atomic<unsigned int> _test_success_count;
-        extern std::atomic<unsigned int> _test_failures_count;
+        std::atomic<unsigned int> & _test_success_count();
+        std::atomic<unsigned int> & _test_failures_count();
 
         inline
         const char *
@@ -229,11 +229,11 @@ namespace gtfo
                 GTFO_IMPL_TEST_FUN_BEGIN_PRINT_MESSAGE()
 
 #define GTFO_TEST_FUN_END \
-                ++::gtfo::detail::_test_success_count; \
+                ++::gtfo::detail::_test_success_count(); \
             } \
             catch (const ::gtfo::detail::test_failure_exception &) \
             { \
-                ++::gtfo::detail::_test_failures_count; \
+                ++::gtfo::detail::_test_failures_count(); \
             } \
         } \
         \

@@ -96,8 +96,9 @@ namespace gtfo
                 return      !(this->invoke(::gtfo::forward<Args>(args)...));
             }
 
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
             template<typename... Args>
-            GTFO_CONSTEXPR_FUNCTION
+            constexpr
                 auto
                 operator () (Args&&... args) &&
                 noexcept( detail::functional::is_not_t_call_noexcept<_fun_holder, Args...>::value )
@@ -105,6 +106,7 @@ namespace gtfo
             {
                 return      !(::gtfo::move(*this).invoke(::gtfo::forward<Args>(args)...));
             }
+#endif
 
             template<typename... Args>
             constexpr
@@ -116,8 +118,9 @@ namespace gtfo
                 return      !(::gtfo::move(*this).invoke(::gtfo::forward<Args>(args)...));
             }
 
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
             template<typename... Args>
-            GTFO_CONSTEXPR_FUNCTION
+            constexpr
                 auto
                 operator () (Args&&... args) volatile &&
                 noexcept( detail::functional::is_not_t_call_noexcept<volatile _fun_holder, Args...>::value )
@@ -125,6 +128,7 @@ namespace gtfo
             {
                 return      !(::gtfo::move(*this).invoke(::gtfo::forward<Args>(args)...));
             }
+#endif
 
             template<typename... Args>
             constexpr

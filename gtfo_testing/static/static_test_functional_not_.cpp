@@ -67,9 +67,16 @@ static_assert(is_same<result_of_invocation_t<const NotFoo &,          int>, B>::
 static_assert(is_same<result_of_invocation_t<volatile NotFoo &,       int>, C>::value, "");
 static_assert(is_same<result_of_invocation_t<const volatile NotFoo &, int>, D>::value, "");
 
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
 static_assert(is_same<result_of_invocation_t<NotFoo,                  int>, E>::value, "");
+#endif
+
 static_assert(is_same<result_of_invocation_t<const NotFoo,            int>, F>::value, "");
+
+#ifndef GTFO_LIMITED_CONSTEXPR_SUPPORT
 static_assert(is_same<result_of_invocation_t<volatile NotFoo,         int>, G>::value, "");
+#endif
+
 static_assert(is_same<result_of_invocation_t<const volatile NotFoo,   int>, H>::value, "");
 
 namespace
@@ -260,22 +267,16 @@ namespace
     static_assert(!holder_result == 0, "");
 
     constexpr gtfo::not_t<ConstexprTesterObject> tester_1 { ConstexprTesterObject{100} };
-    constexpr auto test_result_1 { tester_1() };
+    constexpr int test_result_1 { tester_1() };
     static_assert(test_result_1 == -100, "");
 
     constexpr auto tester_2 = gtfo::not_(ConstexprTesterObject{150});
     constexpr int test_result_2 { tester_2() };
     static_assert(test_result_2 == -150, "");
 
-#if defined(_MSC_VER) && !defined(__clang__) && (_MSC_VER <= 1900)
-#   define GTFO_OLD_BAD_CONSTEXPR
-#endif
-
-#ifndef GTFO_OLD_BAD_CONSTEXPR
     constexpr int test_result_3 = gtfo::not_t<ConstexprTesterObject>(ConstexprTesterObject{200})();
     static_assert(test_result_3 == -200, "");
 
     constexpr int test_result_4 = gtfo::not_(ConstexprTesterObject{250})();
     static_assert(test_result_4 == -250, "");
-#endif
 }

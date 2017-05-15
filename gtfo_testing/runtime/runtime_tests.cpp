@@ -5,8 +5,8 @@ namespace gtfo
 {
     namespace detail
     {
-        std::atomic<unsigned int> _test_success_count(0);
-        std::atomic<unsigned int> _test_failures_count(0);
+        std::atomic<unsigned int> & _test_success_count()  { static std::atomic<unsigned int> _value(0); return _value; }
+        std::atomic<unsigned int> & _test_failures_count() { static std::atomic<unsigned int> _value(0); return _value; }
 
         bool is_equal(const std::string & lhs, const char * rhs) noexcept
         {
@@ -35,8 +35,8 @@ namespace gtfo
 
 int main()
 {
-    unsigned int success_count = ::gtfo::detail::_test_success_count;
-    unsigned int failures_count = ::gtfo::detail::_test_failures_count;
+    unsigned int success_count = ::gtfo::detail::_test_success_count();
+    unsigned int failures_count = ::gtfo::detail::_test_failures_count();
 
     std::cout << "successful tests: " << success_count << "; ";
     std::cout << "failed tests: " << failures_count << std::endl;

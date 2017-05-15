@@ -66,6 +66,11 @@ public:
         (void)p_Widget_base;
     }
 
+#if defined(__GNUG__) && (__GNUC__ < 5) // a bug in the library implementation: std::string's move constructor is not noexcept
+    WeirdWidget(const WeirdWidget &) = default;
+    WeirdWidget(WeirdWidget && other) noexcept : _info(std::move(other._info)) { }
+#endif
+
     void draw() const override
     {
         std::printf("WeirdWidget (%.12s)\n", _info.c_str());

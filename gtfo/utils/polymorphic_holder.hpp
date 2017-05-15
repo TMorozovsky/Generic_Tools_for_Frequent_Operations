@@ -28,10 +28,11 @@ namespace polymorphic_holder_lib
     template<>           struct is_unsigned_integral_type<unsigned long int>      { static constexpr bool value = true; };
     template<>           struct is_unsigned_integral_type<unsigned long long int> { static constexpr bool value = true; };
 
-    // Interface that must be implemented by a hierarchy of nothrow-moveable polymorphic objects.
-    // This interface will be used by polymorphic_holder to move-construct its owned object
+    // Interface the declares a "virtual nothrow move constructor" in the owned objects' hierarchy.
+    //
+    // It must be implemented by a hierarchy of nothrow-moveable polymorphic objects,
+    // and it will be used by polymorphic_holder to move-construct its owned object
     // when the polymorphic_holder itself is being moved.
-    // Essentially, this interface declares a "virtual move constructor" in the owned objects' hierarchy.
     class i_nothrow_moveable
     {
     public:
@@ -40,14 +41,14 @@ namespace polymorphic_holder_lib
 
     protected:
         constexpr i_nothrow_moveable() noexcept = default;
-        inline ~i_nothrow_moveable() noexcept { }
     };
 
-    // Interface that must be implemented by a hierarchy of moveable polymorphic objects
-    // move constructors of which might throw exceptions.
-    // This interface will be used by polymorphic_holder to move-construct its owned object
+    // Interface that declares a "virtual throwing move constructor" in the owned objects' hierarchy.
+    //
+    // It must be implemented by a hierarchy of moveable polymorphic objects
+    // move constructors of which might throw exceptions,
+    // and it will be used by polymorphic_holder to move-construct its owned object
     // when the polymorphic_holder itself is being moved.
-    // Essentially, this interface declares a "virtual move constructor" in the owned objects' hierarchy.
     class i_throwing_moveable
     {
     public:
@@ -56,13 +57,13 @@ namespace polymorphic_holder_lib
 
     protected:
         constexpr i_throwing_moveable() noexcept = default;
-        inline ~i_throwing_moveable() noexcept { }
     };
 
-    // Interface that must be implemented by a hierarchy of nothrow-copyable polymorphic objects.
-    // This interface will be used by polymorphic_holder to copy-construct its owned object
+    // Interface that declares a "virtual nothrow copy constructor" in the owned objects' hierarchy.
+    //
+    // It must be implemented by a hierarchy of nothrow-copyable polymorphic objects,
+    // and it will be used by polymorphic_holder to copy-construct its owned object
     // when the polymorphic_holder itself is being copied.
-    // Essentially, this interface declares a "virtual copy constructor" in the owned objects' hierarchy.
     class i_nothrow_copyable
     {
     public:
@@ -71,14 +72,14 @@ namespace polymorphic_holder_lib
 
     protected:
         constexpr i_nothrow_copyable() noexcept = default;
-        inline ~i_nothrow_copyable() noexcept { }
     };
 
-    // Interface that must be implemented by a hierarchy of copyable polymorphic objects
-    // copy constructors of which might throw exceptions.
-    // This interface will be used by polymorphic_holder to copy-construct its owned object
+    // Interface that declares a "virtual throwing copy constructor" in the owned objects' hierarchy.
+    //
+    // It must be implemented by a hierarchy of copyable polymorphic objects
+    // copy constructors of which might throw exceptions,
+    // and it will be used by polymorphic_holder to copy-construct its owned object
     // when the polymorphic_holder itself is being copied.
-    // Essentially, this interface declares a "virtual copy constructor" in the owned objects' hierarchy.
     class i_throwing_copyable
     {
     public:
@@ -87,7 +88,6 @@ namespace polymorphic_holder_lib
 
     protected:
         constexpr i_throwing_copyable() noexcept = default;
-        inline ~i_throwing_copyable() noexcept { }
     };
 }
 
@@ -150,7 +150,6 @@ namespace polymorphic_holder_utils
 
     protected:
         constexpr nothrow_moveable_only() noexcept = default;
-        inline ~nothrow_moveable_only() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -164,7 +163,6 @@ namespace polymorphic_holder_utils
 
     protected:
         constexpr throwing_moveable_only() noexcept = default;
-        inline ~throwing_moveable_only() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -178,7 +176,6 @@ namespace polymorphic_holder_utils
 
     protected:
         constexpr nothrow_copyable_only() noexcept = default;
-        inline ~nothrow_copyable_only() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -192,7 +189,6 @@ namespace polymorphic_holder_utils
 
     protected:
         constexpr throwing_copyable_only() noexcept = default;
-        inline ~throwing_copyable_only() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -203,7 +199,6 @@ namespace polymorphic_holder_utils
     {
     protected:
         constexpr nothrow_moveable_and_nothrow_copyable() noexcept = default;
-        inline ~nothrow_moveable_and_nothrow_copyable() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -214,7 +209,6 @@ namespace polymorphic_holder_utils
     {
     protected:
         constexpr nothrow_moveable_and_throwing_copyable() noexcept = default;
-        inline ~nothrow_moveable_and_throwing_copyable() noexcept { }
     };
 
     // Interface that must be inherited by the base class of a polymorphic hierarchy
@@ -225,7 +219,6 @@ namespace polymorphic_holder_utils
     {
     protected:
         constexpr throwing_moveable_and_throwing_copyable() noexcept = default;
-        inline ~throwing_moveable_and_throwing_copyable() noexcept { }
     };
 }
 
@@ -403,7 +396,7 @@ namespace polymorphic_holder_lib
 
         // Invoke this function when throwing construction has successfully been finished
         // to disable the guard.
-        inline void set_constructed() noexcept
+        GTFO_CONSTEXPR_FUNCTION void set_constructed() noexcept
         {
             GTFO_DEBUG_ASSERT(_is_constructed == false);
             _is_constructed = true;
@@ -532,7 +525,6 @@ namespace polymorphic_holder_MCP
         void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
 
         constexpr bitwise_exclusive_move() noexcept = default;
-        inline ~bitwise_exclusive_move() noexcept { }
     };
 
     // Implements both moving and copying of polymorphic_holder<...> instances as if they were POD.
@@ -556,7 +548,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr bitwise_copying() noexcept = default;
-        inline ~bitwise_copying() noexcept { }
     };
 
     // Implements moving of polymorphic_holder<...> instances
@@ -583,7 +574,6 @@ namespace polymorphic_holder_MCP
         void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
 
         constexpr nothrow_moveable_only() noexcept = default;
-        inline ~nothrow_moveable_only() noexcept { }
     };
 
     // Implements moving of polymorphic_holder<...> instances
@@ -610,7 +600,6 @@ namespace polymorphic_holder_MCP
         void MCP_copy_construct_from(const PolymorphicHolderSelf &) = delete;
 
         constexpr throwing_moveable_only() noexcept = default;
-        inline ~throwing_moveable_only() noexcept { }
     };
 
     // Implements copying of polymorphic_holder<...> instances
@@ -640,7 +629,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr nothrow_copyable_only() noexcept = default;
-        inline ~nothrow_copyable_only() noexcept { }
     };
 
     // Implements copying of polymorphic_holder<...> instances
@@ -670,7 +658,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr throwing_copyable_only() noexcept = default;
-        inline ~throwing_copyable_only() noexcept { }
     };
 
     // Implements both moving and copying of polymorphic_holder<...> instances
@@ -699,7 +686,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr nothrow_moveable_and_nothrow_copyable() noexcept = default;
-        inline ~nothrow_moveable_and_nothrow_copyable() noexcept { }
     };
 
     // Implements both moving and copying of polymorphic_holder<...> instances
@@ -728,7 +714,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr nothrow_moveable_and_throwing_copyable() noexcept = default;
-        inline ~nothrow_moveable_and_throwing_copyable() noexcept { }
     };
 
     // Implements both moving and copying of polymorphic_holder<...> instances
@@ -757,7 +742,6 @@ namespace polymorphic_holder_MCP
         }
 
         constexpr throwing_moveable_and_throwing_copyable() noexcept = default;
-        inline ~throwing_moveable_and_throwing_copyable() noexcept { }
     };
 }
 
@@ -823,19 +807,18 @@ namespace polymorphic_holder_DRP
                 return 0;
             }
 
-            inline void DRP_set_offset_to_base(size_t new_offset_value) noexcept
+            GTFO_CONSTEXPR_FUNCTION void DRP_set_offset_to_base(size_t new_offset_value) noexcept
             {
                 GTFO_DEBUG_ASSERT(new_offset_value == 0);
                 (void)new_offset_value;
             }
 
         protected:
-            constexpr bytes_array_only_impl() noexcept                                         = default;
-            inline bytes_array_only_impl(const bytes_array_only_impl &) noexcept               { }
-            inline bytes_array_only_impl & operator = (const bytes_array_only_impl &) noexcept { return *this; }
-            inline bytes_array_only_impl(bytes_array_only_impl &&) noexcept                    { }
-            inline bytes_array_only_impl & operator = (bytes_array_only_impl &&) noexcept      { return *this; }
-            inline ~bytes_array_only_impl() noexcept                                           { }
+            constexpr               bytes_array_only_impl() noexcept                                            = default;
+            constexpr               bytes_array_only_impl(const bytes_array_only_impl &) noexcept               { }
+            GTFO_CONSTEXPR_FUNCTION bytes_array_only_impl & operator = (const bytes_array_only_impl &) noexcept { return *this; }
+            constexpr               bytes_array_only_impl(bytes_array_only_impl &&) noexcept                    { }
+            GTFO_CONSTEXPR_FUNCTION bytes_array_only_impl & operator = (bytes_array_only_impl &&) noexcept      { return *this; }
         };
 
         // Implementation of the offset_before_bytes and offset_before_bytes_typed<...> policies.
@@ -854,12 +837,12 @@ namespace polymorphic_holder_DRP
             alignas(ObjectAlignment) unsigned char DRP_object_bytes[MaxObjectSize];
 
         protected:
-            inline size_t DRP_offset_to_base() const noexcept
+            constexpr size_t DRP_offset_to_base() const noexcept
             {
                 return static_cast<size_t>(_offset_to_base_value);
             }
 
-            inline void DRP_set_offset_to_base(size_t new_offset_value) noexcept
+            GTFO_CONSTEXPR_FUNCTION void DRP_set_offset_to_base(size_t new_offset_value) noexcept
             {
                 GTFO_DEBUG_ASSERT(new_offset_value < MaxObjectSize);
                 GTFO_DEBUG_ASSERT(new_offset_value <= static_cast<size_t>(OffsetType(-1)));
@@ -867,12 +850,11 @@ namespace polymorphic_holder_DRP
             }
 
         protected:
-            constexpr offset_before_bytes_impl() noexcept                                            = default;
-            inline offset_before_bytes_impl(const offset_before_bytes_impl &) noexcept               { }
-            inline offset_before_bytes_impl & operator = (const offset_before_bytes_impl &) noexcept { return *this; }
-            inline offset_before_bytes_impl(offset_before_bytes_impl &&) noexcept                    { }
-            inline offset_before_bytes_impl & operator = (offset_before_bytes_impl &&) noexcept      { return *this; }
-            inline ~offset_before_bytes_impl() noexcept                                              { }
+            constexpr               offset_before_bytes_impl() noexcept                                               = default;
+            constexpr               offset_before_bytes_impl(const offset_before_bytes_impl &) noexcept               { }
+            GTFO_CONSTEXPR_FUNCTION offset_before_bytes_impl & operator = (const offset_before_bytes_impl &) noexcept { return *this; }
+            constexpr               offset_before_bytes_impl(offset_before_bytes_impl &&) noexcept                    { }
+            GTFO_CONSTEXPR_FUNCTION offset_before_bytes_impl & operator = (offset_before_bytes_impl &&) noexcept      { return *this; }
         };
 
         // Implementation of the offset_after_bytes and offset_after_bytes_typed<...> policies.
@@ -891,12 +873,12 @@ namespace polymorphic_holder_DRP
             OffsetType _offset_to_base_value;
 
         protected:
-            inline size_t DRP_offset_to_base() const noexcept
+            constexpr size_t DRP_offset_to_base() const noexcept
             {
                 return static_cast<size_t>(_offset_to_base_value);
             }
 
-            inline void DRP_set_offset_to_base(size_t new_offset_value) noexcept
+            GTFO_CONSTEXPR_FUNCTION void DRP_set_offset_to_base(size_t new_offset_value) noexcept
             {
                 GTFO_DEBUG_ASSERT(new_offset_value < MaxObjectSize);
                 GTFO_DEBUG_ASSERT(new_offset_value <= static_cast<size_t>(OffsetType(-1)));
@@ -904,12 +886,11 @@ namespace polymorphic_holder_DRP
             }
 
         protected:
-            constexpr offset_after_bytes_impl() noexcept                                           = default;
-            inline offset_after_bytes_impl(const offset_after_bytes_impl &) noexcept               { }
-            inline offset_after_bytes_impl & operator = (const offset_after_bytes_impl &) noexcept { return *this; }
-            inline offset_after_bytes_impl(offset_after_bytes_impl &&) noexcept                    { }
-            inline offset_after_bytes_impl & operator = (offset_after_bytes_impl &&) noexcept      { return *this; }
-            inline ~offset_after_bytes_impl() noexcept                                             { }
+            constexpr               offset_after_bytes_impl() noexcept                                              = default;
+            constexpr               offset_after_bytes_impl(const offset_after_bytes_impl &) noexcept               { }
+            GTFO_CONSTEXPR_FUNCTION offset_after_bytes_impl & operator = (const offset_after_bytes_impl &) noexcept { return *this; }
+            constexpr               offset_after_bytes_impl(offset_after_bytes_impl &&) noexcept                    { }
+            GTFO_CONSTEXPR_FUNCTION offset_after_bytes_impl & operator = (offset_after_bytes_impl &&) noexcept      { return *this; }
         };
     }
 
@@ -922,7 +903,6 @@ namespace polymorphic_holder_DRP
         using implementation = detail::bytes_array_only_impl<MaxObjectSize, ObjectAlignment>;
 
         bytes_array_only() = delete;
-        ~bytes_array_only() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -937,7 +917,6 @@ namespace polymorphic_holder_DRP
         using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
 
         offset_before_bytes() = delete;
-        ~offset_before_bytes() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -953,7 +932,6 @@ namespace polymorphic_holder_DRP
         using implementation = detail::offset_before_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
 
         offset_before_bytes_typed() = delete;
-        ~offset_before_bytes_typed() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -968,7 +946,6 @@ namespace polymorphic_holder_DRP
         using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, size_t>;
 
         offset_after_bytes() = delete;
-        ~offset_after_bytes() = delete;
     };
 
     // Data Representation Policy for polymorphic_holder that stores an offset to base subobject
@@ -984,7 +961,6 @@ namespace polymorphic_holder_DRP
         using implementation = detail::offset_after_bytes_impl<MaxObjectSize, ObjectAlignment, OffsetType>;
 
         offset_after_bytes_typed() = delete;
-        ~offset_after_bytes_typed() = delete;
     };
 }
 
@@ -1069,18 +1045,14 @@ namespace polymorphic_holder_lib
             const pointer_to_member_function _p_member_function;
 
         public:
-            inline pending_member_function_call(base_object_pointer p_base_object, pointer_to_member_function p_member_function) noexcept
+            GTFO_CONSTEXPR_FUNCTION pending_member_function_call(base_object_pointer p_base_object, pointer_to_member_function p_member_function) noexcept
                 : _p_base_object(p_base_object), _p_member_function(p_member_function)
             {
                 GTFO_DEBUG_ASSERT(p_base_object != nullptr);
                 GTFO_DEBUG_ASSERT(p_member_function != nullptr);
             }
 
-            inline ~pending_member_function_call() noexcept
-            {
-            }
-
-            inline ResultType operator () (ArgTypes ... args) const
+            GTFO_CONSTEXPR_FUNCTION ResultType operator () (ArgTypes ... args) const
                 noexcept(noexcept((_p_base_object->*_p_member_function)(::gtfo::forward<ArgTypes>(args)...)))
             {
                 return (_p_base_object->*_p_member_function)(::gtfo::forward<ArgTypes>(args)...);
@@ -1156,6 +1128,7 @@ class polymorphic_holder
     friend typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
 
     using mcp_type = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
+    using drp_type = typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
 
 public:
     using base_type = BaseType;
@@ -1172,6 +1145,8 @@ public:
     // Move-constructs a polymorphic_holder using the move construction function
     // provided by polymorphic_holder's Moving/Copying Policy.
     inline polymorphic_holder(polymorphic_holder && other) noexcept(mcp_type::MCP_is_nothrow_move_constructible)
+        : mcp_type()
+        , drp_type()
     {
         static_assert(noexcept(this->MCP_move_construct_from(::gtfo::move(other))) == mcp_type::MCP_is_nothrow_move_constructible,
                       "conflicting \"MCP_is_nothrow_move_constructible\" static constant in current Moving/Copying Policy");
@@ -1181,6 +1156,8 @@ public:
     // Copy-constructs a polymorphic_holder using the copy construction function
     // provided by polymorphic_holder's Moving/Copying Policy.
     inline polymorphic_holder(const polymorphic_holder & other) noexcept(mcp_type::MCP_is_nothrow_copy_constructible)
+        : mcp_type()
+        , drp_type()
     {
         static_assert(noexcept(this->MCP_copy_construct_from(other)) == mcp_type::MCP_is_nothrow_copy_constructible,
                       "conflicting \"MCP_is_nothrow_copy_constructible\" static constant in current Moving/Copying Policy");
