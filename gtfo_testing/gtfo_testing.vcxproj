@@ -65,6 +65,7 @@
     <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp" />
     <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_copying.cpp" />
     <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_exclusive_move.cpp" />
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_const.cpp" />
     <ClCompile Include="runtime\utils\polymorphic_holder\test_member_fields_access_through_pointers.cpp" />
     <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp" />
     <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_only.cpp" />

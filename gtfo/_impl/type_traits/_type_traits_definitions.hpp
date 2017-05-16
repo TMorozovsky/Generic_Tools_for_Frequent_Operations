@@ -17,6 +17,7 @@ namespace gtfo
         using ::std::is_same;
         using ::std::is_void;
         using ::std::is_const;
+        using ::std::is_volatile;
         using ::std::is_fundamental;
         using ::std::is_constructible;
         using ::std::is_default_constructible;
@@ -27,6 +28,7 @@ namespace gtfo
         using ::std::is_lvalue_reference;
         using ::std::is_rvalue_reference;
         using ::std::is_reference;
+        using ::std::remove_const;
         using ::std::remove_reference;
         using ::std::decay;
 
@@ -34,8 +36,9 @@ namespace gtfo
         // The declval function template is not a type trait, but it is used in a simlar context most of the time,
         // so we define it here in order to keep the enclosing namespace a little bit cleaner.
 
-        template<typename T>                using remove_reference_t = typename ::gtfo::_tt::remove_reference<T>::type;
-        template<typename T>                using decay_t            = typename ::gtfo::_tt::decay<T>::type;
+        template<typename T> using remove_const_t     = typename ::gtfo::_tt::remove_const<T>::type;
+        template<typename T> using remove_reference_t = typename ::gtfo::_tt::remove_reference<T>::type;
+        template<typename T> using decay_t            = typename ::gtfo::_tt::decay<T>::type;
 
         typedef char(&yes_type)[1];
         typedef char(&no_type) [2];

@@ -15,16 +15,16 @@ namespace gtfo
 
     template<typename T>
     constexpr
-    typename _tt::remove_reference<T>::type &&
+    _tt::remove_reference_t<T> &&
     move(T && arg) noexcept
     {
-        return static_cast< typename _tt::remove_reference<T>::type && >(arg);
+        return static_cast<_tt::remove_reference_t<T> &&>(arg);
     }
 
     template<typename T>
     constexpr
     T &&
-    forward(typename _tt::remove_reference<T>::type & arg) noexcept
+    forward(_tt::remove_reference_t<T> & arg) noexcept
     {
         return static_cast<T &&>(arg);
     }
@@ -32,7 +32,7 @@ namespace gtfo
     template<typename T>
     constexpr
     T &&
-    forward(typename _tt::remove_reference<T>::type && arg) noexcept
+    forward(_tt::remove_reference_t<T> && arg) noexcept
     {
         return static_cast<T &&>(arg);
     }

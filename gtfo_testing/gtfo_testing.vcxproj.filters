@@ -247,6 +247,9 @@
     <ClCompile Include="static\result_of_logical_negation.cpp">
       <Filter>gtfo_testing\static</Filter>
     </ClCompile>
+    <ClCompile Include="runtime\utils\polymorphic_holder\test_const.cpp">
+      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">

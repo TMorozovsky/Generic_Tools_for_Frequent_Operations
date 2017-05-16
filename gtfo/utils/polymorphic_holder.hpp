@@ -228,8 +228,8 @@ namespace polymorphic_holder_utils
     virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && noexcept override \
     { \
         static_assert(::gtfo::_tt::is_base_of<::gtfo::polymorphic_holder_lib::i_nothrow_moveable, c>::value, \
-                      "base class of this polymorphic hierarchy must inherit from one of the \"nothrow moveable\" interfaces " \
-                      "from namespace polymorphic_holder_utils"); \
+                      "base class of this polymorphic hierarchy was expected to inherit from " \
+                      "one of the \"nothrow moveable\" interfaces from namespace polymorphic_holder_utils"); \
         static_assert(noexcept(c(::gtfo::move(*this))), "move construction of objects of this class is required to be noexcept"); \
         GTFO_DEBUG_ASSERT(dest_buffer_begin != nullptr); \
         GTFO_DEBUG_ASSERT(sizeof(c) <= dest_buffer_size); \
@@ -244,8 +244,8 @@ namespace polymorphic_holder_utils
     virtual void move_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) && override \
     { \
         static_assert(::gtfo::_tt::is_base_of<::gtfo::polymorphic_holder_lib::i_throwing_moveable, c>::value, \
-                      "base class of this polymorphic hierarchy must inherit from one of the \"throwing moveable\" interfaces " \
-                      "from namespace polymorphic_holder_utils"); \
+                      "base class of this polymorphic hierarchy was expected to inherit from " \
+                      "one of the \"throwing moveable\" interfaces from namespace polymorphic_holder_utils"); \
         GTFO_DEBUG_ASSERT(dest_buffer_begin != nullptr); \
         GTFO_DEBUG_ASSERT(sizeof(c) <= dest_buffer_size); \
         GTFO_DEBUG_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
@@ -259,8 +259,8 @@ namespace polymorphic_holder_utils
     virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const noexcept override \
     { \
         static_assert(::gtfo::_tt::is_base_of<::gtfo::polymorphic_holder_lib::i_nothrow_copyable, c>::value, \
-                      "base class of this polymorphic hierarchy must inherit from one of the \"nothrow copyable\" interfaces " \
-                      "from namespace polymorphic_holder_utils"); \
+                      "base class of this polymorphic hierarchy was expected to inherit from " \
+                      "one of the \"nothrow copyable\" interfaces from namespace polymorphic_holder_utils"); \
         static_assert(noexcept(c(*this)), "copy construction of objects of this class is required to be noexcept"); \
         GTFO_DEBUG_ASSERT(dest_buffer_begin != nullptr); \
         GTFO_DEBUG_ASSERT(sizeof(c) <= dest_buffer_size); \
@@ -275,8 +275,8 @@ namespace polymorphic_holder_utils
     virtual void copy_construct_at(unsigned char * dest_buffer_begin, size_t dest_buffer_size) const override \
     { \
         static_assert(::gtfo::_tt::is_base_of<::gtfo::polymorphic_holder_lib::i_throwing_copyable, c>::value, \
-                      "base class of this polymorphic hierarchy must inherit from one of the \"throwing copyable\" interfaces " \
-                      "from namespace polymorphic_holder_utils"); \
+                      "base class of this polymorphic hierarchy was expected to inherit from " \
+                      "one of the \"throwing copyable\" interfaces from namespace polymorphic_holder_utils"); \
         GTFO_DEBUG_ASSERT(dest_buffer_begin != nullptr); \
         GTFO_DEBUG_ASSERT(sizeof(c) <= dest_buffer_size); \
         GTFO_DEBUG_ASSERT(0 == reinterpret_cast<uintptr_t>(dest_buffer_begin) % alignof(c)); \
@@ -413,9 +413,9 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void nothrow_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src) noexcept
     {
-        polymorphic_holder_lib::i_nothrow_moveable * p = static_cast<polymorphic_holder_lib::i_nothrow_moveable *>(src.object_ptr_safe());
+        polymorphic_holder_lib::i_nothrow_moveable * p = static_cast<polymorphic_holder_lib::i_nothrow_moveable *>(src.object_ptr_safe_remove_const());
         if (p) {
-            ::gtfo::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            ::gtfo::move(*p).move_construct_at(uninitialized_dest.derived_object_bytes_begin(), PolymorphicHolder::max_object_size);
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
             polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
@@ -425,10 +425,10 @@ namespace polymorphic_holder_lib
     template<class PolymorphicHolder>
     inline void throwing_move_construct(PolymorphicHolder & uninitialized_dest, PolymorphicHolder && src)
     {
-        polymorphic_holder_lib::i_throwing_moveable * p = static_cast<polymorphic_holder_lib::i_throwing_moveable *>(src.object_ptr_safe());
+        polymorphic_holder_lib::i_throwing_moveable * p = static_cast<polymorphic_holder_lib::i_throwing_moveable *>(src.object_ptr_safe_remove_const());
         if (p) {
             polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
-            ::gtfo::move(*p).move_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            ::gtfo::move(*p).move_construct_at(uninitialized_dest.derived_object_bytes_begin(), PolymorphicHolder::max_object_size);
             guard.set_constructed();
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
@@ -441,7 +441,7 @@ namespace polymorphic_holder_lib
     {
         const polymorphic_holder_lib::i_nothrow_copyable * p = static_cast<const polymorphic_holder_lib::i_nothrow_copyable *>(src.object_ptr_safe());
         if (p) {
-            p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            p->copy_construct_at(uninitialized_dest.derived_object_bytes_begin(), PolymorphicHolder::max_object_size);
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
             polymorphic_holder_lib::set_bytes_to_zero(uninitialized_dest);
@@ -454,7 +454,7 @@ namespace polymorphic_holder_lib
         const polymorphic_holder_lib::i_throwing_copyable * p = static_cast<const polymorphic_holder_lib::i_throwing_copyable *>(src.object_ptr_safe());
         if (p) {
             polymorphic_holder_lib::scoped_throwing_construction_guard<PolymorphicHolder> guard(uninitialized_dest);
-            p->copy_construct_at(uninitialized_dest.object_bytes_begin(), PolymorphicHolder::max_object_size);
+            p->copy_construct_at(uninitialized_dest.derived_object_bytes_begin(), PolymorphicHolder::max_object_size);
             guard.set_constructed();
             uninitialized_dest.DRP_set_offset_to_base(src.DRP_offset_to_base());
         } else {
@@ -978,12 +978,13 @@ namespace polymorphic_holder_lib
     {
         static_assert(::gtfo::_tt::is_base_of<BaseType, DerivedType>::value, "invalid base and derived types");
 
-        using derived_type_ptr = const DerivedType *;
-        using base_type_ptr = const BaseType *;
+        using derived_type_ptr = const volatile DerivedType *;
+        using base_type_ptr    = const volatile BaseType *;
+        using byte_ptr         = const volatile unsigned char *;
 
         const derived_type_ptr test_ptr_d = reinterpret_cast<derived_type_ptr>(uintptr_t(-1) / 2);
-        const base_type_ptr test_ptr_b = static_cast<base_type_ptr>(test_ptr_d);
-        const size_t offset = reinterpret_cast<const unsigned char *>(test_ptr_b) - reinterpret_cast<const unsigned char *>(test_ptr_d);
+        const base_type_ptr    test_ptr_b = static_cast<base_type_ptr>(test_ptr_d);
+        const size_t           offset     = reinterpret_cast<byte_ptr>(test_ptr_b) - reinterpret_cast<byte_ptr>(test_ptr_d);
 
         return offset;
     }
@@ -1129,6 +1130,9 @@ class polymorphic_holder
 
     using mcp_type = MovingCopyingPolicy<polymorphic_holder<BaseType, MaxObjectSize, ObjectAlignment, MovingCopyingPolicy, DataRepresentationPolicy>>;
     using drp_type = typename DataRepresentationPolicy::template implementation<MaxObjectSize, ObjectAlignment>;
+
+    static_assert(!::gtfo::_tt::is_volatile<BaseType>::value, "volatile-qualified types are not supported by polymorphic_holder");
+    using base_type_no_const = ::gtfo::_tt::remove_const_t<BaseType>;
 
 public:
     using base_type = BaseType;
@@ -1403,13 +1407,19 @@ private:
         return false;
     }
 
-    inline unsigned char * object_bytes_begin() noexcept { return &this->DRP_object_bytes[0]; }
+    inline       unsigned char * derived_object_bytes_begin()       noexcept { return &this->DRP_object_bytes[0]; }
+    inline       unsigned char *    base_object_bytes_begin()       noexcept { return &this->DRP_object_bytes[this->DRP_offset_to_base()]; }
+    inline const unsigned char *    base_object_bytes_begin() const noexcept { return &this->DRP_object_bytes[this->DRP_offset_to_base()]; }
 
-    inline       base_type * object_ptr_unsafe()       noexcept { return reinterpret_cast<      base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
-    inline const base_type * object_ptr_unsafe() const noexcept { return reinterpret_cast<const base_type *>(&this->DRP_object_bytes[this->DRP_offset_to_base()]); }
+    inline       base_type * object_ptr_unsafe()       noexcept { return reinterpret_cast<      base_type *>(this->base_object_bytes_begin()); }
+    inline const base_type * object_ptr_unsafe() const noexcept { return reinterpret_cast<const base_type *>(this->base_object_bytes_begin()); }
+
+    inline base_type_no_const * object_ptr_unsafe_remove_const() noexcept { return reinterpret_cast<base_type_no_const *>(this->base_object_bytes_begin()); }
 
     inline       base_type * object_ptr_safe()       noexcept { return this->owns_object() ? this->object_ptr_unsafe() : nullptr; }
     inline const base_type * object_ptr_safe() const noexcept { return this->owns_object() ? this->object_ptr_unsafe() : nullptr; }
+
+    inline base_type_no_const * object_ptr_safe_remove_const() noexcept { return this->owns_object() ? this->object_ptr_unsafe_remove_const() : nullptr; }
 
     inline       base_type & object_ref()       noexcept { GTFO_DEBUG_ASSERT(this->owns_object()); return *(this->object_ptr_unsafe()); }
     inline const base_type & object_ref() const noexcept { GTFO_DEBUG_ASSERT(this->owns_object()); return *(this->object_ptr_unsafe()); }
@@ -1436,17 +1446,26 @@ private: // impl_construct<DesiredType>(construction_specification_tag, args)
          // Implementation of polymorphic_holder's member function construct<DesiredType>(CtorArgs&&... args).
          // Dispatches on exception specification tag of DesiredType's constructor which takes given args pack.
 
-    // DesiredType's constructor cannot throw, so we just construct an object inplace with no-throw guarantee.
-    template<class DesiredType, typename... CtorArgs>
-    inline void impl_construct(polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args) noexcept
+    template<class DesiredType>
+    constexpr void instantiate_common_static_checks_for_impl_construct() const noexcept
     {
         static_assert(::gtfo::_tt::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
         static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
         static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this polymorphic_holder");
+        static_assert((int)::gtfo::_tt::is_const<DesiredType>::value <= (int)::gtfo::_tt::is_const<base_type>::value,
+                      "unable to construct a const-qualified derived object in a polymorphic_holder<non-const base>");
+        static_assert(!::gtfo::_tt::is_volatile<DesiredType>::value, "cannot construct a volatile object inside a polymorphic_holder");
+    }
+
+    // DesiredType's constructor cannot throw, so we just construct an object inplace with no-throw guarantee.
+    template<class DesiredType, typename... CtorArgs>
+    inline void impl_construct(polymorphic_holder_lib::nothrow_tag, CtorArgs&&... args) noexcept
+    {
+        this->instantiate_common_static_checks_for_impl_construct<DesiredType>();
 
         static_assert(noexcept(DesiredType(::gtfo::forward<CtorArgs>(args)...)), "");
-        GTFO_DEBUG_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
-        ::new (this->object_bytes_begin()) DesiredType(::gtfo::forward<CtorArgs>(args)...);
+        GTFO_DEBUG_ASSERT(uintptr_t(this->derived_object_bytes_begin()) % object_alignment == 0);
+        ::new (this->derived_object_bytes_begin()) DesiredType(::gtfo::forward<CtorArgs>(args)...);
 
         const size_t offset = polymorphic_holder_lib::get_offset_to_base_from_derived<base_type, DesiredType>();
         this->DRP_set_offset_to_base(offset);
@@ -1457,13 +1476,11 @@ private: // impl_construct<DesiredType>(construction_specification_tag, args)
     template<class DesiredType, typename... CtorArgs>
     inline void impl_construct(polymorphic_holder_lib::throwing_tag, CtorArgs&&... args)
     {
-        static_assert(::gtfo::_tt::is_base_of<base_type, DesiredType>::value, "constructed object type is not derived from base_type");
-        static_assert(sizeof(DesiredType) <= max_object_size, "constructed object does not fit into available memory");
-        static_assert(alignof(DesiredType) <= object_alignment, "constructed object's alignment requirements are not met by this polymorphic_holder");
+        this->instantiate_common_static_checks_for_impl_construct<DesiredType>();
 
         polymorphic_holder_lib::scoped_throwing_construction_guard<polymorphic_holder> guard(*this);
-        GTFO_DEBUG_ASSERT(uintptr_t(this->object_bytes_begin()) % object_alignment == 0);
-        ::new (this->object_bytes_begin()) DesiredType(::gtfo::forward<CtorArgs>(args)...);
+        GTFO_DEBUG_ASSERT(uintptr_t(this->derived_object_bytes_begin()) % object_alignment == 0);
+        ::new (this->derived_object_bytes_begin()) DesiredType(::gtfo::forward<CtorArgs>(args)...);
         guard.set_constructed();
 
         const size_t offset = polymorphic_holder_lib::get_offset_to_base_from_derived<base_type, DesiredType>();
