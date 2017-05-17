@@ -84,7 +84,7 @@ namespace container
                                    : matrix_rows_iterator (_base_iterator_mixin::_make_reverse_iterator(::gtfo::forward<BaseIteratorType>(base_iterator))) { }
 
     public:
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator = (const matrix_rows_iterator & other)
+        inline matrix_rows_iterator & operator = (const matrix_rows_iterator & other)
             noexcept(_tt::is_nothrow_copy_assignable<row_elements_iterator>::value)
         {
             _current_row_begin   = other._current_row_begin;
@@ -92,7 +92,7 @@ namespace container
             return *this;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator = (matrix_rows_iterator && other)
+        inline matrix_rows_iterator & operator = (matrix_rows_iterator && other)
             noexcept(_tt::is_nothrow_move_assignable<row_elements_iterator>::value)
         {
             _current_row_begin   = ::gtfo::move(other._current_row_begin);
@@ -100,14 +100,14 @@ namespace container
             return *this;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator ++ ()
+        inline matrix_rows_iterator & operator ++ ()
             noexcept(noexcept(_tt::declval<row_elements_iterator &>() += _tt::declval<difference_type &>()))
         {
             _current_row_begin += _offset_between_rows;
             return *this;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator operator ++ (int)
+        inline matrix_rows_iterator operator ++ (int)
             noexcept(_tt::is_nothrow_copy_constructible<row_elements_iterator>::value &&
                      noexcept(_tt::declval<row_elements_iterator &>() += _tt::declval<difference_type &>()) &&
                      _tt::is_nothrow_move_constructible<row_elements_iterator>::value)
@@ -117,14 +117,14 @@ namespace container
             return tmp;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator -- ()
+        inline matrix_rows_iterator & operator -- ()
             noexcept(noexcept(_tt::declval<row_elements_iterator &>() -= _tt::declval<difference_type &>()))
         {
             _current_row_begin -= _offset_between_rows;
             return *this;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator operator -- (int)
+        inline matrix_rows_iterator operator -- (int)
             noexcept(_tt::is_nothrow_copy_constructible<row_elements_iterator>::value &&
                      noexcept(_tt::declval<row_elements_iterator &>() -= _tt::declval<difference_type &>()) &&
                      _tt::is_nothrow_move_constructible<row_elements_iterator>::value)
@@ -134,21 +134,21 @@ namespace container
             return tmp;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator += (difference_type diff)
+        inline matrix_rows_iterator & operator += (difference_type diff)
             noexcept(noexcept(_tt::declval<row_elements_iterator &>() += _tt::declval<difference_type>()))
         {
             _current_row_begin += diff * _offset_between_rows;
             return *this;
         }
 
-        GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator & operator -= (difference_type diff)
+        inline matrix_rows_iterator & operator -= (difference_type diff)
             noexcept(noexcept(_tt::declval<row_elements_iterator &>() -= _tt::declval<difference_type>()))
         {
             _current_row_begin -= diff * _offset_between_rows;
             return *this;
         }
 
-        friend GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator operator + (matrix_rows_iterator orig, difference_type diff)
+        friend inline matrix_rows_iterator operator + (matrix_rows_iterator orig, difference_type diff)
             noexcept(_tt::is_nothrow_copy_constructible<row_elements_iterator>::value &&
                      noexcept(_tt::declval<row_elements_iterator &>() += _tt::declval<difference_type>()) &&
                      _tt::is_nothrow_move_constructible<row_elements_iterator>::value)
@@ -157,7 +157,7 @@ namespace container
             return orig;
         }
 
-        friend GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator operator + (difference_type diff, matrix_rows_iterator orig)
+        friend inline matrix_rows_iterator operator + (difference_type diff, matrix_rows_iterator orig)
             noexcept(_tt::is_nothrow_copy_constructible<row_elements_iterator>::value &&
                      noexcept(_tt::declval<row_elements_iterator &>() += _tt::declval<difference_type>()) &&
                      _tt::is_nothrow_move_constructible<row_elements_iterator>::value)
@@ -166,7 +166,7 @@ namespace container
             return orig;
         }
 
-        friend GTFO_CONSTEXPR_FUNCTION matrix_rows_iterator operator - (matrix_rows_iterator orig, difference_type diff)
+        friend inline matrix_rows_iterator operator - (matrix_rows_iterator orig, difference_type diff)
             noexcept(_tt::is_nothrow_copy_constructible<row_elements_iterator>::value &&
                      noexcept(_tt::declval<row_elements_iterator &>() -= _tt::declval<difference_type &>()) &&
                      _tt::is_nothrow_move_constructible<row_elements_iterator>::value)
@@ -175,7 +175,7 @@ namespace container
             return orig;
         }
 
-        friend GTFO_CONSTEXPR_FUNCTION difference_type operator - (const matrix_rows_iterator & lhs, const matrix_rows_iterator & rhs)
+        friend inline difference_type operator - (const matrix_rows_iterator & lhs, const matrix_rows_iterator & rhs)
             noexcept(noexcept(lhs._current_row_begin - rhs._current_row_begin) &&
                      noexcept(_tt::declval<decltype(lhs._current_row_begin - rhs._current_row_begin)>() / lhs._offset_between_rows))
         {
@@ -184,7 +184,7 @@ namespace container
             return (lhs._offset_between_rows == difference_type(0)) ? difference_type(0) : ((lhs._current_row_begin - rhs._current_row_begin) / lhs._offset_between_rows);
         }
 
-        GTFO_CONSTEXPR_FUNCTION row_elements_range operator * () const
+        inline row_elements_range operator * () const
             noexcept(noexcept(_tt::declval<row_elements_iterator &>() + _tt::declval<difference_type &>()) &&
                      _tt::is_nothrow_constructible<row_elements_range, row_elements_iterator &, row_elements_iterator>::value &&
                      _tt::is_nothrow_move_constructible<row_elements_range>::value)
@@ -194,7 +194,7 @@ namespace container
         }
 
 #define GTFO_MATRIX_ROWS_ITERATOR_DEFINE_OVERLOADED_COMPARISON_OPERATOR(op) \
-        friend GTFO_CONSTEXPR_FUNCTION bool operator op (const matrix_rows_iterator & lhs, const matrix_rows_iterator & rhs) \
+        friend inline bool operator op (const matrix_rows_iterator & lhs, const matrix_rows_iterator & rhs) \
             noexcept(noexcept(lhs._current_row_begin op rhs._current_row_begin)) \
         { \
             assert(lhs._offset_between_rows == rhs._offset_between_rows); \
