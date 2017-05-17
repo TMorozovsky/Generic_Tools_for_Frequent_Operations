@@ -52,6 +52,7 @@
     <ClCompile Include="runtime\algorithm\none_of.cpp" />
     <ClCompile Include="runtime\algorithm\search.cpp" />
     <ClCompile Include="runtime\algorithm\search_n.cpp" />
+    <ClCompile Include="runtime\container\matrix.cpp" />
     <ClCompile Include="runtime\functional\arithmetic_operations.cpp" />
     <ClCompile Include="runtime\functional\comparisons.cpp" />
     <ClCompile Include="runtime\functional\not_.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="..\gtfo\algorithm\none_of.hpp" />
     <ClInclude Include="..\gtfo\algorithm\search.hpp" />
     <ClInclude Include="..\gtfo\algorithm\search_n.hpp" />
+    <ClInclude Include="..\gtfo\container\matrix.hpp" />
     <ClInclude Include="..\gtfo\functional.hpp" />
     <ClInclude Include="..\gtfo\functional\divides.hpp" />
     <ClInclude Include="..\gtfo\functional\equal_to.hpp" />
@@ -160,7 +162,13 @@
     <ClInclude Include="..\gtfo\numeric\partial_sum.hpp" />
     <ClInclude Include="..\gtfo\reversed_range.hpp" />
     <ClInclude Include="..\gtfo\utils\polymorphic_holder.hpp" />
+    <ClInclude Include="..\gtfo\_impl\container\matrix\initializer_list_utils.hpp" />
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_exceptions.hpp" />
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator.hpp" />
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator_conversion_mixin.hpp" />
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_reverse_iterator_base_mixin.hpp" />
     <ClInclude Include="..\gtfo\_impl\functional\function_object_holder.hpp" />
+    <ClInclude Include="..\gtfo\_impl\iterator_range.hpp" />
     <ClInclude Include="..\gtfo\_impl\mem.hpp" />
     <ClInclude Include="..\gtfo\_impl\type_traits.hpp" />
     <ClInclude Include="..\gtfo\_impl\type_traits\are_addable.hpp" />

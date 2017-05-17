@@ -25,6 +25,8 @@ namespace gtfo
         using ::std::is_nothrow_default_constructible;
         using ::std::is_nothrow_copy_constructible;
         using ::std::is_nothrow_move_constructible;
+        using ::std::is_nothrow_copy_assignable;
+        using ::std::is_nothrow_move_assignable;
         using ::std::is_lvalue_reference;
         using ::std::is_rvalue_reference;
         using ::std::is_reference;

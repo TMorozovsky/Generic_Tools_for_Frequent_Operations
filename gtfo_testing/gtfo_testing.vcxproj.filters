@@ -250,6 +250,9 @@
     <ClCompile Include="runtime\utils\polymorphic_holder\test_const.cpp">
       <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
     </ClCompile>
+    <ClCompile Include="runtime\container\matrix.cpp">
+      <Filter>gtfo_testing\runtime\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">
@@ -531,6 +534,27 @@
     <ClInclude Include="..\gtfo\_impl\type_traits\result_of_logical_negation.hpp">
       <Filter>gtfo\_impl\type_traits</Filter>
     </ClInclude>
+    <ClInclude Include="..\gtfo\container\matrix.hpp">
+      <Filter>gtfo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\iterator_range.hpp">
+      <Filter>gtfo\_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator_conversion_mixin.hpp">
+      <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_reverse_iterator_base_mixin.hpp">
+      <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\container\matrix\initializer_list_utils.hpp">
+      <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_exceptions.hpp">
+      <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator.hpp">
+      <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="gtfo_testing">
@@ -580,6 +604,18 @@
     </Filter>
     <Filter Include="gtfo\_impl\functional">
       <UniqueIdentifier>{ae5d62da-f3c5-468d-9868-b76723236eae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl\container">
+      <UniqueIdentifier>{48f1cb56-63d4-4d26-a7b7-5f0f8f897148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\_impl\container\matrix">
+      <UniqueIdentifier>{6118f7ed-a067-4a73-bfda-c2750762d365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\container">
+      <UniqueIdentifier>{1b7638f5-adc9-4c50-8ef8-05ede15474c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\container">
+      <UniqueIdentifier>{c7b70be9-9a0b-4778-8a33-c2c8a21631f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
