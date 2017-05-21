@@ -8,29 +8,32 @@ namespace gtfo
 {
     namespace _tt
     {
-        namespace helpers
+        namespace detail
         {
             template<typename T, bool t_is_dereferenceable>
-            struct impl_result_of_dereferencing
+            struct result_of_dereferencing_impl
             {
             };
 
             template<typename T>
-            struct impl_result_of_dereferencing<T, true>
+            struct result_of_dereferencing_impl<T, true>
             {
                 typedef decltype( * declval<T &>() ) type;
             };
         }
 
-        /// declares member type which is the type of expression
-        ///     * lvalue-of-type-T
-        /// stored "as is", without stripping any top-level reference
-        /// or cv-qualifiers;
-        /// if is_dereferenceable<T>::value == false, no member type is provided
+        // Declares member type which is the type of expression
+        //     * lvalue-of-type-T
+        // stored "as is", without stripping any top-level reference or cv-qualifiers.
+        // If is_dereferenceable<T>::value == false, no member type is provided.
         template<typename T>
-        struct result_of_dereferencing : helpers::impl_result_of_dereferencing<T, is_dereferenceable<T>::value>
+        struct result_of_dereferencing : detail::result_of_dereferencing_impl< T,
+                                                                               is_dereferenceable<T>::value >
         {
         };
+
+        template<typename T>
+        using result_of_dereferencing_t = typename result_of_dereferencing<T>::type;
     }
 }
 

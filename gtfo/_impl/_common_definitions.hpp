@@ -14,6 +14,14 @@ namespace gtfo
 
     using ::std::begin;
     using ::std::end;
+
+    using ::std::input_iterator_tag;
+    using ::std::output_iterator_tag;
+    using ::std::forward_iterator_tag;
+    using ::std::bidirectional_iterator_tag;
+    using ::std::random_access_iterator_tag;
+
+    using ::std::iterator_traits;
 }
 
 #if (__cplusplus >= 201402L) || defined(__clang__) || (defined(__GNUG__) && (__GNUC__ >= 5)) || (defined(_MSC_VER) && (_MSC_VER >= 1910))

@@ -5,6 +5,7 @@
 #include "gtfo/_impl/container/matrix/matrix_rows_iterator.hpp"
 #include "gtfo/_impl/container/matrix/initializer_list_utils.hpp"
 #include "gtfo/_impl/container/matrix/matrix_exceptions.hpp"
+#include "gtfo/iterator/reverse_iterator.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -20,23 +21,23 @@ class matrix
     static_assert(_tt::is_same<T, typename UnderlyingVector::value_type>::value, "invalid types specified");
 
 private:
-    using underlying_vector      = UnderlyingVector;
+    using underlying_vector = UnderlyingVector;
 
 public:
-    using size_type              = typename underlying_vector::size_type;
-    using difference_type        = typename underlying_vector::difference_type;
-    using value_type             = typename underlying_vector::value_type;
-    using allocator_type         = typename underlying_vector::allocator_type;
-    using reference              = typename underlying_vector::reference;
-    using const_reference        = typename underlying_vector::const_reference;
-    using pointer                = typename underlying_vector::pointer;
-    using const_pointer          = typename underlying_vector::const_pointer;
+    using size_type       = typename underlying_vector::size_type;
+    using difference_type = typename underlying_vector::difference_type;
+    using value_type      = typename underlying_vector::value_type;
+    using allocator_type  = typename underlying_vector::allocator_type;
+    using reference       = typename underlying_vector::reference;
+    using const_reference = typename underlying_vector::const_reference;
+    using pointer         = typename underlying_vector::pointer;
+    using const_pointer   = typename underlying_vector::const_pointer;
 
 private:
-    using matrix_rows_const_iterator         = detail::container::matrix_rows_iterator<typename underlying_vector::const_iterator,         difference_type, void,                               void>;
-    using matrix_rows_iterator               = detail::container::matrix_rows_iterator<typename underlying_vector::iterator,               difference_type, matrix_rows_const_iterator,         void>;
-    using matrix_rows_const_reverse_iterator = detail::container::matrix_rows_iterator<typename underlying_vector::const_reverse_iterator, difference_type, void,                               matrix_rows_const_iterator>;
-    using matrix_rows_reverse_iterator       = detail::container::matrix_rows_iterator<typename underlying_vector::reverse_iterator,       difference_type, matrix_rows_const_reverse_iterator, matrix_rows_iterator>;
+    using matrix_rows_iterator               = detail::container::matrix_rows_iterator              <value_type *,                                 difference_type>;
+    using matrix_rows_const_iterator         = detail::container::matrix_rows_const_iterator        <const value_type *,                           difference_type, matrix_rows_iterator>;
+    using matrix_rows_reverse_iterator       = detail::container::matrix_rows_reverse_iterator      <::gtfo::reverse_iterator<value_type *>,       difference_type, matrix_rows_iterator>;
+    using matrix_rows_const_reverse_iterator = detail::container::matrix_rows_const_reverse_iterator<::gtfo::reverse_iterator<const value_type *>, difference_type, matrix_rows_reverse_iterator, matrix_rows_const_iterator>;
 
 public:
     using iterator               = matrix_rows_iterator;
@@ -130,7 +131,7 @@ public: // constructors
                                  , _rows(::gtfo::move(other._rows)) { _invariant(); }
 
              matrix              (matrix && other, const allocator_type & alloc)
-                                     noexcept(_tt::is_nothrow_constructible<underlying_vector, underlying_vector &&, const allocator_type &>::value)
+                                     noexcept(_tt::is_nothrow_constructible<underlying_vector, underlying_vector, const allocator_type &>::value)
                                  : _data(::gtfo::move(other._data), alloc)
                                  , _cols(::gtfo::move(other._cols))
                                  , _rows(::gtfo::move(other._rows)) { _invariant(); }
@@ -183,8 +184,8 @@ public: // swap
         noexcept(noexcept(_tt::declval<underlying_vector &>().swap(_tt::declval<underlying_vector &>())))
     {
         _data.swap(other._data);
-        ::gtfo::swap(_cols, other._cols);
-        ::gtfo::swap(_rows, other._rows);
+        { auto tmp = ::gtfo::move(_cols); _cols = ::gtfo::move(other._cols); other._cols = ::gtfo::move(tmp); }
+        { auto tmp = ::gtfo::move(_rows); _rows = ::gtfo::move(other._rows); other._rows = ::gtfo::move(tmp); }
         _invariant();
         other._invariant();
     }
@@ -333,8 +334,10 @@ public:
             return this->begin() + removed_row_index;
         GTFO_DEBUG_ASSERT(_rows > 0);
         GTFO_DEBUG_ASSERT(position < this->cend());
-        ::gtfo::iterator_range<typename underlying_vector::const_iterator> removed_range(*position);
-        _data.erase(removed_range.begin(), removed_range.end());
+        auto removed_range = *position;
+        auto removed_range_begin = _data.begin() + (removed_range.begin() - _data.data());
+        auto removed_range_end   = _data.begin() + (removed_range.end()   - _data.data());
+        _data.erase(removed_range_begin, removed_range_end);
         --_rows;
         _invariant();
         return this->begin() + removed_row_index;
@@ -349,10 +352,12 @@ public:
         GTFO_DEBUG_ASSERT(pos_rows_begin < pos_rows_end);
         GTFO_DEBUG_ASSERT(pos_rows_end <= this->cend());
         const size_type num_removed_rows(pos_rows_end - pos_rows_begin);
-        ::gtfo::iterator_range<typename underlying_vector::const_iterator> first_removed_range(*pos_rows_begin);
+        auto first_removed_range = *pos_rows_begin;
+        auto first_removed_range_begin = _data.begin() + (first_removed_range.begin() - _data.data());
         --pos_rows_end;
-        ::gtfo::iterator_range<typename underlying_vector::const_iterator> last_removed_range(*pos_rows_end);
-        _data.erase(first_removed_range.begin(), last_removed_range.end());
+        auto last_removed_range = *pos_rows_end;
+        auto last_removed_range_end   = _data.begin() + (last_removed_range.end()   - _data.data());
+        _data.erase(first_removed_range_begin, last_removed_range_end);
         _rows -= num_removed_rows;
         _invariant();
         return this->begin() + first_removed_row_index;
@@ -537,23 +542,33 @@ public: // (unchecked) raw_at
 public: // row iterators
     matrix_rows_iterator begin()
     {
-        return matrix_rows_iterator(_data.begin(), static_cast<difference_type>(_cols));
+        return matrix_rows_iterator(_data.data(), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_iterator end()
     {
-        return matrix_rows_iterator(_data.end(), static_cast<difference_type>(_cols));
+        return matrix_rows_iterator(_data.data() + _data.size(), static_cast<difference_type>(_cols));
+    }
+
+    friend inline matrix_rows_iterator begin(matrix & matr)
+    {
+        return matr.begin();
+    }
+
+    friend inline matrix_rows_iterator end(matrix & matr)
+    {
+        return matr.end();
     }
 
 public: // const row iterators
     matrix_rows_const_iterator begin() const
     {
-        return matrix_rows_const_iterator(_data.cbegin(), static_cast<difference_type>(_cols));
+        return matrix_rows_const_iterator(_data.data(), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_const_iterator end() const
     {
-        return matrix_rows_const_iterator(_data.cend(), static_cast<difference_type>(_cols));
+        return matrix_rows_const_iterator(_data.data() + _data.size(), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_const_iterator cbegin() const
@@ -566,26 +581,56 @@ public: // const row iterators
         return this->end();
     }
 
+    friend inline matrix_rows_const_iterator begin(const matrix & matr)
+    {
+        return matr.begin();
+    }
+
+    friend inline matrix_rows_const_iterator end(const matrix & matr)
+    {
+        return matr.end();
+    }
+
+    friend inline matrix_rows_const_iterator cbegin(const matrix & matr)
+    {
+        return matr.cbegin();
+    }
+
+    friend inline matrix_rows_const_iterator cend(const matrix & matr)
+    {
+        return matr.cend();
+    }
+
 public: // reverse row iterators
     matrix_rows_reverse_iterator rbegin()
     {
-        return matrix_rows_reverse_iterator(_data.rbegin(), static_cast<difference_type>(_cols));
+        return matrix_rows_reverse_iterator(::gtfo::make_reverse_iterator(_data.data() + _data.size()), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_reverse_iterator rend()
     {
-        return matrix_rows_reverse_iterator(_data.rend(), static_cast<difference_type>(_cols));
+        return matrix_rows_reverse_iterator(::gtfo::make_reverse_iterator(_data.data()), static_cast<difference_type>(_cols));
+    }
+
+    friend inline matrix_rows_reverse_iterator rbegin(matrix & matr)
+    {
+        return matr.rbegin();
+    }
+
+    friend inline matrix_rows_reverse_iterator rend(matrix & matr)
+    {
+        return matr.rend();
     }
 
 public: // const reverse row iterators
     matrix_rows_const_reverse_iterator rbegin() const
     {
-        return matrix_rows_const_reverse_iterator(_data.crbegin(), static_cast<difference_type>(_cols));
+        return matrix_rows_const_reverse_iterator(::gtfo::make_reverse_iterator(_data.data() + _data.size()), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_const_reverse_iterator rend() const
     {
-        return matrix_rows_const_reverse_iterator(_data.crend(), static_cast<difference_type>(_cols));
+        return matrix_rows_const_reverse_iterator(::gtfo::make_reverse_iterator(_data.data()), static_cast<difference_type>(_cols));
     }
 
     matrix_rows_const_reverse_iterator crbegin() const
@@ -596,6 +641,26 @@ public: // const reverse row iterators
     matrix_rows_const_reverse_iterator crend() const
     {
         return this->rend();
+    }
+
+    friend inline matrix_rows_const_reverse_iterator rbegin(const matrix & matr)
+    {
+        return matr.rbegin();
+    }
+
+    friend inline matrix_rows_const_reverse_iterator rend(const matrix & matr)
+    {
+        return matr.rend();
+    }
+
+    friend inline matrix_rows_const_reverse_iterator crbegin(const matrix & matr)
+    {
+        return matr.crbegin();
+    }
+
+    friend inline matrix_rows_const_reverse_iterator crend(const matrix & matr)
+    {
+        return matr.crend();
     }
 
 public:

@@ -7,27 +7,28 @@ namespace gtfo
 {
     namespace _tt
     {
-        /// defines static member constant value of type bool
-        /// which is true if and only if an expression
-        ///     lvalue-of-type-LhsArgument - lvalue-of-type-RhsArgument
-        /// is well-formed
-        template<typename LhsArgument, typename RhsArgument>
+        namespace detail
+        {
+            struct are_subtractable_tester
+            {
+                template<typename Lhs, typename Rhs>
+                static yes_type test(typename remove_reference<
+                                         decltype( declval<Lhs &>() - declval<Rhs &>() )
+                                     >::type *);
+
+                template< typename Lhs, typename Rhs>
+                static no_type test(...);
+            };
+        }
+
+        // Defines a static member constant value of type bool
+        // which is true if the expression
+        //     lvalue-of-type-Lhs - lvalue-of-type-Rhs
+        // is well-formed.
+        template<typename Lhs, typename Rhs>
         struct are_subtractable
         {
-            template<typename Lhs, typename Rhs>
-            static yes_type test(typename remove_reference
-                                 <
-                                     decltype( declval<Lhs &>() - declval<Rhs &>() )
-                                 >::type *);
-
-            template< typename Lhs, typename Rhs>
-            static no_type test(...);
-
-            static constexpr bool value = sizeof(test
-                                                 <
-                                                     LhsArgument,
-                                                     RhsArgument
-                                                 >(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(detail::are_subtractable_tester::test<Lhs, Rhs>(nullptr)) == sizeof(yes_type);
         };
     }
 }

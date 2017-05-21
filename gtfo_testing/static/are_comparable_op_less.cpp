@@ -1,6 +1,6 @@
 #include "gtfo/_impl/type_traits/are_comparable_op_less.hpp"
-#define GTFO_CAN_INVOKE_OP_LESS(t1,t2) ::gtfo::_tt::helpers::can_invoke_op_less<t1,t2>::value
-#define GTFO_RESULT_OF_OP_LESS(t1,t2) typename ::gtfo::_tt::helpers::result_of_op_less<t1,t2>::type
+#define GTFO_CAN_INVOKE_OP_LESS(t1,t2) ::gtfo::_tt::detail::can_invoke_op_less<t1,t2>::value
+#define GTFO_RESULT_OF_OP_LESS(t1,t2) typename ::gtfo::_tt::detail::result_of_op_less<t1,t2>::type
 #define GTFO_ARE_COMPARABLE_OP_LESS(t1,t2) ::gtfo::_tt::are_comparable_op_less<t1,t2>::value
 
 #define GTFO_RESULT_OF_OP_LESS_IS(t1,t2,t3) \

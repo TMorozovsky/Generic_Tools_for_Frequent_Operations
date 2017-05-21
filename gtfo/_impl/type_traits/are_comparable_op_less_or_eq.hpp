@@ -1,5 +1,5 @@
-#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_HPP
-#define GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_HPP
+#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_OR_EQ_HPP
+#define GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_OR_EQ_HPP
 
 #include "gtfo/_impl/type_traits/can_be_used_in_boolean_context.hpp"
 
@@ -17,11 +17,11 @@ namespace gtfo
     {
         namespace detail
         {
-            struct _can_invoke_op_less_tester
+            struct _can_invoke_op_less_or_eq_tester
             {
                 template<typename T, typename U>
                 static yes_type test(typename remove_reference<
-                                         decltype( declval<T>() < declval<U>() )
+                                         decltype( declval<T>() <= declval<U>() )
                                      >::type *);
 
                 template<typename T, typename U>
@@ -29,57 +29,57 @@ namespace gtfo
             };
 
             template<typename T, typename U>
-            struct can_invoke_op_less
+            struct can_invoke_op_less_or_eq
             {
 
-                static constexpr bool value = sizeof(_can_invoke_op_less_tester::test<T, U>(nullptr)) == sizeof(yes_type);
+                static constexpr bool value = sizeof(_can_invoke_op_less_or_eq_tester::test<T, U>(nullptr)) == sizeof(yes_type);
             };
         }
 
         namespace detail
         {
-            template<typename T, typename U, bool can_invoke_op_less_on_T_and_U>
-            struct _result_of_op_less_impl
+            template<typename T, typename U, bool can_invoke_op_less_or_eq_on_T_and_U>
+            struct _result_of_op_less_or_eq_impl
             {
             };
 
             template<typename T, typename U>
-            struct _result_of_op_less_impl<T, U, true>
+            struct _result_of_op_less_or_eq_impl<T, U, true>
             {
-                using type = decltype( declval<T &>() < declval<U &>() );
+                using type = decltype( declval<T &>() <= declval<U &>() );
             };
 
             template<typename T, typename U>
-            struct result_of_op_less : _result_of_op_less_impl<T, U, can_invoke_op_less<T, U>::value>
+            struct result_of_op_less_or_eq : _result_of_op_less_or_eq_impl<T, U, can_invoke_op_less_or_eq<T, U>::value>
             {
             };
         }
 
         namespace detail
         {
-            template<typename T, typename U, bool can_invoke_op_less_on_T_and_U>
-            struct _are_comparable_op_less_impl
+            template<typename T, typename U, bool can_invoke_op_less_or_eq_on_T_and_U>
+            struct _are_comparable_op_less_or_eq_impl
             {
                 static constexpr bool value = false;
             };
 
             template<typename T, typename U>
-            struct _are_comparable_op_less_impl<T, U, true>
+            struct _are_comparable_op_less_or_eq_impl<T, U, true>
             {
                 static constexpr bool value = can_be_used_in_boolean_context<
-                                                  typename result_of_op_less<T, U>::type
+                                                  typename result_of_op_less_or_eq<T, U>::type
                                               >::value;
             };
         }
 
         // Defines a static member constant value of type bool
         // which is true if values of types T and U
-        // can be compared using operator <.
+        // can be compared using operator <=.
         template<typename T, typename U>
-        struct are_comparable_op_less
+        struct are_comparable_op_less_or_eq
         {
-            static constexpr bool value = detail::_are_comparable_op_less_impl< T, U,
-                                                                                detail::can_invoke_op_less<T, U>::value >::value;
+            static constexpr bool value = detail::_are_comparable_op_less_or_eq_impl< T, U,
+                                                                                      detail::can_invoke_op_less_or_eq<T, U>::value >::value;
         };
     }
 }
@@ -88,4 +88,4 @@ namespace gtfo
 #   pragma warning( pop )
 #endif
 
-#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_HPP
+#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_COMPARABLE_OP_LESS_OR_EQ_HPP

@@ -12,12 +12,7 @@ namespace gtfo
 {
     namespace _tt
     {
-        /// defines static member constant value of type bool
-        /// which is true if and only if an lvalue of type T
-        /// can be treated as a valid iterator,
-        /// meaning that it can at least be incremented,
-        /// dereferenced (returning non-void result)
-        /// and equality-compared to other lvalues of this type
+        // !!! DEPRECATED !!!
         template<typename T>
         struct is_iterator
         {

@@ -1,5 +1,5 @@
-#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
-#define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
+#ifndef GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_DECREMENTABLE_HPP
+#define GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_DECREMENTABLE_HPP
 
 #include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
 
@@ -9,11 +9,11 @@ namespace gtfo
     {
         namespace detail
         {
-            struct is_incrementable_tester
+            struct is_decrementable_tester
             {
                 template<typename T>
                 static yes_type test(typename remove_reference<
-                                         decltype( ++ declval<T &>() )
+                                         decltype( -- declval<T &>() )
                                      >::type *);
 
                 template<typename T>
@@ -22,15 +22,15 @@ namespace gtfo
         }
 
         // Defines a static member constant value of type bool
-        // which is true if type T is incrementable, i.e. if the expression
-        //     ++ lvalue-of-type-T
+        // which is true if type T is decrementable, i.e. if the expression
+        //     -- lvalue-of-type-T
         // is well-formed.
         template<typename T>
-        struct is_incrementable
+        struct is_decrementable
         {
-            static constexpr bool value = sizeof(detail::is_incrementable_tester::test<T>(nullptr)) == sizeof(yes_type);
+            static constexpr bool value = sizeof(detail::is_decrementable_tester::test<T>(nullptr)) == sizeof(yes_type);
         };
     }
 }
 
-#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_INCREMENTABLE_HPP
+#endif // GTFO_FILE_INCLUDED_TYPE_TRAITS_IS_DECREMENTABLE_HPP

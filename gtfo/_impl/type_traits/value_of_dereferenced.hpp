@@ -34,6 +34,9 @@ namespace gtfo
         struct value_of_dereferenced : helpers::impl_value_of_dereferenced<T, is_dereferenceable<T>::value>
         {
         };
+
+        template<typename T>
+        using value_of_dereferenced_t = typename value_of_dereferenced<T>::type;
     }
 }
 

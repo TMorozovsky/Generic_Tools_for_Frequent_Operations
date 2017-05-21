@@ -74,6 +74,46 @@ namespace gtfo
         {
             return _end_iterator;
         }
+
+        GTFO_CONSTEXPR_FUNCTION
+            typename _tt::enable_if<
+                         _tt::is_same<
+                             typename iterator_traits<begin_iterator_type>::iterator_category,
+                             random_access_iterator_tag
+                         >::value,
+                         decltype( _tt::declval<begin_iterator_type &>() [ _tt::declval<typename iterator_traits<begin_iterator_type>::difference_type &>() ] )
+                     >::type
+            operator [] (typename iterator_traits<begin_iterator_type>::difference_type index)
+        {
+            GTFO_DEBUG_ASSERT((index >= 0) && (index < (_end_iterator - _begin_iterator)));
+            return _begin_iterator[index];
+        }
+
+        constexpr
+            typename _tt::enable_if<
+                         _tt::is_same<
+                             typename iterator_traits<begin_iterator_type>::iterator_category,
+                             random_access_iterator_tag
+                         >::value,
+                         decltype( _tt::declval<const begin_iterator_type &>() [ _tt::declval<typename iterator_traits<begin_iterator_type>::difference_type &>() ] )
+                     >::type
+            operator [] (typename iterator_traits<begin_iterator_type>::difference_type index) const
+        {
+            GTFO_DEBUG_ASSERT((index >= 0) && (index < (_end_iterator - _begin_iterator)));
+            return _begin_iterator[index];
+        }
+
+        friend constexpr begin_iterator_type begin(const iterator_range & r)
+            noexcept(_tt::is_nothrow_copy_constructible<begin_iterator_type>::value)
+        {
+            return r._begin_iterator;
+        }
+
+        friend constexpr end_iterator_type end(const iterator_range & r)
+            noexcept(_tt::is_nothrow_copy_constructible<end_iterator_type>::value)
+        {
+            return r._end_iterator;
+        }
     };
 }
 

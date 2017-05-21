@@ -18,18 +18,32 @@ namespace gtfo
         using ::std::is_void;
         using ::std::is_const;
         using ::std::is_volatile;
-        using ::std::is_fundamental;
+
+        using ::std::is_arithmetic;
+        using ::std::is_enum;
+        using ::std::is_pointer;
+
         using ::std::is_constructible;
         using ::std::is_default_constructible;
+        using ::std::is_copy_constructible;
+        using ::std::is_move_constructible;
+        using ::std::is_copy_assignable;
+        using ::std::is_move_assignable;
+
         using ::std::is_nothrow_constructible;
         using ::std::is_nothrow_default_constructible;
         using ::std::is_nothrow_copy_constructible;
         using ::std::is_nothrow_move_constructible;
+        using ::std::is_nothrow_assignable;
         using ::std::is_nothrow_copy_assignable;
         using ::std::is_nothrow_move_assignable;
+
+        using ::std::is_destructible;
+
         using ::std::is_lvalue_reference;
         using ::std::is_rvalue_reference;
         using ::std::is_reference;
+
         using ::std::remove_const;
         using ::std::remove_reference;
         using ::std::decay;
@@ -52,6 +66,16 @@ namespace gtfo
             static constexpr bool value = __is_class(C);
 #else
             static constexpr bool value = ::std::is_class<C>::value;
+#endif
+        };
+
+        template<typename C>
+        struct is_union
+        {
+#ifdef GTFO_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
+            static constexpr bool value = __is_union(C);
+#else
+            static constexpr bool value = ::std::is_union<C>::value;
 #endif
         };
 

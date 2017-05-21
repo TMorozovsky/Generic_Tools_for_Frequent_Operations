@@ -253,6 +253,18 @@
     <ClCompile Include="runtime\container\matrix.cpp">
       <Filter>gtfo_testing\runtime\container</Filter>
     </ClCompile>
+    <ClCompile Include="static\are_comparable_op_less_or_eq.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_op_greater.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="static\are_comparable_op_greater_or_eq.cpp">
+      <Filter>gtfo_testing\static</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\matrix_rows_iterator.cpp">
+      <Filter>gtfo_testing\runtime\container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">
@@ -274,9 +286,6 @@
       <Filter>gtfo\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\gtfo\_impl\_common_definitions.hpp">
-      <Filter>gtfo\_impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gtfo\_impl\type_traits.hpp">
       <Filter>gtfo\_impl</Filter>
     </ClInclude>
     <ClInclude Include="..\gtfo\_impl\utility.hpp">
@@ -540,12 +549,6 @@
     <ClInclude Include="..\gtfo\_impl\iterator_range.hpp">
       <Filter>gtfo\_impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator_conversion_mixin.hpp">
-      <Filter>gtfo\_impl\container\matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_reverse_iterator_base_mixin.hpp">
-      <Filter>gtfo\_impl\container\matrix</Filter>
-    </ClInclude>
     <ClInclude Include="..\gtfo\_impl\container\matrix\initializer_list_utils.hpp">
       <Filter>gtfo\_impl\container\matrix</Filter>
     </ClInclude>
@@ -554,6 +557,45 @@
     </ClInclude>
     <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator.hpp">
       <Filter>gtfo\_impl\container\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_forward_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_input_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_output_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_decrementable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_bidirectional_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_compound_addable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_compound_subtractable.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_less_or_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_greater.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\are_comparable_op_greater_or_eq.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\can_apply_array_subscript.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\_impl\type_traits\is_random_access_iterator.hpp">
+      <Filter>gtfo\_impl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gtfo\iterator\reverse_iterator.hpp">
+      <Filter>gtfo\iterator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -616,6 +658,9 @@
     </Filter>
     <Filter Include="gtfo_testing\runtime\container">
       <UniqueIdentifier>{c7b70be9-9a0b-4778-8a33-c2c8a21631f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\iterator">
+      <UniqueIdentifier>{b3ff2585-d8ff-41a7-9256-fa5d170e40dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

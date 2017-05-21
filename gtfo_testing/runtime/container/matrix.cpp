@@ -1,25 +1,37 @@
+#if 1
+
 #include "gtfo/container/matrix.hpp"
 #include <iostream>
+#include <iomanip>
 
-inline std::ostream & operator << (std::ostream & os, gtfo::matrix<int>::iterator)
+inline std::ostream & operator << (std::ostream & os, const gtfo::matrix<int>::iterator &)
 {
     return os << "<matrix iterator>";
 }
-inline std::ostream & operator << (std::ostream & os, gtfo::matrix<int>::const_iterator)
+inline std::ostream & operator << (std::ostream & os, const gtfo::matrix<int>::const_iterator &)
 {
     return os << "<matrix const_iterator>";
 }
-inline std::ostream & operator << (std::ostream & os, gtfo::matrix<int>::reverse_iterator)
+inline std::ostream & operator << (std::ostream & os, const gtfo::matrix<int>::reverse_iterator &)
 {
     return os << "<matrix reverse_iterator>";
 }
-inline std::ostream & operator << (std::ostream & os, gtfo::matrix<int>::const_reverse_iterator)
+inline std::ostream & operator << (std::ostream & os, const gtfo::matrix<int>::const_reverse_iterator &)
 {
     return os << "<matrix const_reverse_iterator>";
 }
 
+inline std::ostream & operator << (std::ostream & os, const gtfo::matrix<int> & matr)
+{
+    for (auto row : matr) {
+        for (const auto & element : row)
+            std::cout << std::setw(3) << element << ' ';
+        std::cout << std::endl;
+    }
+    return os;
+}
+
 #include "gtfo_testing/runtime/runtime_tests.hpp"
-#include <iomanip>
 using namespace std;
 using gtfo::matrix;
 
@@ -91,12 +103,23 @@ static void test_row_reverse_iterator_construct()
     }
 }
 
+static void test_row_reverse_iterator_subscript()
+{
+    matrix<int> mi = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+    const matrix<int>::iterator it = mi.begin() + 1;
+    GTFO_TEST_ASSERT_EQ((*it),  std::vector<int>({ 4, 5, 6 }));
+    GTFO_TEST_ASSERT_EQ(it[0],  std::vector<int>({ 4, 5, 6 }));
+    GTFO_TEST_ASSERT_EQ(it[1],  std::vector<int>({ 7, 8, 9 }));
+    GTFO_TEST_ASSERT_EQ(it[-1], std::vector<int>({ 1, 2, 3 }));
+}
+
 static void test_row_reverse_iterator_to_base()
 {
     cout << (__func__) << endl;
     matrix<int> mi = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
     {
-        const matrix<int>::const_reverse_iterator rit = mi.rbegin();
+          matrix<int>::reverse_iterator non_const_rit = mi.rbegin();
+          matrix<int>::const_reverse_iterator rit = non_const_rit;
         const matrix<int>::const_iterator it = rit.base();
         GTFO_TEST_ASSERT_EQ(it, mi.end());
     }
@@ -253,6 +276,7 @@ GTFO_TEST_FUN_BEGIN
         test_const_reverse_loop();
 
         test_row_reverse_iterator_construct();
+        test_row_reverse_iterator_subscript();
         test_row_reverse_iterator_to_base();
 
         test_erase_row();
@@ -282,3 +306,5 @@ GTFO_TEST_FUN_BEGIN
     }
 }
 GTFO_TEST_FUN_END
+
+#endif
