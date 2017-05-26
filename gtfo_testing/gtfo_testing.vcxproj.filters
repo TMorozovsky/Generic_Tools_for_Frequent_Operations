@@ -4,36 +4,6 @@
     <ClCompile Include="runtime\runtime_tests.cpp">
       <Filter>gtfo_testing\runtime</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_derived_classes.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_copying.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_exclusive_move.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_member_fields_access_through_pointers.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_no_moving_or_copying.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_only.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_pending_member_function_calls.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_throwing_moveable_only.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
     <ClCompile Include="runtime\algorithm\adjacent_find.cpp">
       <Filter>gtfo_testing\runtime\algorithm</Filter>
     </ClCompile>
@@ -247,9 +217,6 @@
     <ClCompile Include="static\result_of_logical_negation.cpp">
       <Filter>gtfo_testing\static</Filter>
     </ClCompile>
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_const.cpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
-    </ClCompile>
     <ClCompile Include="runtime\container\matrix.cpp">
       <Filter>gtfo_testing\runtime\container</Filter>
     </ClCompile>
@@ -265,13 +232,43 @@
     <ClCompile Include="runtime\container\matrix_rows_iterator.cpp">
       <Filter>gtfo_testing\runtime\container</Filter>
     </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors_derived_classes.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_bitwise_copying.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_bitwise_exclusive_move.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_const.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_member_fields_access_through_pointers.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_no_moving_or_copying.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_nothrow_moveable_only.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_pending_member_function_calls.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\container\polymorphic_holder\test_throwing_moveable_only.cpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">
       <Filter>gtfo_testing\runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors.hpp">
-      <Filter>gtfo_testing\runtime\utils\polymorphic_holder</Filter>
     </ClInclude>
     <ClInclude Include="..\gtfo\algorithm.hpp">
       <Filter>gtfo</Filter>
@@ -281,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="..\gtfo\reversed_range.hpp">
       <Filter>gtfo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gtfo\utils\polymorphic_holder.hpp">
-      <Filter>gtfo\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\gtfo\_impl\_common_definitions.hpp">
       <Filter>gtfo\_impl</Filter>
@@ -597,6 +591,12 @@
     <ClInclude Include="..\gtfo\iterator\reverse_iterator.hpp">
       <Filter>gtfo\iterator</Filter>
     </ClInclude>
+    <ClInclude Include="..\gtfo\container\polymorphic_holder.hpp">
+      <Filter>gtfo\container</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors.hpp">
+      <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="gtfo_testing">
@@ -614,17 +614,8 @@
     <Filter Include="gtfo_testing\runtime\numeric">
       <UniqueIdentifier>{e1335140-3a5c-46de-87a3-3d083b530772}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gtfo_testing\runtime\utils">
-      <UniqueIdentifier>{e738a401-230a-42cb-812d-6ae4b6ce7c65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="gtfo_testing\runtime\utils\polymorphic_holder">
-      <UniqueIdentifier>{e4e6e7d9-cca9-49fd-aa12-98b5bf1cf6e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="gtfo">
       <UniqueIdentifier>{a87bb421-86d8-4b57-bab0-1a89bd0b7dba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="gtfo\utils">
-      <UniqueIdentifier>{129b21ad-dc81-4026-a021-16070d95f272}</UniqueIdentifier>
     </Filter>
     <Filter Include="gtfo\_impl">
       <UniqueIdentifier>{f286380a-add1-4fbb-b1b3-a1edc697a3ff}</UniqueIdentifier>
@@ -661,6 +652,9 @@
     </Filter>
     <Filter Include="gtfo\iterator">
       <UniqueIdentifier>{b3ff2585-d8ff-41a7-9256-fa5d170e40dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\container\polymorphic_holder">
+      <UniqueIdentifier>{5eed6aaa-54bb-4196-ad72-c6b7549f912b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

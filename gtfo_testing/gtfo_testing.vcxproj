@@ -54,6 +54,17 @@
     <ClCompile Include="runtime\algorithm\search_n.cpp" />
     <ClCompile Include="runtime\container\matrix.cpp" />
     <ClCompile Include="runtime\container\matrix_rows_iterator.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors_derived_classes.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_bitwise_copying.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_bitwise_exclusive_move.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_const.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_member_fields_access_through_pointers.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_nothrow_moveable_only.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_no_moving_or_copying.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_pending_member_function_calls.cpp" />
+    <ClCompile Include="runtime\container\polymorphic_holder\test_throwing_moveable_only.cpp" />
     <ClCompile Include="runtime\functional\arithmetic_operations.cpp" />
     <ClCompile Include="runtime\functional\comparisons.cpp" />
     <ClCompile Include="runtime\functional\not_.cpp" />
@@ -63,17 +74,6 @@
     <ClCompile Include="runtime\numeric\iota.cpp" />
     <ClCompile Include="runtime\numeric\partial_sum.cpp" />
     <ClCompile Include="runtime\runtime_tests.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_derived_classes.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors_test.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_copying.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_bitwise_exclusive_move.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_const.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_member_fields_access_through_pointers.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_and_throwing_copyable.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_nothrow_moveable_only.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_no_moving_or_copying.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_pending_member_function_calls.cpp" />
-    <ClCompile Include="runtime\utils\polymorphic_holder\test_throwing_moveable_only.cpp" />
     <ClCompile Include="static\are_addable.cpp" />
     <ClCompile Include="static\are_comparable_op_eq.cpp" />
     <ClCompile Include="static\are_comparable_op_greater.cpp" />
@@ -144,6 +144,7 @@
     <ClInclude Include="..\gtfo\algorithm\search.hpp" />
     <ClInclude Include="..\gtfo\algorithm\search_n.hpp" />
     <ClInclude Include="..\gtfo\container\matrix.hpp" />
+    <ClInclude Include="..\gtfo\container\polymorphic_holder.hpp" />
     <ClInclude Include="..\gtfo\functional.hpp" />
     <ClInclude Include="..\gtfo\functional\divides.hpp" />
     <ClInclude Include="..\gtfo\functional\equal_to.hpp" />
@@ -166,7 +167,6 @@
     <ClInclude Include="..\gtfo\numeric\iota.hpp" />
     <ClInclude Include="..\gtfo\numeric\partial_sum.hpp" />
     <ClInclude Include="..\gtfo\reversed_range.hpp" />
-    <ClInclude Include="..\gtfo\utils\polymorphic_holder.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\initializer_list_utils.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_exceptions.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator.hpp" />
@@ -233,8 +233,8 @@
     <ClInclude Include="..\gtfo\_impl\type_traits\_type_traits_definitions.hpp" />
     <ClInclude Include="..\gtfo\_impl\utility.hpp" />
     <ClInclude Include="..\gtfo\_impl\_common_definitions.hpp" />
+    <ClInclude Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors.hpp" />
     <ClInclude Include="runtime\runtime_tests.hpp" />
-    <ClInclude Include="runtime\utils\polymorphic_holder\hierarchy_with_virtual_constructors.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E2142809-7234-4030-9AE5-DFDA1FC331EF}</ProjectGuid>

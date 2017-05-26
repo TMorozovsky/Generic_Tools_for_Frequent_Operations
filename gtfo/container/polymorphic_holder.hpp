@@ -13,7 +13,7 @@
 
 namespace gtfo
 {
-inline namespace utils
+inline namespace container
 {
 
 // Common definitions and various utilities used by polymorphic_holder<...>.
@@ -1561,7 +1561,7 @@ private: // impl_reset<DesiredType>(construction_specification_tag, move_specifi
     }
 };
 
-} // inline namespace utils
+} // inline namespace container
 } // namespace gtfo
 
 #if defined(_MSC_VER) && !defined(__clang__)
