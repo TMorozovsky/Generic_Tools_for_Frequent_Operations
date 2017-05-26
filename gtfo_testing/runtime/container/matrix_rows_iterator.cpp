@@ -101,15 +101,15 @@ static void run_iterators_test()
     if (rit >= rit) {}
 
     iterator rit_base = rit.base();
-    GTFO_TEST_ASSERT_EQ(*rit_base,   std::vector<int>({ 4, 5, 6 }));
-    GTFO_TEST_ASSERT_EQ(rit_base[1], std::vector<int>({ 7, 8, 9 }));
+    GTFO_TEST_ASSERT_EQ(*rit_base,    std::vector<int>({ 7, 8, 9 }));
+    GTFO_TEST_ASSERT_EQ(rit_base[-1], std::vector<int>({ 4, 5, 6 }));
 
-    rit_base = (rit - 1).base();
-    GTFO_TEST_ASSERT_EQ(*rit_base,   std::vector<int>({ 7, 8, 9 }));
+    rit_base = (rit + 1).base();
+    GTFO_TEST_ASSERT_EQ(*rit_base, std::vector<int>({ 4, 5, 6 }));
 
     const_reverse_iterator crit = rit;
-    GTFO_TEST_ASSERT_EQ(*crit,    std::vector<int>({ 3, 2, 1 }));
-    GTFO_TEST_ASSERT_EQ(crit[-1], std::vector<int>({ 6, 5, 4 }));
+    GTFO_TEST_ASSERT_EQ(*crit,    std::vector<int>({ 6, 5, 4 }));
+    GTFO_TEST_ASSERT_EQ(crit[-1], std::vector<int>({ 9, 8, 7 }));
 
     if (rit == crit) {}
     if (rit != crit) {}
