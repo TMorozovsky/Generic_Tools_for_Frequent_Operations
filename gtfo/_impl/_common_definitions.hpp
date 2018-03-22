@@ -31,6 +31,12 @@ namespace gtfo
 #   define GTFO_LIMITED_CONSTEXPR_SUPPORT
 #endif
 
+#if defined(_MSC_VER) || defined(__clang__) || defined(__GNUG__)
+#   define GTFO_RESTRICT __restrict
+#else
+#   define GTFO_RESTRICT
+#endif
+
 #define GTFO_DEBUG_ASSERT(x) \
     { \
         assert((x)); \

@@ -8,7 +8,7 @@ namespace gtfo
 {
     using ::std::memset;
 
-    inline void memcpy_s(void * dest, size_t dest_size, const void * src, size_t src_size) noexcept
+    inline void memcpy_s(void * GTFO_RESTRICT dest, size_t dest_size, const void * GTFO_RESTRICT src, size_t src_size) noexcept
     {
         GTFO_DEBUG_ASSERT(dest_size >= src_size);
 #ifdef _MSC_VER

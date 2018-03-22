@@ -48,6 +48,9 @@ namespace gtfo
         using ::std::remove_reference;
         using ::std::decay;
 
+        using ::std::true_type;
+        using ::std::false_type;
+
         using ::std::declval;
         // The declval function template is not a type trait, but it is used in a simlar context most of the time,
         // so we define it here in order to keep the enclosing namespace a little bit cleaner.

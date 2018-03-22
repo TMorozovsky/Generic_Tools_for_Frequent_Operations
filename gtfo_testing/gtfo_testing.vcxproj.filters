@@ -265,6 +265,9 @@
     <ClCompile Include="runtime\container\polymorphic_holder\test_throwing_moveable_only.cpp">
       <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
     </ClCompile>
+    <ClCompile Include="runtime\utils\scope_exit.cpp">
+      <Filter>gtfo_testing\runtime\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="runtime\runtime_tests.hpp">
@@ -597,6 +600,9 @@
     <ClInclude Include="runtime\container\polymorphic_holder\hierarchy_with_virtual_constructors.hpp">
       <Filter>gtfo_testing\runtime\container\polymorphic_holder</Filter>
     </ClInclude>
+    <ClInclude Include="..\gtfo\utils\scope_exit.hpp">
+      <Filter>gtfo\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="gtfo_testing">
@@ -655,6 +661,12 @@
     </Filter>
     <Filter Include="gtfo_testing\runtime\container\polymorphic_holder">
       <UniqueIdentifier>{5eed6aaa-54bb-4196-ad72-c6b7549f912b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo\utils">
+      <UniqueIdentifier>{402e8418-304e-47bc-a628-0d8e483fa731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gtfo_testing\runtime\utils">
+      <UniqueIdentifier>{56d3eb12-3a72-45d6-bd44-f9c332f9c9d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

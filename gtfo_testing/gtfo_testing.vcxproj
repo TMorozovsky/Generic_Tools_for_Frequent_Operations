@@ -74,6 +74,7 @@
     <ClCompile Include="runtime\numeric\iota.cpp" />
     <ClCompile Include="runtime\numeric\partial_sum.cpp" />
     <ClCompile Include="runtime\runtime_tests.cpp" />
+    <ClCompile Include="runtime\utils\scope_exit.cpp" />
     <ClCompile Include="static\are_addable.cpp" />
     <ClCompile Include="static\are_comparable_op_eq.cpp" />
     <ClCompile Include="static\are_comparable_op_greater.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="..\gtfo\numeric\iota.hpp" />
     <ClInclude Include="..\gtfo\numeric\partial_sum.hpp" />
     <ClInclude Include="..\gtfo\reversed_range.hpp" />
+    <ClInclude Include="..\gtfo\utils\scope_exit.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\initializer_list_utils.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_exceptions.hpp" />
     <ClInclude Include="..\gtfo\_impl\container\matrix\matrix_rows_iterator.hpp" />
