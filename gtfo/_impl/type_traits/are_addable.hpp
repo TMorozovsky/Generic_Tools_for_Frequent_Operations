@@ -2,6 +2,7 @@
 #define GTFO_FILE_INCLUDED_TYPE_TRAITS_ARE_ADDABLE_HPP
 
 #include "gtfo/_impl/type_traits/_type_traits_definitions.hpp"
+#include "gtfo/_impl/type_traits/void_t.hpp"
 
 namespace gtfo
 {
@@ -9,15 +10,16 @@ namespace gtfo
     {
         namespace detail
         {
-            struct are_addable_tester
+            template<typename Lhs, typename Rhs, typename = void_t<>>
+            struct are_addable
+                : false_type
             {
-                template<typename Lhs, typename Rhs>
-                static yes_type test(typename remove_reference<
-                                         decltype( declval<Lhs &>() + declval<Rhs &>() )
-                                     >::type *);
+            };
 
-                template< typename Lhs, typename Rhs>
-                static no_type test(...);
+            template<typename Lhs, typename Rhs>
+            struct are_addable<Lhs, Rhs, void_t<decltype( declval<Lhs>() + declval<Rhs>() )>>
+                : true_type
+            {
             };
         }
 
@@ -27,8 +29,8 @@ namespace gtfo
         // is well-formed.
         template<typename Lhs, typename Rhs>
         struct are_addable
+            : detail::are_addable<add_lvalue_reference_t<Lhs>, add_lvalue_reference_t<Rhs>>
         {
-            static constexpr bool value = sizeof(detail::are_addable_tester::test<Lhs, Rhs>(nullptr)) == sizeof(yes_type);
         };
     }
 }

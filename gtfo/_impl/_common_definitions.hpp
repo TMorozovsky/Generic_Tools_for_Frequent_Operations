@@ -31,6 +31,14 @@ namespace gtfo
 #   define GTFO_LIMITED_CONSTEXPR_SUPPORT
 #endif
 
+#if (__cplusplus >= 201700L)
+#   define GTFO_NOEXCEPT_IS_PART_OF_FUNCTION_SIGNATURE 1
+#elif defined(__clang__) || (defined(__GNUG__) && (__GNUC__ >= 6)) || (defined(_MSC_VER) && (_MSC_VER > 1910))
+#   define GTFO_NOEXCEPT_IS_PART_OF_FUNCTION_SIGNATURE 1
+#else
+#   define GTFO_NOEXCEPT_IS_PART_OF_FUNCTION_SIGNATURE 0
+#endif
+
 #if defined(_MSC_VER) || defined(__clang__) || defined(__GNUG__)
 #   define GTFO_RESTRICT __restrict
 #else

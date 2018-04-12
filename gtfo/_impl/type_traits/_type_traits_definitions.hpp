@@ -44,9 +44,40 @@ namespace gtfo
         using ::std::is_rvalue_reference;
         using ::std::is_reference;
 
+        using ::std::add_lvalue_reference;
+        using ::std::add_rvalue_reference;
+
         using ::std::remove_const;
         using ::std::remove_reference;
-        using ::std::decay;
+
+        template<typename T>
+        struct decay;
+
+#if GTFO_NOEXCEPT_IS_PART_OF_FUNCTION_SIGNATURE
+        template<typename R, typename... Args>
+        struct decay<R(Args...) noexcept>
+        {
+            using type = R(*)(Args...) noexcept;
+        };
+
+        template<typename R, typename... Args>
+        struct decay<R(&)(Args...) noexcept>
+        {
+            using type = R(*)(Args...) noexcept;
+        };
+
+        template<typename R, typename... Args>
+        struct decay<R(&&)(Args...) noexcept>
+        {
+            using type = R(*)(Args...) noexcept;
+        };
+#endif
+
+        template<typename T>
+        struct decay
+            : ::std::decay<T>
+        {
+        };
 
         using ::std::true_type;
         using ::std::false_type;
@@ -54,6 +85,10 @@ namespace gtfo
         using ::std::declval;
         // The declval function template is not a type trait, but it is used in a simlar context most of the time,
         // so we define it here in order to keep the enclosing namespace a little bit cleaner.
+
+
+        template<typename T> using add_lvalue_reference_t = typename ::gtfo::_tt::add_lvalue_reference<T>::type;
+        template<typename T> using add_rvalue_reference_t = typename ::gtfo::_tt::add_rvalue_reference<T>::type;
 
         template<typename T> using remove_const_t     = typename ::gtfo::_tt::remove_const<T>::type;
         template<typename T> using remove_reference_t = typename ::gtfo::_tt::remove_reference<T>::type;
@@ -82,20 +117,70 @@ namespace gtfo
 #endif
         };
 
-        template<typename C>
-        struct is_final
+        namespace detail
         {
-            static_assert(sizeof(C) > 0, "incomplete types are not allowed");
+            template<typename C>
+            struct is_final;
+
+            template<typename R, typename... Args>
+            struct is_final<R(Args...)>
+            {
+                static constexpr bool value = false;
+            };
+
+            template<typename R, typename... Args>
+            struct is_final<R(&)(Args...)>
+            {
+                static constexpr bool value = false;
+            };
+
+            template<typename R, typename... Args>
+            struct is_final<R(&&)(Args...)>
+            {
+                static constexpr bool value = false;
+            };
+
+#if GTFO_NOEXCEPT_IS_PART_OF_FUNCTION_SIGNATURE
+            template<typename R, typename... Args>
+            struct is_final<R(Args...) noexcept>
+            {
+                static constexpr bool value = false;
+            };
+
+            template<typename R, typename... Args>
+            struct is_final<R(&)(Args...) noexcept>
+            {
+                static constexpr bool value = false;
+            };
+
+            template<typename R, typename... Args>
+            struct is_final<R(&&)(Args...) noexcept>
+            {
+                static constexpr bool value = false;
+            };
+#endif
+
+            template<typename C>
+            struct is_final
+            {
+                static_assert(sizeof(C) > 0, "incomplete types are not allowed");
 
 #ifdef GTFO_USE_TYPE_TRAITS_COMPILER_EXTENSIONS
-            static constexpr bool value = __is_final(C);
+                static constexpr bool value = __is_final(C);
 #elif __cplusplus > 201103L
-            static constexpr bool value = ::std::is_final<C>::value;
+                static constexpr bool value = ::std::is_final<C>::value;
 #else
             // In the worst case, we can't determine whether a class is final, so
             // we answer "true" for every class to disable any attempts to inherit from it.
             static constexpr bool value = is_class<C>::value;
 #endif
+            };
+        }
+
+        template<typename C>
+        struct is_final
+        {
+            static constexpr bool value = detail::is_final<C>::value;
         };
 
         template<typename C>
